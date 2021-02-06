@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.menuButton = new System.Windows.Forms.Button();
-            this.infoLabel = new System.Windows.Forms.Label();
             this.pocetHracu = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pocetTahu = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.obtiznosti = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vitez = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.menuButton = new System.Windows.Forms.Button();
+            this.infoLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -52,29 +52,8 @@
             this.dataGridView1.Location = new System.Drawing.Point(24, 78);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(876, 150);
+            this.dataGridView1.Size = new System.Drawing.Size(876, 650);
             this.dataGridView1.TabIndex = 0;
-            // 
-            // menuButton
-            // 
-            this.menuButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.menuButton.Location = new System.Drawing.Point(378, 247);
-            this.menuButton.Name = "menuButton";
-            this.menuButton.Size = new System.Drawing.Size(172, 61);
-            this.menuButton.TabIndex = 6;
-            this.menuButton.Text = "Návrat do menu";
-            this.menuButton.UseVisualStyleBackColor = true;
-            this.menuButton.Click += new System.EventHandler(this.menuButton_Click);
-            // 
-            // infoLabel
-            // 
-            this.infoLabel.AutoSize = true;
-            this.infoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.infoLabel.Location = new System.Drawing.Point(20, 28);
-            this.infoLabel.Name = "infoLabel";
-            this.infoLabel.Size = new System.Drawing.Size(39, 20);
-            this.infoLabel.TabIndex = 7;
-            this.infoLabel.Text = "text";
             // 
             // pocetHracu
             // 
@@ -102,11 +81,32 @@
             this.vitez.ReadOnly = true;
             this.vitez.Width = 150;
             // 
+            // menuButton
+            // 
+            this.menuButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.menuButton.Location = new System.Drawing.Point(371, 755);
+            this.menuButton.Name = "menuButton";
+            this.menuButton.Size = new System.Drawing.Size(172, 61);
+            this.menuButton.TabIndex = 6;
+            this.menuButton.Text = "Návrat do menu";
+            this.menuButton.UseVisualStyleBackColor = true;
+            this.menuButton.Click += new System.EventHandler(this.MenuButton_Click);
+            // 
+            // infoLabel
+            // 
+            this.infoLabel.AutoSize = true;
+            this.infoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.infoLabel.Location = new System.Drawing.Point(20, 28);
+            this.infoLabel.Name = "infoLabel";
+            this.infoLabel.Size = new System.Drawing.Size(39, 20);
+            this.infoLabel.TabIndex = 7;
+            this.infoLabel.Text = "text";
+            // 
             // StatistikyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(927, 329);
+            this.ClientSize = new System.Drawing.Size(927, 861);
             this.Controls.Add(this.infoLabel);
             this.Controls.Add(this.menuButton);
             this.Controls.Add(this.dataGridView1);

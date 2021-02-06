@@ -19,26 +19,6 @@ namespace Čínská_dáma
             this.vyskaPole = vyskaPole;
         }
 
-        public int get_poz_X_Zv()
-        {
-            return poz_X_Zv;
-        }
-
-        public int get_poz_Y_Zv()
-        {
-            return poz_Y_Zv;
-        }
-
-        public int get_sirkaPole()
-        {
-            return sirkaPole;
-        }
-
-        public int get_vyskaPole()
-        {
-            return vyskaPole;
-        }
-
         public void NakresliZvyrazeneniPole(PaintEventArgs e)
         {
             e.Graphics.DrawEllipse(pen, this.poz_X_Zv, this.poz_Y_Zv, this.sirkaPole, this.vyskaPole);

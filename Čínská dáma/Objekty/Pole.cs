@@ -23,17 +23,17 @@ namespace Čínská_dáma
             this.jeAktivni = jeAktivni;
         }
         
-        public int get_poz_X_He()
+        public int Get_poz_X_He()
         {
             return poz_X_He;
         }
 
-        public int get_poz_Y_He()
+        public int Get_poz_Y_He()
         {
             return poz_Y_He;
         }
 
-        public void set_jeAktivni(bool jeAktivni)
+        public void Set_jeAktivni(bool jeAktivni)
         {
             this.jeAktivni = jeAktivni;
         }

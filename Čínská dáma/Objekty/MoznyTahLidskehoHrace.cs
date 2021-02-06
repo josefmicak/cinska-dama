@@ -24,22 +24,22 @@ namespace Čínská_dáma
             this.vyskaPole = vyskaPole;
         }
 
-        public int get_poz_X_MT()
+        public int Get_poz_X_MT()
         {
             return poz_X_MT;
         }
 
-        public int get_poz_Y_MT()
+        public int Get_poz_Y_MT()
         {
             return poz_Y_MT;
         }
 
-        public int get_poz_X_KLHr()
+        public int Get_poz_X_KLHr()
         {
             return poz_X_KLHr;
         }
 
-        public int get_poz_Y_KLHr()
+        public int Get_poz_Y_KLHr()
         {
             return poz_Y_KLHr;
         }

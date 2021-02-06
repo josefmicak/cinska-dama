@@ -40,10 +40,10 @@
             this.label7 = new System.Windows.Forms.Label();
             this.zacitSimulaciButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.dvaHraciRB = new System.Windows.Forms.RadioButton();
-            this.triHraciRB = new System.Windows.Forms.RadioButton();
-            this.ctyriHraciRB = new System.Windows.Forms.RadioButton();
             this.sestHracuRB = new System.Windows.Forms.RadioButton();
+            this.ctyriHraciRB = new System.Windows.Forms.RadioButton();
+            this.triHraciRB = new System.Windows.Forms.RadioButton();
+            this.dvaHraciRB = new System.Windows.Forms.RadioButton();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -60,6 +60,10 @@
             this.label18 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.obtiznost5TB = new System.Windows.Forms.TrackBar();
+            this.hromadnaSimulace = new System.Windows.Forms.Button();
+            this.label20 = new System.Windows.Forms.Label();
+            this.pocetSimulaciTB = new System.Windows.Forms.TextBox();
+            this.hromadnaSimulaceLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.ukazkaPB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.obtiznost1TB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.obtiznost6TB)).BeginInit();
@@ -161,20 +165,20 @@
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label7.Location = new System.Drawing.Point(12, 9);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(418, 24);
+            this.label7.Size = new System.Drawing.Size(349, 24);
             this.label7.TabIndex = 12;
-            this.label7.Text = "Zvolte prosím obtížnost počítačových hráčů:";
+            this.label7.Text = "Zvolte obtížnost počítačových hráčů:";
             // 
             // zacitSimulaciButton
             // 
             this.zacitSimulaciButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.zacitSimulaciButton.Location = new System.Drawing.Point(404, 467);
+            this.zacitSimulaciButton.Location = new System.Drawing.Point(344, 516);
             this.zacitSimulaciButton.Name = "zacitSimulaciButton";
-            this.zacitSimulaciButton.Size = new System.Drawing.Size(166, 41);
+            this.zacitSimulaciButton.Size = new System.Drawing.Size(166, 60);
             this.zacitSimulaciButton.TabIndex = 13;
-            this.zacitSimulaciButton.Text = "Začít simulaci";
+            this.zacitSimulaciButton.Text = "Provést jednu simulaci";
             this.zacitSimulaciButton.UseVisualStyleBackColor = true;
-            this.zacitSimulaciButton.Click += new System.EventHandler(this.zacitSimulaciButton_Click);
+            this.zacitSimulaciButton.Click += new System.EventHandler(this.ZacitSimulaciButton_Click);
             // 
             // groupBox1
             // 
@@ -189,6 +193,39 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Počet hráčů";
             // 
+            // sestHracuRB
+            // 
+            this.sestHracuRB.AutoSize = true;
+            this.sestHracuRB.Location = new System.Drawing.Point(21, 165);
+            this.sestHracuRB.Name = "sestHracuRB";
+            this.sestHracuRB.Size = new System.Drawing.Size(76, 17);
+            this.sestHracuRB.TabIndex = 3;
+            this.sestHracuRB.Text = "Šest hráčů";
+            this.sestHracuRB.UseVisualStyleBackColor = true;
+            this.sestHracuRB.CheckedChanged += new System.EventHandler(this.SestHracuRB_CheckedChanged);
+            // 
+            // ctyriHraciRB
+            // 
+            this.ctyriHraciRB.AutoSize = true;
+            this.ctyriHraciRB.Location = new System.Drawing.Point(21, 124);
+            this.ctyriHraciRB.Name = "ctyriHraciRB";
+            this.ctyriHraciRB.Size = new System.Drawing.Size(72, 17);
+            this.ctyriHraciRB.TabIndex = 2;
+            this.ctyriHraciRB.Text = "Čtyři hráči";
+            this.ctyriHraciRB.UseVisualStyleBackColor = true;
+            this.ctyriHraciRB.CheckedChanged += new System.EventHandler(this.CtyriHraciRB_CheckedChanged);
+            // 
+            // triHraciRB
+            // 
+            this.triHraciRB.AutoSize = true;
+            this.triHraciRB.Location = new System.Drawing.Point(21, 82);
+            this.triHraciRB.Name = "triHraciRB";
+            this.triHraciRB.Size = new System.Drawing.Size(64, 17);
+            this.triHraciRB.TabIndex = 1;
+            this.triHraciRB.Text = "Tři hráči";
+            this.triHraciRB.UseVisualStyleBackColor = true;
+            this.triHraciRB.CheckedChanged += new System.EventHandler(this.TriHraciRB_CheckedChanged);
+            // 
             // dvaHraciRB
             // 
             this.dvaHraciRB.AutoSize = true;
@@ -200,40 +237,7 @@
             this.dvaHraciRB.TabStop = true;
             this.dvaHraciRB.Text = "Dva hráči";
             this.dvaHraciRB.UseVisualStyleBackColor = true;
-            this.dvaHraciRB.CheckedChanged += new System.EventHandler(this.dvaHraciRB_CheckedChanged);
-            // 
-            // triHraciRB
-            // 
-            this.triHraciRB.AutoSize = true;
-            this.triHraciRB.Location = new System.Drawing.Point(21, 82);
-            this.triHraciRB.Name = "triHraciRB";
-            this.triHraciRB.Size = new System.Drawing.Size(64, 17);
-            this.triHraciRB.TabIndex = 1;
-            this.triHraciRB.Text = "Tři hráči";
-            this.triHraciRB.UseVisualStyleBackColor = true;
-            this.triHraciRB.CheckedChanged += new System.EventHandler(this.triHraciRB_CheckedChanged);
-            // 
-            // ctyriHraciRB
-            // 
-            this.ctyriHraciRB.AutoSize = true;
-            this.ctyriHraciRB.Location = new System.Drawing.Point(21, 124);
-            this.ctyriHraciRB.Name = "ctyriHraciRB";
-            this.ctyriHraciRB.Size = new System.Drawing.Size(72, 17);
-            this.ctyriHraciRB.TabIndex = 2;
-            this.ctyriHraciRB.Text = "Čtyři hráči";
-            this.ctyriHraciRB.UseVisualStyleBackColor = true;
-            this.ctyriHraciRB.CheckedChanged += new System.EventHandler(this.ctyriHraciRB_CheckedChanged);
-            // 
-            // sestHracuRB
-            // 
-            this.sestHracuRB.AutoSize = true;
-            this.sestHracuRB.Location = new System.Drawing.Point(21, 165);
-            this.sestHracuRB.Name = "sestHracuRB";
-            this.sestHracuRB.Size = new System.Drawing.Size(76, 17);
-            this.sestHracuRB.TabIndex = 3;
-            this.sestHracuRB.Text = "Šest hráčů";
-            this.sestHracuRB.UseVisualStyleBackColor = true;
-            this.sestHracuRB.CheckedChanged += new System.EventHandler(this.sestHracuRB_CheckedChanged);
+            this.dvaHraciRB.CheckedChanged += new System.EventHandler(this.DvaHraciRB_CheckedChanged);
             // 
             // label8
             // 
@@ -383,11 +387,52 @@
             this.obtiznost5TB.TabIndex = 27;
             this.obtiznost5TB.Value = 2;
             // 
+            // hromadnaSimulace
+            // 
+            this.hromadnaSimulace.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hromadnaSimulace.Location = new System.Drawing.Point(619, 516);
+            this.hromadnaSimulace.Name = "hromadnaSimulace";
+            this.hromadnaSimulace.Size = new System.Drawing.Size(212, 62);
+            this.hromadnaSimulace.TabIndex = 31;
+            this.hromadnaSimulace.Text = "Začít hromadnou simulaci";
+            this.hromadnaSimulace.UseVisualStyleBackColor = true;
+            this.hromadnaSimulace.Click += new System.EventHandler(this.HromadnaSimulace_Click);
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(627, 480);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(80, 13);
+            this.label20.TabIndex = 32;
+            this.label20.Text = "Počet simulací:";
+            // 
+            // pocetSimulaciTB
+            // 
+            this.pocetSimulaciTB.Location = new System.Drawing.Point(722, 477);
+            this.pocetSimulaciTB.Name = "pocetSimulaciTB";
+            this.pocetSimulaciTB.Size = new System.Drawing.Size(70, 20);
+            this.pocetSimulaciTB.TabIndex = 33;
+            // 
+            // hromadnaSimulaceLabel
+            // 
+            this.hromadnaSimulaceLabel.AutoSize = true;
+            this.hromadnaSimulaceLabel.Location = new System.Drawing.Point(619, 594);
+            this.hromadnaSimulaceLabel.Name = "hromadnaSimulaceLabel";
+            this.hromadnaSimulaceLabel.Size = new System.Drawing.Size(25, 13);
+            this.hromadnaSimulaceLabel.TabIndex = 34;
+            this.hromadnaSimulaceLabel.Text = "Info";
+            this.hromadnaSimulaceLabel.Visible = false;
+            // 
             // ParametrySimulatoruForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1145, 535);
+            this.ClientSize = new System.Drawing.Size(1007, 630);
+            this.Controls.Add(this.hromadnaSimulaceLabel);
+            this.Controls.Add(this.pocetSimulaciTB);
+            this.Controls.Add(this.label20);
+            this.Controls.Add(this.hromadnaSimulace);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.label18);
             this.Controls.Add(this.label19);
@@ -469,5 +514,9 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.TrackBar obtiznost5TB;
+        private System.Windows.Forms.Button hromadnaSimulace;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox pocetSimulaciTB;
+        private System.Windows.Forms.Label hromadnaSimulaceLabel;
     }
 }

@@ -17,16 +17,16 @@ namespace Čínská_dáma.Forms
         {
             InitializeComponent();
             infoLabel.Text = "Statistiky slouží ke zaznamenávání výsledků simulací, tedy her mezi počítačovými hráči.\nHry lidského hráče zde nebudou zaznamenány.";
-            nacistStatistiky();
+            NacistStatistiky();
         }
 
-        private void menuButton_Click(object sender, EventArgs e)
+        private void MenuButton_Click(object sender, EventArgs e)
         {
             new MenuForm().Show();
             Hide();
         }
 
-        private void nacistStatistiky()
+        private void NacistStatistiky()
         {
             string[] radky = File.ReadAllLines(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\Statistiky.txt");
             
@@ -38,20 +38,20 @@ namespace Čínská_dáma.Forms
                 switch (int.Parse(splitStrednik[0]))
                 {
                     case 2:
-                        obtiznostiText = "Červený: " + getObtiznost(int.Parse(splitStrednik[3])) + ", modrý: " + getObtiznost(int.Parse(splitStrednik[4]));
-                        viteziciHrac = getBarva(int.Parse(splitStrednik[5]), int.Parse(splitStrednik[2]));
+                        obtiznostiText = "Červený: " + GetObtiznost(int.Parse(splitStrednik[3])) + ", modrý: " + GetObtiznost(int.Parse(splitStrednik[4]));
+                        viteziciHrac = GetBarva(int.Parse(splitStrednik[5]), int.Parse(splitStrednik[2]));
                         break;
                     case 3:
-                        obtiznostiText = "Zelený: " + getObtiznost(int.Parse(splitStrednik[3])) + ", žlutý: " + getObtiznost(int.Parse(splitStrednik[4])) + ", modrý: " + getObtiznost(int.Parse(splitStrednik[5]));
-                        viteziciHrac = getBarva(int.Parse(splitStrednik[6]), int.Parse(splitStrednik[2]));
+                        obtiznostiText = "Zelený: " + GetObtiznost(int.Parse(splitStrednik[3])) + ", žlutý: " + GetObtiznost(int.Parse(splitStrednik[4])) + ", modrý: " + GetObtiznost(int.Parse(splitStrednik[5]));
+                        viteziciHrac = GetBarva(int.Parse(splitStrednik[6]), int.Parse(splitStrednik[2]));
                         break;
                     case 4:
-                        obtiznostiText = "Zelený: " + getObtiznost(int.Parse(splitStrednik[3])) + ", žlutý: " + getObtiznost(int.Parse(splitStrednik[4])) + ", fialový: " + getObtiznost(int.Parse(splitStrednik[5])) + ", hnědý: " + getObtiznost(int.Parse(splitStrednik[6]));
-                        viteziciHrac = getBarva(int.Parse(splitStrednik[7]), int.Parse(splitStrednik[2]));
+                        obtiznostiText = "Zelený: " + GetObtiznost(int.Parse(splitStrednik[3])) + ", žlutý: " + GetObtiznost(int.Parse(splitStrednik[4])) + ", fialový: " + GetObtiznost(int.Parse(splitStrednik[5])) + ", hnědý: " + GetObtiznost(int.Parse(splitStrednik[6]));
+                        viteziciHrac = GetBarva(int.Parse(splitStrednik[7]), int.Parse(splitStrednik[2]));
                         break;
                     case 6:
-                        obtiznostiText = "Červený: " + getObtiznost(int.Parse(splitStrednik[3])) + ", zelený: " + getObtiznost(int.Parse(splitStrednik[4])) + ", žlutý: " + getObtiznost(int.Parse(splitStrednik[5])) + ", fialový: " + getObtiznost(int.Parse(splitStrednik[6])) + ", hnědý: " + getObtiznost(int.Parse(splitStrednik[7])) + ", modrý: " + getObtiznost(int.Parse(splitStrednik[8]));
-                        viteziciHrac = getBarva(int.Parse(splitStrednik[9]), int.Parse(splitStrednik[2]));
+                        obtiznostiText = "Červený: " + GetObtiznost(int.Parse(splitStrednik[3])) + ", zelený: " + GetObtiznost(int.Parse(splitStrednik[4])) + ", žlutý: " + GetObtiznost(int.Parse(splitStrednik[5])) + ", fialový: " + GetObtiznost(int.Parse(splitStrednik[6])) + ", hnědý: " + GetObtiznost(int.Parse(splitStrednik[7])) + ", modrý: " + GetObtiznost(int.Parse(splitStrednik[8]));
+                        viteziciHrac = GetBarva(int.Parse(splitStrednik[9]), int.Parse(splitStrednik[2]));
                         break;
                 }
                 dataGridView1.Rows.Add();
@@ -62,9 +62,9 @@ namespace Čínská_dáma.Forms
             }
         }
 
-        private string getBarva(int idHrace, int kontumaceVyhra)
+        private string GetBarva(int idHrace, int kontumaceVyhra)
         {
-            string vyslednyText = "";
+            string vyslednyText;
             switch(idHrace)
             {
                 case 1:
@@ -99,7 +99,7 @@ namespace Čínská_dáma.Forms
             return vyslednyText;
         }
 
-        private string getObtiznost(int id)
+        private string GetObtiznost(int id)
         {
             switch (id)
             {

@@ -34,7 +34,7 @@
             this.konecTahuPB = new System.Windows.Forms.PictureBox();
             this.pausePB = new System.Windows.Forms.PictureBox();
             this.zvukPB = new System.Windows.Forms.PictureBox();
-            this.ukoncitPB = new System.Windows.Forms.PictureBox();
+            this.UkoncitPB = new System.Windows.Forms.PictureBox();
             this.restartPB = new System.Windows.Forms.PictureBox();
             this.konzolePanel = new System.Windows.Forms.Panel();
             this.Casovac = new System.Windows.Forms.Timer(this.components);
@@ -49,7 +49,6 @@
             this.pozastavitpokračovatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.konecTahuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.zapnoutvypnoutZvukyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tesrToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nápovědaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.oAplikaciToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.herniPanel = new Čínská_dáma.DoubleBufferedPanel();
@@ -59,7 +58,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.konecTahuPB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pausePB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.zvukPB)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ukoncitPB)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UkoncitPB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.restartPB)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.herniPanel.SuspendLayout();
@@ -72,7 +71,7 @@
             this.kontrolniPanel.Controls.Add(this.konecTahuPB);
             this.kontrolniPanel.Controls.Add(this.pausePB);
             this.kontrolniPanel.Controls.Add(this.zvukPB);
-            this.kontrolniPanel.Controls.Add(this.ukoncitPB);
+            this.kontrolniPanel.Controls.Add(this.UkoncitPB);
             this.kontrolniPanel.Controls.Add(this.restartPB);
             this.kontrolniPanel.Location = new System.Drawing.Point(225, 839);
             this.kontrolniPanel.Name = "kontrolniPanel";
@@ -89,7 +88,7 @@
             this.zacitSimulaciButton.Text = "Začít simulaci";
             this.zacitSimulaciButton.UseVisualStyleBackColor = true;
             this.zacitSimulaciButton.Visible = false;
-            this.zacitSimulaciButton.Click += new System.EventHandler(this.zacitSimulaciButton_Click);
+            this.zacitSimulaciButton.Click += new System.EventHandler(this.ZacitSimulaciButton_Click);
             // 
             // konecTahuPB
             // 
@@ -101,8 +100,8 @@
             this.konecTahuPB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.konecTahuPB.TabIndex = 6;
             this.konecTahuPB.TabStop = false;
-            this.konecTahuPB.EnabledChanged += new System.EventHandler(this.konecTahuPB_EnabledChanged);
-            this.konecTahuPB.Click += new System.EventHandler(this.konecTahuPB_Click);
+            this.konecTahuPB.EnabledChanged += new System.EventHandler(this.KonecTahuPB_EnabledChanged);
+            this.konecTahuPB.Click += new System.EventHandler(this.KonecTahuPB_Click);
             // 
             // pausePB
             // 
@@ -113,7 +112,7 @@
             this.pausePB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pausePB.TabIndex = 5;
             this.pausePB.TabStop = false;
-            this.pausePB.Click += new System.EventHandler(this.pausePB_Click);
+            this.pausePB.Click += new System.EventHandler(this.PausePB_Click);
             // 
             // zvukPB
             // 
@@ -124,18 +123,18 @@
             this.zvukPB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.zvukPB.TabIndex = 2;
             this.zvukPB.TabStop = false;
-            this.zvukPB.Click += new System.EventHandler(this.zvukPB_Click);
+            this.zvukPB.Click += new System.EventHandler(this.ZvukPB_Click);
             // 
-            // ukoncitPB
+            // UkoncitPB
             // 
-            this.ukoncitPB.Image = global::Čínská_dáma.Properties.Resources.ukoncit;
-            this.ukoncitPB.Location = new System.Drawing.Point(179, 7);
-            this.ukoncitPB.Name = "ukoncitPB";
-            this.ukoncitPB.Size = new System.Drawing.Size(82, 72);
-            this.ukoncitPB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.ukoncitPB.TabIndex = 4;
-            this.ukoncitPB.TabStop = false;
-            this.ukoncitPB.Click += new System.EventHandler(this.ukoncitPB_Click);
+            this.UkoncitPB.Image = global::Čínská_dáma.Properties.Resources.ukoncit;
+            this.UkoncitPB.Location = new System.Drawing.Point(179, 7);
+            this.UkoncitPB.Name = "UkoncitPB";
+            this.UkoncitPB.Size = new System.Drawing.Size(82, 72);
+            this.UkoncitPB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.UkoncitPB.TabIndex = 4;
+            this.UkoncitPB.TabStop = false;
+            this.UkoncitPB.Click += new System.EventHandler(this.UkoncitPB_Click);
             // 
             // restartPB
             // 
@@ -146,7 +145,7 @@
             this.restartPB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.restartPB.TabIndex = 3;
             this.restartPB.TabStop = false;
-            this.restartPB.Click += new System.EventHandler(this.restartPB_Click);
+            this.restartPB.Click += new System.EventHandler(this.RestartPB_Click);
             // 
             // konzolePanel
             // 
@@ -155,7 +154,7 @@
             this.konzolePanel.Name = "konzolePanel";
             this.konzolePanel.Size = new System.Drawing.Size(600, 55);
             this.konzolePanel.TabIndex = 7;
-            this.konzolePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.konzolePanel_Paint);
+            this.konzolePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.KonzolePanel_Paint);
             // 
             // Casovac
             // 
@@ -192,7 +191,7 @@
             this.nováHraToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.nováHraToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.nováHraToolStripMenuItem.Text = "Nová hra";
-            this.nováHraToolStripMenuItem.Click += new System.EventHandler(this.nováHraToolStripMenuItem_Click);
+            this.nováHraToolStripMenuItem.Click += new System.EventHandler(this.NováHraToolStripMenuItem_Click);
             // 
             // restartovatHruToolStripMenuItem
             // 
@@ -200,7 +199,7 @@
             this.restartovatHruToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
             this.restartovatHruToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.restartovatHruToolStripMenuItem.Text = "Restartovat hru";
-            this.restartovatHruToolStripMenuItem.Click += new System.EventHandler(this.restartovatHruToolStripMenuItem_Click);
+            this.restartovatHruToolStripMenuItem.Click += new System.EventHandler(this.RestartovatHruToolStripMenuItem_Click);
             // 
             // návratDoMenuToolStripMenuItem
             // 
@@ -208,7 +207,7 @@
             this.návratDoMenuToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
             this.návratDoMenuToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.návratDoMenuToolStripMenuItem.Text = "Návrat do menu";
-            this.návratDoMenuToolStripMenuItem.Click += new System.EventHandler(this.návratDoMenuToolStripMenuItem_Click);
+            this.návratDoMenuToolStripMenuItem.Click += new System.EventHandler(this.NávratDoMenuToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -221,15 +220,14 @@
             this.ukončitAplikaciToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
             this.ukončitAplikaciToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.ukončitAplikaciToolStripMenuItem.Text = "Ukončit aplikaci";
-            this.ukončitAplikaciToolStripMenuItem.Click += new System.EventHandler(this.ukončitAplikaciToolStripMenuItem_Click);
+            this.ukončitAplikaciToolStripMenuItem.Click += new System.EventHandler(this.UkončitAplikaciToolStripMenuItem_Click);
             // 
             // hraToolStripMenuItem
             // 
             this.hraToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.pozastavitpokračovatToolStripMenuItem,
             this.konecTahuToolStripMenuItem,
-            this.zapnoutvypnoutZvukyToolStripMenuItem,
-            this.tesrToolStripMenuItem});
+            this.zapnoutvypnoutZvukyToolStripMenuItem});
             this.hraToolStripMenuItem.Name = "hraToolStripMenuItem";
             this.hraToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.hraToolStripMenuItem.Text = "Hra";
@@ -240,7 +238,7 @@
             this.pozastavitpokračovatToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
             this.pozastavitpokračovatToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.pozastavitpokračovatToolStripMenuItem.Text = "Pozastavit/pokračovat";
-            this.pozastavitpokračovatToolStripMenuItem.Click += new System.EventHandler(this.pozastavitpokračovatToolStripMenuItem_Click);
+            this.pozastavitpokračovatToolStripMenuItem.Click += new System.EventHandler(this.PozastavitpokračovatToolStripMenuItem_Click);
             // 
             // konecTahuToolStripMenuItem
             // 
@@ -248,7 +246,7 @@
             this.konecTahuToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
             this.konecTahuToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.konecTahuToolStripMenuItem.Text = "Konec tahu";
-            this.konecTahuToolStripMenuItem.Click += new System.EventHandler(this.konecTahuToolStripMenuItem_Click);
+            this.konecTahuToolStripMenuItem.Click += new System.EventHandler(this.KonecTahuToolStripMenuItem_Click);
             // 
             // zapnoutvypnoutZvukyToolStripMenuItem
             // 
@@ -256,13 +254,7 @@
             this.zapnoutvypnoutZvukyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
             this.zapnoutvypnoutZvukyToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.zapnoutvypnoutZvukyToolStripMenuItem.Text = "Zapnout/vypnout zvuky";
-            this.zapnoutvypnoutZvukyToolStripMenuItem.Click += new System.EventHandler(this.zapnoutvypnoutZvukyToolStripMenuItem_Click);
-            // 
-            // tesrToolStripMenuItem
-            // 
-            this.tesrToolStripMenuItem.Name = "tesrToolStripMenuItem";
-            this.tesrToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
-            this.tesrToolStripMenuItem.Text = "tesr";
+            this.zapnoutvypnoutZvukyToolStripMenuItem.Click += new System.EventHandler(this.ZapnoutvypnoutZvukyToolStripMenuItem_Click);
             // 
             // nápovědaToolStripMenuItem
             // 
@@ -277,9 +269,9 @@
             // 
             this.oAplikaciToolStripMenuItem.Name = "oAplikaciToolStripMenuItem";
             this.oAplikaciToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.oAplikaciToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.oAplikaciToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.oAplikaciToolStripMenuItem.Text = "O aplikaci";
-            this.oAplikaciToolStripMenuItem.Click += new System.EventHandler(this.oAplikaciToolStripMenuItem_Click);
+            this.oAplikaciToolStripMenuItem.Click += new System.EventHandler(this.OAplikaciToolStripMenuItem_Click);
             // 
             // herniPanel
             // 
@@ -290,8 +282,8 @@
             this.herniPanel.Name = "herniPanel";
             this.herniPanel.Size = new System.Drawing.Size(600, 702);
             this.herniPanel.TabIndex = 4;
-            this.herniPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.herniPanel_Paint);
-            this.herniPanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.herniPanel_MouseClick);
+            this.herniPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.HerniPanel_Paint);
+            this.herniPanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.HerniPanel_MouseClick);
             // 
             // casLabel
             // 
@@ -335,7 +327,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.konecTahuPB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pausePB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.zvukPB)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ukoncitPB)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UkoncitPB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.restartPB)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -354,7 +346,7 @@
         private System.Windows.Forms.Panel kontrolniPanel;
         private System.Windows.Forms.PictureBox pausePB;
         private System.Windows.Forms.PictureBox zvukPB;
-        private System.Windows.Forms.PictureBox ukoncitPB;
+        private System.Windows.Forms.PictureBox UkoncitPB;
         private System.Windows.Forms.PictureBox restartPB;
         private System.Windows.Forms.Timer Casovac;
         private System.Windows.Forms.MenuStrip menuStrip1;
@@ -372,7 +364,6 @@
         private System.Windows.Forms.ToolStripMenuItem oAplikaciToolStripMenuItem;
         private System.Windows.Forms.PictureBox konecTahuPB;
         private System.Windows.Forms.Panel konzolePanel;
-        private System.Windows.Forms.ToolStripMenuItem tesrToolStripMenuItem;
         private System.Windows.Forms.Button zacitSimulaciButton;
     }
 }

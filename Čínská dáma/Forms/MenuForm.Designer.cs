@@ -53,7 +53,7 @@
             this.novaHraButton.TabIndex = 0;
             this.novaHraButton.Text = "Nová hra";
             this.novaHraButton.UseVisualStyleBackColor = true;
-            this.novaHraButton.Click += new System.EventHandler(this.novaHraButton_Click);
+            this.novaHraButton.Click += new System.EventHandler(this.NovaHraButton_Click);
             // 
             // menuStrip1
             // 
@@ -81,7 +81,7 @@
             this.nováHraToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.nováHraToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.nováHraToolStripMenuItem.Text = "Nová hra";
-            this.nováHraToolStripMenuItem.Click += new System.EventHandler(this.nováHraToolStripMenuItem_Click);
+            this.nováHraToolStripMenuItem.Click += new System.EventHandler(this.NováHraToolStripMenuItem_Click);
             // 
             // ukončitAplikaciToolStripMenuItem
             // 
@@ -89,7 +89,7 @@
             this.ukončitAplikaciToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
             this.ukončitAplikaciToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.ukončitAplikaciToolStripMenuItem.Text = "Ukončit aplikaci";
-            this.ukončitAplikaciToolStripMenuItem.Click += new System.EventHandler(this.ukončitAplikaciToolStripMenuItem_Click);
+            this.ukončitAplikaciToolStripMenuItem.Click += new System.EventHandler(this.UkončitAplikaciToolStripMenuItem_Click);
             // 
             // nápovědaToolStripMenuItem
             // 
@@ -103,10 +103,10 @@
             // 
             this.oHřeToolStripMenuItem.Name = "oHřeToolStripMenuItem";
             this.oHřeToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.oHřeToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.oHřeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.oHřeToolStripMenuItem.Text = "O hře";
             this.oHřeToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.oHřeToolStripMenuItem.Click += new System.EventHandler(this.oHřeToolStripMenuItem_Click);
+            this.oHřeToolStripMenuItem.Click += new System.EventHandler(this.OHřeToolStripMenuItem_Click);
             // 
             // menuObrazekPB
             // 
@@ -117,7 +117,7 @@
             this.menuObrazekPB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.menuObrazekPB.TabIndex = 2;
             this.menuObrazekPB.TabStop = false;
-            this.menuObrazekPB.Paint += new System.Windows.Forms.PaintEventHandler(this.menuObrazekPB_Paint);
+            this.menuObrazekPB.Paint += new System.Windows.Forms.PaintEventHandler(this.MenuObrazekPB_Paint);
             // 
             // oHreButton
             // 
@@ -128,7 +128,7 @@
             this.oHreButton.TabIndex = 3;
             this.oHreButton.Text = "O hře";
             this.oHreButton.UseVisualStyleBackColor = true;
-            this.oHreButton.Click += new System.EventHandler(this.oHreButton_Click);
+            this.oHreButton.Click += new System.EventHandler(this.OHreButton_Click);
             // 
             // zavritButton
             // 
@@ -139,7 +139,7 @@
             this.zavritButton.TabIndex = 4;
             this.zavritButton.Text = "Zavřít";
             this.zavritButton.UseVisualStyleBackColor = true;
-            this.zavritButton.Click += new System.EventHandler(this.zavritButton_Click);
+            this.zavritButton.Click += new System.EventHandler(this.ZavritButton_Click);
             // 
             // simulatorButton
             // 
@@ -150,7 +150,7 @@
             this.simulatorButton.TabIndex = 5;
             this.simulatorButton.Text = "Simulátor";
             this.simulatorButton.UseVisualStyleBackColor = true;
-            this.simulatorButton.Click += new System.EventHandler(this.simulatorButton_Click);
+            this.simulatorButton.Click += new System.EventHandler(this.SimulatorButton_Click);
             // 
             // statistikyButton
             // 
@@ -161,7 +161,7 @@
             this.statistikyButton.TabIndex = 6;
             this.statistikyButton.Text = "Statistiky";
             this.statistikyButton.UseVisualStyleBackColor = true;
-            this.statistikyButton.Click += new System.EventHandler(this.statistikyButton_Click);
+            this.statistikyButton.Click += new System.EventHandler(this.StatistikyButton_Click);
             // 
             // MenuForm
             // 
@@ -181,7 +181,6 @@
             this.Name = "MenuForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Čínská dáma - Menu";
-            this.Load += new System.EventHandler(this.MenuForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.menuObrazekPB)).EndInit();

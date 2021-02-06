@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace Čínská_dáma
 {
@@ -49,12 +47,12 @@ namespace Čínská_dáma
             }
         }
 
-        public (List<Pole>, List<LidskyHrac>, List<PocitacovyHrac>, List<MoznyTahLidskehoHrace>, ZvyrazneniPoleLidskehoHrace, List<ZvyrazneniPolePocitacovehoHrace>, List<VychoziPolePocitacovehoHrace>) herniPrvky()
+        public (List<Pole>, List<LidskyHrac>, List<PocitacovyHrac>, List<MoznyTahLidskehoHrace>, ZvyrazneniPoleLidskehoHrace, List<ZvyrazneniPolePocitacovehoHrace>, List<VychoziPolePocitacovehoHrace>) HerniPrvky()
         {
             return (herniPole, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, zvyrazneniPoleLidskehoHrace, zvyraznenaPolePocitacovehoHrace, vychoziPolePocitacovehoHrace);
         }
 
-        public void novaHra(int sirkaPanelu, HraForm hraform)//vytvoří herní, hráčova a nepřítelova pole na předem dané pozice
+        public void NovaHra(int sirkaPanelu, HraForm hraform)//vytvoří herní, hráčova a nepřítelova pole na předem dané pozice
         {
             //reset parametrů předchozí hry
             viteziciPocitacovyHrac = 0;
@@ -143,14 +141,14 @@ namespace Čínská_dáma
             for (int i = 0; i < herniPole.Count; i++)
             {
                 Pole pole = herniPole[i];
-                poz_X_He = pole.get_poz_X_He();
-                poz_Y_He = pole.get_poz_Y_He();
+                poz_X_He = pole.Get_poz_X_He();
+                poz_Y_He = pole.Get_poz_Y_He();
 
                 if(!simulaceMod)
                 {
                     if (pocetHracu != 4)
                     {
-                        if (poz_Y_He >= posun * 13 + horniOdsazeni && poleLidskehoHrace.Count < 10)
+                        if (JePoleVNejnizsimRohu(poz_Y_He) && poleLidskehoHrace.Count < 10)
                         {
                             LidskyHrac lidskyHrac = new LidskyHrac(poz_X_He, poz_Y_He, sirkaPole, vyskaPole);
                             poleLidskehoHrace.Add(lidskyHrac);
@@ -158,7 +156,7 @@ namespace Čínská_dáma
                     }
                     else
                     {
-                        if ((poz_Y_He == posun * 9 + horniOdsazeni && poz_X_He == leveOdsazeni - posun * 4 - posun / 2) || (poz_Y_He == posun * 10 + horniOdsazeni && poz_X_He <= leveOdsazeni - posun * 4) || (poz_Y_He == posun * 11 + horniOdsazeni && poz_X_He <= leveOdsazeni - posun * 3 - posun / 2) || (poz_Y_He == posun * 12 + horniOdsazeni && poz_X_He <= leveOdsazeni - posun * 3) && poleLidskehoHrace.Count < 10)
+                        if (JePoleVSpodnimLevemRohu(poz_X_He, poz_Y_He) && poleLidskehoHrace.Count < 10)
                         {
                             LidskyHrac lidskyHrac = new LidskyHrac(poz_X_He, poz_Y_He, sirkaPole, vyskaPole);
                             poleLidskehoHrace.Add(lidskyHrac);
@@ -167,10 +165,10 @@ namespace Čínská_dáma
                 }
 
                 //zašedění neaktivních polí
-                if((pocetHracu == 2 && (jePoleVHornimLevemRohu(poz_X_He, poz_Y_He) || jePoleVHornimPravemRohu(poz_X_He, poz_Y_He) || jePoleVSpodnimLevemRohu(poz_X_He, poz_Y_He) || jePoleVSpodnimPravemRohu(poz_X_He, poz_Y_He))) ||
-                    (pocetHracu == 4 && (jePoleVNejnizsimRohu(poz_X_He, poz_Y_He) || jePoleVNejvyssimRohu(poz_X_He, poz_Y_He))))
+                if((pocetHracu == 2 && (JePoleVHornimLevemRohu(poz_X_He, poz_Y_He) || JePoleVHornimPravemRohu(poz_X_He, poz_Y_He) || JePoleVSpodnimLevemRohu(poz_X_He, poz_Y_He) || JePoleVSpodnimPravemRohu(poz_X_He, poz_Y_He))) ||
+                    (pocetHracu == 4 && (JePoleVNejnizsimRohu(poz_Y_He) || JePoleVNejvyssimRohu(poz_Y_He))))
                 {
-                    herniPole[i].set_jeAktivni(false);
+                    herniPole[i].Set_jeAktivni(false);
                 }
 
                 for (int n = 0; n <= 6; n++)
@@ -179,12 +177,12 @@ namespace Čínská_dáma
                     {
                         continue;
                     }
-                    if ((n == 0 && poz_Y_He >= posun * 13 + horniOdsazeni && simulaceMod) ||
-                        (n == 2 && poz_Y_He <= posun * 3 + horniOdsazeni) ||
-                        (n == 3 && ((poz_Y_He == posun * 4 + horniOdsazeni && poz_X_He <= leveOdsazeni - posun * 3) || (poz_Y_He == posun * 5 + horniOdsazeni && poz_X_He <= leveOdsazeni - posun * 3 - posun / 2) || (poz_Y_He == posun * 6 + horniOdsazeni && poz_X_He <= leveOdsazeni - posun * 4) || (poz_Y_He == posun * 7 + horniOdsazeni && poz_X_He == leveOdsazeni - posun * 4 - posun / 2))) ||
-                        (n == 4 && ((poz_Y_He == posun * 4 + horniOdsazeni && poz_X_He >= leveOdsazeni + posun * 3) || (poz_Y_He == posun * 5 + horniOdsazeni && poz_X_He >= leveOdsazeni + posun * 3 + posun / 2) || (poz_Y_He == posun * 6 + horniOdsazeni && poz_X_He >= leveOdsazeni + posun * 4) || (poz_Y_He == posun * 7 + horniOdsazeni && poz_X_He == leveOdsazeni + posun * 4 + posun / 2))) ||
-                        (n == 5 && ((poz_Y_He == posun * 9 + horniOdsazeni && poz_X_He == leveOdsazeni - posun * 4 - posun / 2) || (poz_Y_He == posun * 10 + horniOdsazeni && poz_X_He <= leveOdsazeni - posun * 4) || (poz_Y_He == posun * 11 + horniOdsazeni && poz_X_He <= leveOdsazeni - posun * 3 - posun / 2) || (poz_Y_He == posun * 12 + horniOdsazeni && poz_X_He <= leveOdsazeni - posun * 3))) ||
-                        (n == 6 && ((poz_Y_He == posun * 9 + horniOdsazeni && poz_X_He == leveOdsazeni + posun * 4 + posun / 2) || (poz_Y_He == posun * 10 + horniOdsazeni && poz_X_He >= leveOdsazeni + posun * 4) || (poz_Y_He == posun * 11 + horniOdsazeni && poz_X_He >= leveOdsazeni + posun * 3 + posun / 2) || (poz_Y_He == posun * 12 + horniOdsazeni && poz_X_He >= leveOdsazeni + posun * 3))))
+                    if ((n == 0 && JePoleVNejnizsimRohu(poz_Y_He) && simulaceMod) ||
+                        (n == 2 && JePoleVNejvyssimRohu(poz_Y_He)) ||
+                        (n == 3 && JePoleVHornimLevemRohu(poz_X_He, poz_Y_He)) ||
+                        (n == 4 && JePoleVHornimPravemRohu(poz_X_He, poz_Y_He)) ||
+                        (n == 5 && JePoleVSpodnimLevemRohu(poz_X_He, poz_Y_He)) ||
+                        (n == 6 && JePoleVSpodnimPravemRohu(poz_X_He, poz_Y_He)))
                     {
                         PocitacovyHrac pocitacovyHrac = new PocitacovyHrac(poz_X_He, poz_Y_He, sirkaPole, vyskaPole, n);
                        polePocitacovehoHrace.Add(pocitacovyHrac);
@@ -193,11 +191,11 @@ namespace Čínská_dáma
             }
             if (prvniTah == 2)
             {
-                pocitacovyHracPohyb(hraform);
+                PocitacovyHracPohyb(hraform);
             }
         }
 
-        public void panelKliknuti(int x, int y, HraForm hraform)
+        public void PanelKliknuti(int x, int y, HraForm hraform)
         {
             konzoleZprava = 0;
             int poz_X_LHr, poz_Y_LHr, poz_X_KHr, poz_Y_KHr, poz_X_He, poz_Y_He, poz_X_He_S, poz_Y_He_S;
@@ -209,28 +207,28 @@ namespace Čínská_dáma
             for (int i = 0; i < herniPole.Count; i++)
             {
                 Pole pole = herniPole[i];
-                poz_X_He = pole.get_poz_X_He();
-                poz_Y_He = pole.get_poz_Y_He();
+                poz_X_He = pole.Get_poz_X_He();
+                poz_Y_He = pole.Get_poz_Y_He();
                 poz_X_He_S = poz_X_He + (sirkaPole / 2);
                 poz_Y_He_S = poz_Y_He + (vyskaPole / 2);
 
-                bool vPoli = jeVPoli(poz_X_He_S, poz_Y_He_S, sirkaPole / 2, x, y);//ověří, jestli se právě kliknuté souřadnice nacházejí v daném poli
+                bool vPoli = JeVPoli(poz_X_He_S, poz_Y_He_S, sirkaPole / 2, x, y);//ověří, jestli se právě kliknuté souřadnice nacházejí v daném poli
                 if(vPoli)
                 {
                     for(int j = 0; j < poleLidskehoHrace.Count; j++)
                     {
                         LidskyHrac lidskyHrac = poleLidskehoHrace[j];
-                        poz_X_KHr = lidskyHrac.get_poz_X_LHr();
-                        poz_Y_KHr = lidskyHrac.get_poz_Y_LHr();
+                        poz_X_KHr = lidskyHrac.Get_poz_X_LHr();
+                        poz_Y_KHr = lidskyHrac.Get_poz_Y_LHr();
                         if (poz_X_He == poz_X_KHr && poz_Y_He == poz_Y_KHr)//nalezli jsme hráčovo pole, do kterého uživatel kliknul
                         {
-                            HraForm.prehratZvuk(1);
-                            if (zvyrazneniPoleLidskehoHrace != null && (poz_X_He == zvyrazneniPoleLidskehoHrace.get_poz_X_Zv() && poz_Y_He == zvyrazneniPoleLidskehoHrace.get_poz_Y_Zv()) && hracProvedlSkok)//hráč klikl na pole na které se přesunul - chce tedy ukončit tah
+                            HraForm.PrehratZvuk(1);
+                            if (zvyrazneniPoleLidskehoHrace != null && (poz_X_He == zvyrazneniPoleLidskehoHrace.Get_poz_X_Zv() && poz_Y_He == zvyrazneniPoleLidskehoHrace.Get_poz_Y_Zv()) && hracProvedlSkok)//hráč klikl na pole na které se přesunul - chce tedy ukončit tah
                             {
                                 ukoncitTah = true;
                             }
                             mozneTahyLidskehoHrace.Clear();
-                            vypocetMoznychTahu.pridaniMoznychTahu(poz_X_KHr, poz_Y_KHr, 1, pocetHracu, false, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                            vypocetMoznychTahu.PridaniMoznychTahu(poz_X_KHr, poz_Y_KHr, 1, pocetHracu, false, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
 
                             zvyrazneniPoleLidskehoHrace = new ZvyrazneniPoleLidskehoHrace(poz_X_KHr, poz_Y_KHr, sirkaPole, vyskaPole);
                             break;
@@ -240,35 +238,35 @@ namespace Čínská_dáma
                     for(int j = 0; j < mozneTahyLidskehoHrace.Count; j++)
                     {
                         MoznyTahLidskehoHrace moznyTah = mozneTahyLidskehoHrace[j];
-                        poz_X_MT = moznyTah.get_poz_X_MT();
-                        poz_Y_MT = moznyTah.get_poz_Y_MT();
+                        poz_X_MT = moznyTah.Get_poz_X_MT();
+                        poz_Y_MT = moznyTah.Get_poz_Y_MT();
                         if (poz_X_He == poz_X_MT && poz_Y_He == poz_Y_MT)//nalezli jsme možný tah, do kterého hráč kliknul
                         {
                             if (!kliknutMoznyTah)
                             {
-                                hraform.konecTahuButton();
+                                hraform.KonecTahuButton();
                             }
                             kliknutMoznyTah = true;
-                            HraForm.prehratZvuk(1);
+                            HraForm.PrehratZvuk(1);
                             mozneTahyLidskehoHrace.Clear();
                             for (int k = 0; k < poleLidskehoHrace.Count; k++)
                             {
                                 LidskyHrac h = poleLidskehoHrace[k];
-                                poz_X_LHr = h.get_poz_X_LHr();
-                                poz_Y_LHr = h.get_poz_Y_LHr();
-                                if (poz_X_LHr == zvyrazneniPoleLidskehoHrace.get_poz_X_Zv() && poz_Y_LHr == zvyrazneniPoleLidskehoHrace.get_poz_Y_Zv())
+                                poz_X_LHr = h.Get_poz_X_LHr();
+                                poz_Y_LHr = h.Get_poz_Y_LHr();
+                                if (poz_X_LHr == zvyrazneniPoleLidskehoHrace.Get_poz_X_Zv() && poz_Y_LHr == zvyrazneniPoleLidskehoHrace.Get_poz_Y_Zv())
                                 {
                                     poleLidskehoHrace.Remove(h);
                                 }
                             }
                             LidskyHrac lidskyHrac = new LidskyHrac(poz_X_He, poz_Y_He, sirkaPole, vyskaPole);
                             poleLidskehoHrace.Add(lidskyHrac);
-                            if (Math.Abs(poz_X_MT - zvyrazneniPoleLidskehoHrace.get_poz_X_Zv()) > posun + 1 || Math.Abs(poz_Y_MT - zvyrazneniPoleLidskehoHrace.get_poz_Y_Zv()) > posun + 1)//hráč se posunul skokem - nalezneme možné tahy z pole na které skočil
+                            if (Math.Abs(poz_X_MT - zvyrazneniPoleLidskehoHrace.Get_poz_X_Zv()) > posun + 1 || Math.Abs(poz_Y_MT - zvyrazneniPoleLidskehoHrace.Get_poz_Y_Zv()) > posun + 1)//hráč se posunul skokem - nalezneme možné tahy z pole na které skočil
                             {
-                                delkaSkokuX = Math.Abs(poz_X_MT - zvyrazneniPoleLidskehoHrace.get_poz_X_Zv());
-                                delkaSkokuY = Math.Abs(poz_Y_MT - zvyrazneniPoleLidskehoHrace.get_poz_Y_Zv());
+                                delkaSkokuX = Math.Abs(poz_X_MT - zvyrazneniPoleLidskehoHrace.Get_poz_X_Zv());
+                                delkaSkokuY = Math.Abs(poz_Y_MT - zvyrazneniPoleLidskehoHrace.Get_poz_Y_Zv());
                                 hracProvedlSkok = true;
-                                vypocetMoznychTahu.pridaniMoznychTahu(poz_X_He, poz_Y_He, 1, pocetHracu, hracProvedlSkok, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                                vypocetMoznychTahu.PridaniMoznychTahu(poz_X_He, poz_Y_He, 1, pocetHracu, hracProvedlSkok, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                                 zvyrazneniPoleLidskehoHrace = new ZvyrazneniPoleLidskehoHrace(poz_X_MT, poz_Y_MT, sirkaPole, vyskaPole);
                             }
                             else//hráč se přemístil na sousední pole - tah tedy ukončíme
@@ -281,41 +279,41 @@ namespace Čínská_dáma
             }
             if(ukoncitTah)
             {
-                konecTahu(hraform);
+                KonecTahu(hraform);
             }
         }
 
-        private bool jeVPoli(int poz_X_He_S, int poz_Y_He_S, int prumerPole, int eX, int eY)//ověří, jestli se souřadnice na které hráč klikl nalézají v některém z herních polí
+        private bool JeVPoli(int poz_X_He_S, int poz_Y_He_S, int prumerPole, int eX, int eY)//ověří, jestli se souřadnice na které hráč klikl nalézají v některém z herních polí
         {
             int pozX = poz_X_He_S - eX;
             int pozY = poz_Y_He_S - eY;
             return pozX * pozX + pozY * pozY <= prumerPole * prumerPole;
         }
 
-        public void konecTahu(HraForm hraform)
+        public void KonecTahu(HraForm hraform)
         {
             mozneTahyLidskehoHrace.Clear();
             pocetTahu++;
             zvyrazneniPoleLidskehoHrace = null;
             hracProvedlSkok = false;
-            hraform.konecTahuButton();
+            hraform.KonecTahuButton();
             kliknutMoznyTah = false;
-            HraForm.prehratZvuk(2);
+            HraForm.PrehratZvuk(2);
             if (prvniTah == 2)
             {
-                kontrolaVitezstvi();
+                KontrolaVitezstvi();
             }
             if(konzoleZprava < 4)
             {
-                pocitacovyHracPohyb(hraform);
+                PocitacovyHracPohyb(hraform);
             }
             if (prvniTah == 1)
             {
-                kontrolaVitezstvi();
+                KontrolaVitezstvi();
             }
         }
 
-        private void kontrolaVitezstvi()//při dokončení kola (všichni hráči táhli) je zkontrolováno, jestli některý z hráčů nevyhrál (všechna jeho pole se nalézají na protější straně herního pole)
+        private void KontrolaVitezstvi()//při dokončení kola (všichni hráči táhli) je zkontrolováno, jestli některý z hráčů nevyhrál (všechna jeho pole se nalézají na protější straně herního pole)
         {
             int poz_X_LHr, poz_Y_LHr, poz_X_PHr, poz_Y_PHr, idPocitacovehoHrace;
             bool lidskyHracVyhral = true;
@@ -323,18 +321,18 @@ namespace Čínská_dáma
             for (int i = 0; i < poleLidskehoHrace.Count; i++)
             {
                 LidskyHrac lidskyHrac = poleLidskehoHrace[i];
-                poz_X_LHr = lidskyHrac.get_poz_X_LHr();
-                poz_Y_LHr = lidskyHrac.get_poz_Y_LHr();
+                poz_X_LHr = lidskyHrac.Get_poz_X_LHr();
+                poz_Y_LHr = lidskyHrac.Get_poz_Y_LHr();
                 if (pocetHracu != 4)
                 {
-                    if (poz_Y_LHr > posun * 3 + horniOdsazeni)
+                    if(!JePoleVNejvyssimRohu(poz_Y_LHr))
                     {
                         lidskyHracVyhral = false;
                     }
                 }
                 else
                 {
-                    if ((poz_Y_LHr > posun * 7 + horniOdsazeni) || (poz_Y_LHr < posun * 4 + horniOdsazeni) || (poz_Y_LHr == posun * 4 + horniOdsazeni && poz_X_LHr < leveOdsazeni + posun * 3) || (poz_Y_LHr == posun * 5 + horniOdsazeni && poz_X_LHr < leveOdsazeni + posun * 3 + posun / 2) || (poz_Y_LHr == posun * 6 + horniOdsazeni && poz_X_LHr < leveOdsazeni + posun * 4) || (poz_Y_LHr == posun * 7 + horniOdsazeni && poz_X_LHr != leveOdsazeni + posun * 4 + posun / 2))
+                    if (!JePoleVHornimPravemRohu(poz_X_LHr, poz_Y_LHr))
                     {
                         lidskyHracVyhral = false;
                     }
@@ -349,9 +347,9 @@ namespace Čínská_dáma
                 for (int j = 0; j < polePocitacovehoHrace.Count; j++)
                 {
                     PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[j];
-                    poz_X_PHr = pocitacovyHrac.get_poz_X_PHr();
-                    poz_Y_PHr = pocitacovyHrac.get_poz_Y_PHr();
-                    idPocitacovehoHrace = pocitacovyHrac.get_idPocitacovehoHrace();
+                    poz_X_PHr = pocitacovyHrac.Get_poz_X_PHr();
+                    poz_Y_PHr = pocitacovyHrac.Get_poz_Y_PHr();
+                    idPocitacovehoHrace = pocitacovyHrac.Get_idPocitacovehoHrace();
 
                     if (idPocitacovehoHrace != i)
                     {
@@ -366,32 +364,32 @@ namespace Čínská_dáma
                         pocetPoliPocitacovehoHrace[idPocitacovehoHrace - 2] += 1;
                     }
 
-                    if(idPocitacovehoHrace == 0 && poz_Y_PHr > posun * 3 + horniOdsazeni)
+                    if(idPocitacovehoHrace == 0 && !JePoleVNejvyssimRohu(poz_Y_PHr))
                     {
                         vyhraPocitacovehoHrace[5] = false;
                     }
 
-                    if (idPocitacovehoHrace == 2 && poz_Y_PHr < posun * 13 + horniOdsazeni)
+                    if(idPocitacovehoHrace == 2 && !JePoleVNejnizsimRohu(poz_Y_PHr))
                     {
                         vyhraPocitacovehoHrace[0] = false;
                     }
 
-                    if (idPocitacovehoHrace == 3 && ((poz_Y_PHr < posun * 9 + horniOdsazeni) || (poz_Y_PHr > posun * 12 + horniOdsazeni) || (poz_Y_PHr == posun * 9 + horniOdsazeni && poz_X_PHr != leveOdsazeni + posun * 4 + posun / 2) || (poz_Y_PHr == posun * 10 + horniOdsazeni && poz_X_PHr < leveOdsazeni + posun * 4) || (poz_Y_PHr == posun * 11 + horniOdsazeni && poz_X_PHr < leveOdsazeni + posun * 3 + posun / 2) || (poz_Y_PHr == posun * 12 + horniOdsazeni && poz_X_PHr < leveOdsazeni + posun * 3)))
+                    if(idPocitacovehoHrace == 3 && !JePoleVSpodnimPravemRohu(poz_X_PHr, poz_Y_PHr))
                     {
                         vyhraPocitacovehoHrace[1] = false;
                     }
 
-                    if (idPocitacovehoHrace == 4 && ((poz_Y_PHr < posun * 9 + horniOdsazeni) || (poz_Y_PHr > posun * 12 + horniOdsazeni) || (poz_Y_PHr == posun * 9 + horniOdsazeni && poz_X_PHr != leveOdsazeni - posun * 4 - posun / 2) || (poz_Y_PHr == posun * 10 + horniOdsazeni && poz_X_PHr > leveOdsazeni - posun * 4) || (poz_Y_PHr == posun * 11 + horniOdsazeni && poz_X_PHr > leveOdsazeni - posun * 3 - posun / 2) || (poz_Y_PHr == posun * 12 + horniOdsazeni && poz_X_PHr > leveOdsazeni - posun * 3)))
+                    if(idPocitacovehoHrace == 4 && !JePoleVSpodnimLevemRohu(poz_X_PHr, poz_Y_PHr))
                     {
                         vyhraPocitacovehoHrace[2] = false;
                     }
 
-                    if (idPocitacovehoHrace == 5 && ((poz_Y_PHr > posun * 7 + horniOdsazeni) || (poz_Y_PHr < posun * 4 + horniOdsazeni) || (poz_Y_PHr == posun * 4 + horniOdsazeni && poz_X_PHr < leveOdsazeni + posun * 3) || (poz_Y_PHr == posun * 5 + horniOdsazeni && poz_X_PHr < leveOdsazeni + posun * 3 + posun / 2) || (poz_Y_PHr == posun * 6 + horniOdsazeni && poz_X_PHr < leveOdsazeni + posun * 4) || (poz_Y_PHr == posun * 7 + horniOdsazeni && poz_X_PHr != leveOdsazeni + posun * 4 + posun / 2)))
+                    if(idPocitacovehoHrace == 5 && !JePoleVHornimPravemRohu(poz_X_PHr, poz_Y_PHr))
                     {
                         vyhraPocitacovehoHrace[3] = false;
                     }
 
-                    if (idPocitacovehoHrace == 6 && ((poz_Y_PHr > posun * 7 + horniOdsazeni) || (poz_Y_PHr < posun * 4 + horniOdsazeni) || (poz_Y_PHr == posun * 4 + horniOdsazeni && poz_X_PHr > leveOdsazeni - posun * 3) || (poz_Y_PHr == posun * 5 + horniOdsazeni && poz_X_PHr > leveOdsazeni - posun * 3 - posun / 2) || (poz_Y_PHr == posun * 6 + horniOdsazeni && poz_X_PHr > leveOdsazeni - posun * 4) || (poz_Y_PHr == posun * 7 + horniOdsazeni && poz_X_PHr != leveOdsazeni - posun * 4 - posun / 2)))
+                    if(idPocitacovehoHrace == 6 && !JePoleVHornimLevemRohu(poz_X_PHr, poz_Y_PHr))
                     {
                         vyhraPocitacovehoHrace[4] = false;
                     }
@@ -422,7 +420,7 @@ namespace Čínská_dáma
 
             if(viteziciPocitacovyHrac != 0 && simulaceMod)
             {
-                zapisDoStatistik(viteziciPocitacovyHrac);
+                ZapisDoStatistik(viteziciPocitacovyHrac);
                 konzoleZprava = 7;
             }
 
@@ -446,7 +444,7 @@ namespace Čínská_dáma
             }
         }
 
-        public void zapisDoStatistik(int viteziciPocitacovyHrac)
+        public void ZapisDoStatistik(int viteziciPocitacovyHrac)
         {
             string[] radky = File.ReadAllLines(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\Statistiky.txt");
 
@@ -468,10 +466,6 @@ namespace Čínská_dáma
             }
 
             string vyslednyText = "";
-        /*    if(radky[0] != null)
-            {
-                vyslednyText += "\n";
-            }*/
            if(radky.Length != 0)
             {
                 vyslednyText += "\n";
@@ -480,19 +474,19 @@ namespace Čínská_dáma
             File.AppendAllText(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\Statistiky.txt", vyslednyText);
         }
 
-        public void pocitacovyHracPohyb(HraForm hraform)
+        public void PocitacovyHracPohyb(HraForm hraform)
         {
             if (konzoleZprava < 4)
             {
                 konzoleZprava = 1;
             }
-            hraform.konzoleRefresh(0);
+            hraform.KonzoleRefresh(0);
             PohybPocitacovehoHrace pohybPocitacovehoHrace = new PohybPocitacovehoHrace(pocetHracu, prvniTah, pocetTahu, sirkaPole, vyskaPole, posun, horniOdsazeni, leveOdsazeni, herniPole, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace, zvyraznenaPolePocitacovehoHrace, vychoziPolePocitacovehoHrace, kontumaceVyhraHrac, simulaceMod);
-            (polePocitacovehoHrace, vychoziPolePocitacovehoHrace, zvyraznenaPolePocitacovehoHrace, kontumaceVyhraHrac) = pohybPocitacovehoHrace.provestPohyb(hraform, obtiznost, simulaceObtiznost);
+            (polePocitacovehoHrace, vychoziPolePocitacovehoHrace, zvyraznenaPolePocitacovehoHrace, kontumaceVyhraHrac) = pohybPocitacovehoHrace.ProvestPohyb(hraform, obtiznost, simulaceObtiznost);
             if (simulaceMod)
             {
                 pocetTahu++;
-                kontrolaVitezstvi();
+                KontrolaVitezstvi();
             }
             if (konzoleZprava < 4)
             {
@@ -505,20 +499,20 @@ namespace Čínská_dáma
                     konzoleZprava = 0;
                 }
             }
-            hraform.konzoleRefresh(0);
+            hraform.KonzoleRefresh(0);
         }
 
-        public int getPocetTahu()
+        public int GetPocetTahu()
         {
             return pocetTahu;
         }
 
-        public (int, int, bool) getKonzoleZprava()
+        public (int, int, bool) GetKonzoleZprava()
         {
             return (konzoleZprava, viteziciPocitacovyHrac, kontumaceVyhra);
         }
 
-        private bool jePoleVNejvyssimRohu(int poz_X_He, int poz_Y_He)
+        private bool JePoleVNejvyssimRohu(int poz_Y_He)
         {
             if (poz_Y_He > horniOdsazeni + posun * 3)
             {
@@ -527,7 +521,7 @@ namespace Čínská_dáma
             return true;
         }
 
-        private bool jePoleVNejnizsimRohu(int poz_X_He, int poz_Y_He)
+        private bool JePoleVNejnizsimRohu(int poz_Y_He)
         {
             if (poz_Y_He < horniOdsazeni + posun * 13)
             {
@@ -536,7 +530,7 @@ namespace Čínská_dáma
             return true;
         }
 
-        private bool jePoleVSpodnimLevemRohu(int poz_X_He, int poz_Y_He)
+        private bool JePoleVSpodnimLevemRohu(int poz_X_He, int poz_Y_He)
         {
             if ((poz_Y_He <= horniOdsazeni + posun * 8) || (poz_Y_He >= horniOdsazeni + posun * 13) || (poz_Y_He == posun * 9 + horniOdsazeni && poz_X_He > leveOdsazeni - posun * 4 - posun / 2) || (poz_Y_He == posun * 10 + horniOdsazeni && poz_X_He > leveOdsazeni - posun * 4) || (poz_Y_He == posun * 11 + horniOdsazeni && poz_X_He > leveOdsazeni - posun * 3 - posun / 2) || (poz_Y_He == posun * 12 + horniOdsazeni && poz_X_He > leveOdsazeni - posun * 3))
             {
@@ -545,7 +539,7 @@ namespace Čínská_dáma
             return true;
         }
 
-        private bool jePoleVHornimPravemRohu(int poz_X_He, int poz_Y_He)
+        private bool JePoleVHornimPravemRohu(int poz_X_He, int poz_Y_He)
         {
             if ((poz_Y_He >= horniOdsazeni + posun * 8) || (poz_Y_He <= horniOdsazeni + posun * 3) || (poz_Y_He == horniOdsazeni + posun * 7 && poz_X_He < leveOdsazeni + posun * 4 + posun / 2) || (poz_Y_He == horniOdsazeni + posun * 6 && poz_X_He < leveOdsazeni + posun * 4) || (poz_Y_He == horniOdsazeni + posun * 5 && poz_X_He < leveOdsazeni + posun * 3 + posun / 2) || (poz_Y_He == horniOdsazeni + posun * 4 && poz_X_He < leveOdsazeni + posun * 3))
             {
@@ -554,7 +548,7 @@ namespace Čínská_dáma
             return true;
         }
 
-        private bool jePoleVSpodnimPravemRohu(int poz_X_He, int poz_Y_He)
+        private bool JePoleVSpodnimPravemRohu(int poz_X_He, int poz_Y_He)
         {
             if ((poz_Y_He <= horniOdsazeni + posun * 8) || (poz_Y_He >= horniOdsazeni + posun * 13) || (poz_Y_He == posun * 9 + horniOdsazeni && poz_X_He < leveOdsazeni + posun * 4 + posun / 2) || (poz_Y_He == posun * 10 + horniOdsazeni && poz_X_He < leveOdsazeni + posun * 4) || (poz_Y_He == posun * 11 + horniOdsazeni && poz_X_He < leveOdsazeni + posun * 3 + posun / 2) || (poz_Y_He == posun * 12 + horniOdsazeni && poz_X_He < leveOdsazeni + posun * 3))
             {
@@ -563,7 +557,7 @@ namespace Čínská_dáma
             return true;
         }
 
-        private bool jePoleVHornimLevemRohu(int poz_X_He, int poz_Y_He)
+        private bool JePoleVHornimLevemRohu(int poz_X_He, int poz_Y_He)
         {
             if ((poz_Y_He >= horniOdsazeni + posun * 8) || (poz_Y_He <= horniOdsazeni + posun * 3) || (poz_Y_He == horniOdsazeni + posun * 7 && poz_X_He > leveOdsazeni - posun * 4 - posun / 2) || (poz_Y_He == horniOdsazeni + posun * 6 && poz_X_He > leveOdsazeni - posun * 4) || (poz_Y_He == horniOdsazeni + posun * 5 && poz_X_He > leveOdsazeni - posun * 3 - posun / 2) || (poz_Y_He == horniOdsazeni + posun * 4 && poz_X_He > leveOdsazeni - posun * 3))
             {

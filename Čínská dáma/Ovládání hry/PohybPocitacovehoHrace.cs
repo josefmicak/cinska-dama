@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace Čínská_dáma
 {
@@ -51,7 +50,7 @@ namespace Čínská_dáma
             this.simulaceMod = simulaceMod;
         }
 
-        public (List<PocitacovyHrac>, List<VychoziPolePocitacovehoHrace>, List<ZvyrazneniPolePocitacovehoHrace>, int) provestPohyb(HraForm hraform, int obtiznost, int[] simulaceObtiznost)
+        public (List<PocitacovyHrac>, List<VychoziPolePocitacovehoHrace>, List<ZvyrazneniPolePocitacovehoHrace>, int) ProvestPohyb(HraForm hraform, int obtiznost, int[] simulaceObtiznost)
         {
             int poz_X_PHr, poz_Y_PHr, poz_X_MT, poz_Y_MT, idOdebiranehoPole = 0, novePoleX, novePoleY, poleKeKontroleX, poleKeKontroleY, delkaSkokuX = 0, delkaSkokuY = 0;
             int maxRozdilY, rozdilX = 0, idPocitacovehoHrace, maxRozdil, pocetPosledniRadek, pocetPredposledniRadek, pozXPosledniRadek = 0, pozXPredposledniRadek = 0;
@@ -66,8 +65,8 @@ namespace Čínská_dáma
             vychoziPolePocitacovehoHrace.Clear();
             zvyraznenaPolePocitacovehoHrace.Clear();
 
-            vytvoreniTahuLidskehoHrace();
-            int nejvyhodnejsiHracuvTah = vypocetNejvyhodnejsihoTahuLidskehoHrace(pocetHracu);
+            VytvoreniTahuLidskehoHrace();
+            int nejvyhodnejsiHracuvTah = VypocetNejvyhodnejsihoTahuLidskehoHrace(pocetHracu);
 
             for (int n = 0; n <= 6; n++)
             {
@@ -110,14 +109,14 @@ namespace Čínská_dáma
                         hracSePohlSkokem = false;
 
                         PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
-                        poz_X_PHr = pocitacovyHrac.get_poz_X_PHr();
-                        poz_Y_PHr = pocitacovyHrac.get_poz_Y_PHr();
-                        idPocitacovehoHrace = pocitacovyHrac.get_idPocitacovehoHrace();
+                        poz_X_PHr = pocitacovyHrac.Get_poz_X_PHr();
+                        poz_Y_PHr = pocitacovyHrac.Get_poz_Y_PHr();
+                        idPocitacovehoHrace = pocitacovyHrac.Get_idPocitacovehoHrace();
                         if (idPocitacovehoHrace != n)
                         {
                             continue;
                         }
-                        vypocetMoznychTahu.pridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                     }
                     if (obtiznost == 1)
                     {
@@ -125,15 +124,15 @@ namespace Čínská_dáma
                         for (int i = 0; i < mozneTahyPocitacovehoHrace.Count; i++)
                         {
                             MoznyTahPocitacovehoHrace moznyTahPocitacovehoHrace = mozneTahyPocitacovehoHrace[i];
-                            idPocitacovehoHrace = moznyTahPocitacovehoHrace.get_idPocitacovehoHrace();
+                            idPocitacovehoHrace = moznyTahPocitacovehoHrace.Get_idPocitacovehoHrace();
                             if (n != idPocitacovehoHrace)
                             {
                                 continue;
                             }
-                            poz_X_MT = moznyTahPocitacovehoHrace.get_poz_X_MT();
-                            poz_Y_MT = moznyTahPocitacovehoHrace.get_poz_Y_MT();
-                            poz_X_PHr = moznyTahPocitacovehoHrace.get_poz_X_KPHr();
-                            poz_Y_PHr = moznyTahPocitacovehoHrace.get_poz_Y_KPHr();
+                            poz_X_MT = moznyTahPocitacovehoHrace.Get_poz_X_MT();
+                            poz_Y_MT = moznyTahPocitacovehoHrace.Get_poz_Y_MT();
+                            poz_X_PHr = moznyTahPocitacovehoHrace.Get_poz_X_KPHr();
+                            poz_Y_PHr = moznyTahPocitacovehoHrace.Get_poz_Y_KPHr();
                             switch (n)
                             {
                                 case 0:
@@ -149,25 +148,25 @@ namespace Čínská_dáma
                                     }
                                     break;
                                 case 3:
-                                    if (((poz_X_MT > poz_X_PHr && poz_Y_MT > poz_Y_PHr)))
+                                    if (poz_X_MT > poz_X_PHr && poz_Y_MT > poz_Y_PHr)
                                     {
                                         proveditelnePohyby.Add(i);
                                     }
                                     break;
                                 case 4:
-                                    if (((poz_X_MT < poz_X_PHr && poz_Y_MT > poz_Y_PHr)))
+                                    if (poz_X_MT < poz_X_PHr && poz_Y_MT > poz_Y_PHr)
                                     {
                                         proveditelnePohyby.Add(i);
                                     }
                                     break;
                                 case 5:
-                                    if (((poz_X_MT > poz_X_PHr && poz_Y_MT < poz_Y_PHr)))
+                                    if (poz_X_MT > poz_X_PHr && poz_Y_MT < poz_Y_PHr)
                                     {
                                         proveditelnePohyby.Add(i);
                                     }
                                     break;
                                 case 6:
-                                    if (((poz_X_MT < poz_X_PHr && poz_Y_MT < poz_Y_PHr)))
+                                    if (poz_X_MT < poz_X_PHr && poz_Y_MT < poz_Y_PHr)
                                     {
                                         proveditelnePohyby.Add(i);
                                     }
@@ -175,7 +174,7 @@ namespace Čínská_dáma
                             }
                         }
                         int cislo = random.Next(0, proveditelnePohyby.Count);
-                        int idPohybu = 0;
+                        int idPohybu;
                         if (proveditelnePohyby.Count == 0)//pokud není k dispozici žádný pohyb, provedeme náhodně vybraný tah
                         {
                             idPohybu = random.Next(0, mozneTahyPocitacovehoHrace.Count);
@@ -184,16 +183,19 @@ namespace Čínská_dáma
                         {
                             idPohybu = proveditelnePohyby[cislo];
                         }
-                        for (int i = 0; i < polePocitacovehoHrace.Count; i++)
+                        if(mozneTahyPocitacovehoHrace.Count > 0)//u her více hráčů se může ve velmi vzácných případech stát, že není k dispozici žádný možný tah
                         {
-                            PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
-                            if (pocitacovyHrac.get_poz_X_PHr() == mozneTahyPocitacovehoHrace[idPohybu].get_poz_X_KPHr() && pocitacovyHrac.get_poz_Y_PHr() == mozneTahyPocitacovehoHrace[idPohybu].get_poz_Y_KPHr())
+                            for (int i = 0; i < polePocitacovehoHrace.Count; i++)
                             {
-                                idOdebiranehoPole = i;
-                                break;
+                                PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
+                                if (pocitacovyHrac.Get_poz_X_PHr() == mozneTahyPocitacovehoHrace[idPohybu].Get_poz_X_KPHr() && pocitacovyHrac.Get_poz_Y_PHr() == mozneTahyPocitacovehoHrace[idPohybu].Get_poz_Y_KPHr())
+                                {
+                                    idOdebiranehoPole = i;
+                                    break;
+                                }
                             }
+                            PridaniPolePocitacovehoHrace(idOdebiranehoPole, mozneTahyPocitacovehoHrace[idPohybu].Get_poz_X_MT(), mozneTahyPocitacovehoHrace[idPohybu].Get_poz_Y_MT(), n);
                         }
-                        pridaniPolePocitacovehoHrace(idOdebiranehoPole, mozneTahyPocitacovehoHrace[idPohybu].get_poz_X_MT(), mozneTahyPocitacovehoHrace[idPohybu].get_poz_Y_MT(), n);
                     }
                     else
                     {
@@ -201,15 +203,15 @@ namespace Čínská_dáma
                         for(int i = 0; i < mozneTahyPocitacovehoHrace.Count; i++)
                         {
                             MoznyTahPocitacovehoHrace moznyTahPocitacovehoHrace = mozneTahyPocitacovehoHrace[i];
-                            idPocitacovehoHrace = moznyTahPocitacovehoHrace.get_idPocitacovehoHrace();
+                            idPocitacovehoHrace = moznyTahPocitacovehoHrace.Get_idPocitacovehoHrace();
                             if(n != idPocitacovehoHrace)
                             {
                                 continue;
                             }
-                            poz_X_MT = moznyTahPocitacovehoHrace.get_poz_X_MT();
-                            poz_Y_MT = moznyTahPocitacovehoHrace.get_poz_Y_MT();
-                            poz_X_PHr = moznyTahPocitacovehoHrace.get_poz_X_KPHr();
-                            poz_Y_PHr = moznyTahPocitacovehoHrace.get_poz_Y_KPHr();
+                            poz_X_MT = moznyTahPocitacovehoHrace.Get_poz_X_MT();
+                            poz_Y_MT = moznyTahPocitacovehoHrace.Get_poz_Y_MT();
+                            poz_X_PHr = moznyTahPocitacovehoHrace.Get_poz_X_KPHr();
+                            poz_Y_PHr = moznyTahPocitacovehoHrace.Get_poz_Y_KPHr();
                             switch (n)
                             {
                                 case 0:
@@ -251,7 +253,7 @@ namespace Čínská_dáma
                             }
                         }
                         int cislo = random.Next(0, proveditelnePohyby.Count);
-                        int idPohybu = 0;
+                        int idPohybu;
                         if (proveditelnePohyby.Count == 0)//pokud není k dispozici žádný pohyb, provedeme náhodně vybraný tah
                         {
                             idPohybu = random.Next(0, mozneTahyPocitacovehoHrace.Count);
@@ -263,18 +265,18 @@ namespace Čínská_dáma
                         for (int i = 0; i < polePocitacovehoHrace.Count; i++)
                         {
                             PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
-                            if (pocitacovyHrac.get_poz_X_PHr() == mozneTahyPocitacovehoHrace[idPohybu].get_poz_X_KPHr() && pocitacovyHrac.get_poz_Y_PHr() == mozneTahyPocitacovehoHrace[idPohybu].get_poz_Y_KPHr())
+                            if (pocitacovyHrac.Get_poz_X_PHr() == mozneTahyPocitacovehoHrace[idPohybu].Get_poz_X_KPHr() && pocitacovyHrac.Get_poz_Y_PHr() == mozneTahyPocitacovehoHrace[idPohybu].Get_poz_Y_KPHr())
                             {
                                 idOdebiranehoPole = i;
                                 break;
                             }
                         }
-                        pridaniPolePocitacovehoHrace(idOdebiranehoPole, mozneTahyPocitacovehoHrace[idPohybu].get_poz_X_MT(), mozneTahyPocitacovehoHrace[idPohybu].get_poz_Y_MT(), n);
+                        PridaniPolePocitacovehoHrace(idOdebiranehoPole, mozneTahyPocitacovehoHrace[idPohybu].Get_poz_X_MT(), mozneTahyPocitacovehoHrace[idPohybu].Get_poz_Y_MT(), n);
                     }
                 }
                 else
                 {
-                    hraform.konzoleRefresh(n);
+                    hraform.KonzoleRefresh(n);
                     maxRozdil = 0;
                     maxRozdilY = 0;
                     pocetPosledniRadek = 0;
@@ -301,9 +303,9 @@ namespace Čínská_dáma
                         hracSePohlSkokem = false;
 
                         PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
-                        poz_X_PHr = pocitacovyHrac.get_poz_X_PHr();
-                        poz_Y_PHr = pocitacovyHrac.get_poz_Y_PHr();
-                        idPocitacovehoHrace = pocitacovyHrac.get_idPocitacovehoHrace();
+                        poz_X_PHr = pocitacovyHrac.Get_poz_X_PHr();
+                        poz_Y_PHr = pocitacovyHrac.Get_poz_Y_PHr();
+                        idPocitacovehoHrace = pocitacovyHrac.Get_idPocitacovehoHrace();
                         if (idPocitacovehoHrace != n)
                         {
                             continue;
@@ -381,13 +383,13 @@ namespace Čínská_dáma
                             }
                         }
                         
-                        vypocetMoznychTahu.pridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                         for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
                         {
                             bool pridatMoznyTah = true;
                             MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                            poz_X_MT = moznyTah.get_poz_X_MT();
-                            poz_Y_MT = moznyTah.get_poz_Y_MT();
+                            poz_X_MT = moznyTah.Get_poz_X_MT();
+                            poz_Y_MT = moznyTah.Get_poz_Y_MT();
 
                             if (Math.Abs(poz_Y_MT - poz_Y_PHr) > posun || Math.Abs(poz_X_MT - poz_X_PHr) > posun)//na ověřovaný možný tah se budeme muset dostat skokem
                             {
@@ -400,9 +402,9 @@ namespace Čínská_dáma
 
                             if (hracSePohlSkokem)//na ověřované pole jsme se dostali skokem - zkontrolujeme možné tahy z tohoto pole
                             {
-                                delkaSkokuX = Math.Abs(moznyTah.get_poz_X_MT() - moznyTah.get_poz_X_KPHr());
-                                delkaSkokuY = Math.Abs(moznyTah.get_poz_Y_MT() - moznyTah.get_poz_Y_KPHr());
-                                vypocetMoznychTahu.pridaniMoznychTahu(poz_X_MT, poz_Y_MT, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                                delkaSkokuX = Math.Abs(moznyTah.Get_poz_X_MT() - moznyTah.Get_poz_X_KPHr());
+                                delkaSkokuY = Math.Abs(moznyTah.Get_poz_Y_MT() - moznyTah.Get_poz_Y_KPHr());
+                                vypocetMoznychTahu.PridaniMoznychTahu(poz_X_MT, poz_Y_MT, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                             }
                             if (n == 0)
                             {
@@ -585,6 +587,53 @@ namespace Čínská_dáma
 
                         }
                     }
+                    //započítání kamenů hráče, pro kterého byl trojúhelník výchozím (pokud bychom tyto kameny nezapočítali, hráč by neměl jak dokončit hru)
+                    for(int i = 0; i < polePocitacovehoHrace.Count; i++)
+                    {
+                        PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
+                        poz_X_PHr = pocitacovyHrac.Get_poz_X_PHr();
+                        poz_Y_PHr = pocitacovyHrac.Get_poz_Y_PHr();
+                        idPocitacovehoHrace = pocitacovyHrac.Get_idPocitacovehoHrace();
+                        if((n == 3 && idPocitacovehoHrace != 6) || (n == 4 && idPocitacovehoHrace != 5) || (n == 5 && idPocitacovehoHrace != 4) || (n == 6 && idPocitacovehoHrace != 3))
+                        {
+                            continue;
+                        }
+                        if(n == 3 && poz_X_PHr >= leveOdsazeni + posun * 5 && poz_Y_PHr == horniOdsazeni + posun * 12)
+                        {
+                            pocetPosledniRadek++;
+                        }
+                        if (n == 3 && poz_X_PHr == leveOdsazeni + posun * 4 + posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 11)
+                        {
+                            pocetPredposledniRadek++;
+                        }
+
+                        if (n == 4 && poz_X_PHr <= leveOdsazeni - posun * 5 && poz_Y_PHr == horniOdsazeni + posun * 12)
+                        {
+                            pocetPosledniRadek++;
+                        }
+                        if (n == 4 && poz_X_PHr == leveOdsazeni - posun * 4 - posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 11)
+                        {
+                            pocetPredposledniRadek++;
+                        }
+
+                        if (n == 5 && poz_X_PHr >= leveOdsazeni + posun * 5 && poz_Y_PHr == horniOdsazeni + posun * 4)
+                        {
+                            pocetPosledniRadek++;
+                        }
+                        if (n == 5 && poz_X_PHr == leveOdsazeni + posun * 4 + posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 5)
+                        {
+                            pocetPredposledniRadek++;
+                        }
+
+                        if (n == 6 && poz_X_PHr <= leveOdsazeni - posun * 5 && poz_Y_PHr == horniOdsazeni + posun * 4)
+                        {
+                            pocetPosledniRadek++;
+                        }
+                        if (n == 6 && poz_X_PHr == leveOdsazeni - posun * 4 - posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 5)
+                        {
+                            pocetPredposledniRadek++;
+                        }
+                    }
 
                     if (n == 0)
                     {
@@ -620,9 +669,9 @@ namespace Čínská_dáma
                             for (int i = 0; i < polePocitacovehoHrace.Count; i++)
                             {
                                 PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
-                                poz_X_PHr = pocitacovyHrac.get_poz_X_PHr();
-                                poz_Y_PHr = pocitacovyHrac.get_poz_Y_PHr();
-                                int _idPocitacovehoHrace = pocitacovyHrac.get_idPocitacovehoHrace();
+                                poz_X_PHr = pocitacovyHrac.Get_poz_X_PHr();
+                                poz_Y_PHr = pocitacovyHrac.Get_poz_Y_PHr();
+                                int _idPocitacovehoHrace = pocitacovyHrac.Get_idPocitacovehoHrace();
                                 if (_idPocitacovehoHrace != 0)
                                 {
                                     continue;
@@ -637,13 +686,13 @@ namespace Čínská_dáma
                                 }
                                 mozneTahyPocitacovehoHrace.Clear();
                                 hracSePohlSkokem = false;
-                                vypocetMoznychTahu.pridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                                vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
 
                                 for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
                                 {
                                     MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                    poz_X_MT = moznyTah.get_poz_X_MT();
-                                    poz_Y_MT = moznyTah.get_poz_Y_MT();
+                                    poz_X_MT = moznyTah.Get_poz_X_MT();
+                                    poz_Y_MT = moznyTah.Get_poz_Y_MT();
                                     if (poz_X_PHr == leveOdsazeni && poz_Y_PHr == horniOdsazeni + posun * 4)
                                     {
                                         idOdebiranehoPole = i;
@@ -678,7 +727,7 @@ namespace Čínská_dáma
                     }
                     else if (n == 2)
                     {
-                        if (!jeTahVyhodny(poleKeKontroleX, poleKeKontroleY, novePoleX, novePoleY, n, nejvyhodnejsiHracuvTah, pocetHracu))
+                        if (!JeTahVyhodny(poleKeKontroleX, poleKeKontroleY, novePoleX, novePoleY, n, nejvyhodnejsiHracuvTah, pocetHracu))
                         {
                             provestTah = false;
                             nevyhodnaPoleX.Add(novePoleX);
@@ -719,9 +768,9 @@ namespace Čínská_dáma
                             for (int i = 0; i < polePocitacovehoHrace.Count; i++)
                             {
                                 PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
-                                poz_X_PHr = pocitacovyHrac.get_poz_X_PHr();
-                                poz_Y_PHr = pocitacovyHrac.get_poz_Y_PHr();
-                                int _idPocitacovehoHrace = pocitacovyHrac.get_idPocitacovehoHrace();
+                                poz_X_PHr = pocitacovyHrac.Get_poz_X_PHr();
+                                poz_Y_PHr = pocitacovyHrac.Get_poz_Y_PHr();
+                                int _idPocitacovehoHrace = pocitacovyHrac.Get_idPocitacovehoHrace();
                                 if (_idPocitacovehoHrace != 2)
                                 {
                                     continue;
@@ -736,13 +785,13 @@ namespace Čínská_dáma
                                 }
                                 mozneTahyPocitacovehoHrace.Clear();
                                 hracSePohlSkokem = false;
-                                vypocetMoznychTahu.pridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                                vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
 
                                 for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
                                 {
                                     MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                    poz_X_MT = moznyTah.get_poz_X_MT();
-                                    poz_Y_MT = moznyTah.get_poz_Y_MT();
+                                    poz_X_MT = moznyTah.Get_poz_X_MT();
+                                    poz_Y_MT = moznyTah.Get_poz_Y_MT();
                                     if (poz_X_PHr == leveOdsazeni && poz_Y_PHr == horniOdsazeni + posun * 12)
                                     {
                                         idOdebiranehoPole = i;
@@ -786,9 +835,9 @@ namespace Čínská_dáma
                             for (int i = 0; i < polePocitacovehoHrace.Count; i++)
                             {
                                 PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
-                                poz_X_PHr = pocitacovyHrac.get_poz_X_PHr();
-                                poz_Y_PHr = pocitacovyHrac.get_poz_Y_PHr();
-                                int _idPocitacovehoHrace = pocitacovyHrac.get_idPocitacovehoHrace();
+                                poz_X_PHr = pocitacovyHrac.Get_poz_X_PHr();
+                                poz_Y_PHr = pocitacovyHrac.Get_poz_Y_PHr();
+                                int _idPocitacovehoHrace = pocitacovyHrac.Get_idPocitacovehoHrace();
                                 if (_idPocitacovehoHrace != n)
                                 {
                                     continue;
@@ -797,12 +846,12 @@ namespace Čínská_dáma
                                 if (n == 3 && ((poz_X_PHr == leveOdsazeni + posun * 2 && poz_Y_PHr == horniOdsazeni + posun * 12) || (poz_X_PHr == leveOdsazeni + posun * 2 + posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 11)))
                                 {
                                     mozneTahyPocitacovehoHrace.Clear();
-                                    vypocetMoznychTahu.pridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                                    vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                                     for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
                                     {
                                         MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                        poz_X_MT = moznyTah.get_poz_X_MT();
-                                        poz_Y_MT = moznyTah.get_poz_Y_MT();
+                                        poz_X_MT = moznyTah.Get_poz_X_MT();
+                                        poz_Y_MT = moznyTah.Get_poz_Y_MT();
 
                                         if (poz_X_MT > poz_X_PHr && poz_Y_MT < poz_Y_PHr && poz_Y_PHr - poz_Y_MT == posun)
                                         {
@@ -816,12 +865,12 @@ namespace Čínská_dáma
                                 if (n == 4 && ((poz_X_PHr == leveOdsazeni - posun * 2 && poz_Y_PHr == horniOdsazeni + posun * 12) || (poz_X_PHr == leveOdsazeni - posun * 2 - posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 11)))
                                 {
                                     mozneTahyPocitacovehoHrace.Clear();
-                                    vypocetMoznychTahu.pridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                                    vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                                     for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
                                     {
                                         MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                        poz_X_MT = moznyTah.get_poz_X_MT();
-                                        poz_Y_MT = moznyTah.get_poz_Y_MT();
+                                        poz_X_MT = moznyTah.Get_poz_X_MT();
+                                        poz_Y_MT = moznyTah.Get_poz_Y_MT();
 
                                         if (poz_X_MT < poz_X_PHr && poz_Y_MT < poz_Y_PHr && poz_Y_PHr - poz_Y_MT == posun)
                                         {
@@ -835,12 +884,12 @@ namespace Čínská_dáma
                                 if (n == 5 && ((poz_X_PHr == leveOdsazeni + posun * 2 && poz_Y_PHr == horniOdsazeni + posun * 4) || (poz_X_PHr == leveOdsazeni + posun * 2 + posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 5)))
                                 {
                                     mozneTahyPocitacovehoHrace.Clear();
-                                    vypocetMoznychTahu.pridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                                    vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                                     for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
                                     {
                                         MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                        poz_X_MT = moznyTah.get_poz_X_MT();
-                                        poz_Y_MT = moznyTah.get_poz_Y_MT();
+                                        poz_X_MT = moznyTah.Get_poz_X_MT();
+                                        poz_Y_MT = moznyTah.Get_poz_Y_MT();
 
                                         if (poz_X_MT > poz_X_PHr && poz_Y_MT > poz_Y_PHr && poz_Y_MT - poz_Y_PHr == posun)
                                         {
@@ -854,12 +903,12 @@ namespace Čínská_dáma
                                 if (n == 6 && ((poz_X_PHr == leveOdsazeni - posun * 2 && poz_Y_PHr == horniOdsazeni + posun * 4) || (poz_X_PHr == leveOdsazeni - posun * 2 - posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 5)))
                                 {
                                     mozneTahyPocitacovehoHrace.Clear();
-                                    vypocetMoznychTahu.pridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                                    vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                                     for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
                                     {
                                         MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                        poz_X_MT = moznyTah.get_poz_X_MT();
-                                        poz_Y_MT = moznyTah.get_poz_Y_MT();
+                                        poz_X_MT = moznyTah.Get_poz_X_MT();
+                                        poz_Y_MT = moznyTah.Get_poz_Y_MT();
 
                                         if (poz_X_MT < poz_X_PHr && poz_Y_MT > poz_Y_PHr && poz_Y_MT - poz_Y_PHr == posun)
                                         {
@@ -883,9 +932,9 @@ namespace Čínská_dáma
                             for (int i = 0; i < polePocitacovehoHrace.Count; i++)
                             {
                                 PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
-                                poz_X_PHr = pocitacovyHrac.get_poz_X_PHr();
-                                poz_Y_PHr = pocitacovyHrac.get_poz_Y_PHr();
-                                int _idPocitacovehoHrace = pocitacovyHrac.get_idPocitacovehoHrace();
+                                poz_X_PHr = pocitacovyHrac.Get_poz_X_PHr();
+                                poz_Y_PHr = pocitacovyHrac.Get_poz_Y_PHr();
+                                int _idPocitacovehoHrace = pocitacovyHrac.Get_idPocitacovehoHrace();
                                 if (_idPocitacovehoHrace != n)
                                 {
                                     continue;
@@ -896,12 +945,12 @@ namespace Čínská_dáma
                                 {
                                     bool nalezenTah = false;
                                     mozneTahyPocitacovehoHrace.Clear();
-                                    vypocetMoznychTahu.pridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                                    vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                                     for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
                                     {
                                         MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                        poz_X_MT = moznyTah.get_poz_X_MT();
-                                        poz_Y_MT = moznyTah.get_poz_Y_MT();
+                                        poz_X_MT = moznyTah.Get_poz_X_MT();
+                                        poz_Y_MT = moznyTah.Get_poz_Y_MT();
 
                                         if (poz_X_MT > poz_X_PHr && poz_Y_MT == poz_Y_PHr)
                                         {
@@ -914,12 +963,12 @@ namespace Čínská_dáma
 
                                     if (!nalezenTah)//tah na x-ové ose nenalezen, provedeme tedy tah směrem dolů na y-ové ose
                                     {
-                                        vypocetMoznychTahu.pridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                                         for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
                                         {
                                             MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                            poz_X_MT = moznyTah.get_poz_X_MT();
-                                            poz_Y_MT = moznyTah.get_poz_Y_MT();
+                                            poz_X_MT = moznyTah.Get_poz_X_MT();
+                                            poz_Y_MT = moznyTah.Get_poz_Y_MT();
 
                                             if (poz_Y_MT < poz_Y_PHr && poz_X_MT > poz_X_PHr)
                                             {
@@ -936,12 +985,12 @@ namespace Čínská_dáma
                                 {
                                     bool nalezenTah = false;
                                     mozneTahyPocitacovehoHrace.Clear();
-                                    vypocetMoznychTahu.pridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                                    vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                                     for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
                                     {
                                         MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                        poz_X_MT = moznyTah.get_poz_X_MT();
-                                        poz_Y_MT = moznyTah.get_poz_Y_MT();
+                                        poz_X_MT = moznyTah.Get_poz_X_MT();
+                                        poz_Y_MT = moznyTah.Get_poz_Y_MT();
 
                                         if (poz_X_MT < poz_X_PHr && poz_Y_MT == poz_Y_PHr)
                                         {
@@ -954,12 +1003,12 @@ namespace Čínská_dáma
 
                                     if (!nalezenTah)//tah na x-ové ose nenalezen, provedeme tedy tah směrem dolů na y-ové ose
                                     {
-                                        vypocetMoznychTahu.pridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                                         for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
                                         {
                                             MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                            poz_X_MT = moznyTah.get_poz_X_MT();
-                                            poz_Y_MT = moznyTah.get_poz_Y_MT();
+                                            poz_X_MT = moznyTah.Get_poz_X_MT();
+                                            poz_Y_MT = moznyTah.Get_poz_Y_MT();
 
                                             if (poz_Y_MT < poz_Y_PHr && poz_X_MT < poz_X_PHr)
                                             {
@@ -976,12 +1025,12 @@ namespace Čínská_dáma
                                 {
                                     bool nalezenTah = false;
                                     mozneTahyPocitacovehoHrace.Clear();
-                                    vypocetMoznychTahu.pridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                                    vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                                     for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
                                     {
                                         MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                        poz_X_MT = moznyTah.get_poz_X_MT();
-                                        poz_Y_MT = moznyTah.get_poz_Y_MT();
+                                        poz_X_MT = moznyTah.Get_poz_X_MT();
+                                        poz_Y_MT = moznyTah.Get_poz_Y_MT();
 
                                         if (poz_X_MT > poz_X_PHr && poz_Y_MT == poz_Y_PHr)
                                         {
@@ -994,12 +1043,12 @@ namespace Čínská_dáma
 
                                     if (!nalezenTah)//tah na x-ové ose nenalezen, provedeme tedy tah směrem nahoru na y-ové ose
                                     {
-                                        vypocetMoznychTahu.pridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                                         for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
                                         {
                                             MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                            poz_X_MT = moznyTah.get_poz_X_MT();
-                                            poz_Y_MT = moznyTah.get_poz_Y_MT();
+                                            poz_X_MT = moznyTah.Get_poz_X_MT();
+                                            poz_Y_MT = moznyTah.Get_poz_Y_MT();
 
                                             if (poz_Y_MT > poz_Y_PHr && poz_X_MT > poz_X_PHr)
                                             {
@@ -1016,12 +1065,12 @@ namespace Čínská_dáma
                                 {
                                     bool nalezenTah = false;
                                     mozneTahyPocitacovehoHrace.Clear();
-                                    vypocetMoznychTahu.pridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                                    vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                                     for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
                                     {
                                         MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                        poz_X_MT = moznyTah.get_poz_X_MT();
-                                        poz_Y_MT = moznyTah.get_poz_Y_MT();
+                                        poz_X_MT = moznyTah.Get_poz_X_MT();
+                                        poz_Y_MT = moznyTah.Get_poz_Y_MT();
 
                                         if (poz_X_MT < poz_X_PHr && poz_Y_MT == poz_Y_PHr)
                                         {
@@ -1034,12 +1083,12 @@ namespace Čínská_dáma
 
                                     if (!nalezenTah)//tah na x-ové ose nenalezen, provedeme tedy tah směrem nahoru na y-ové ose
                                     {
-                                        vypocetMoznychTahu.pridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                                         for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
                                         {
                                             MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                            poz_X_MT = moznyTah.get_poz_X_MT();
-                                            poz_Y_MT = moznyTah.get_poz_Y_MT();
+                                            poz_X_MT = moznyTah.Get_poz_X_MT();
+                                            poz_Y_MT = moznyTah.Get_poz_Y_MT();
 
                                             if (poz_Y_MT > poz_Y_PHr && poz_X_MT < poz_X_PHr)
                                             {
@@ -1053,6 +1102,7 @@ namespace Čínská_dáma
                             }
                         }
 
+                        
                         //ošetření případů, kdy je počítačový hráč blokován protilehlým hráčem, a zbývá mu dosadit jeden kámen do rohu nejbližšího ke středu herní desky
                         if(n == 3)
                         {
@@ -1060,29 +1110,29 @@ namespace Čínská_dáma
                             int pocetKamenu = 0;
                             for(int i = 0; i < polePocitacovehoHrace.Count; i++)
                             {
-                                if(polePocitacovehoHrace[i].get_poz_X_PHr() == leveOdsazeni + posun * 3 + posun / 2 && polePocitacovehoHrace[i].get_poz_Y_PHr() == horniOdsazeni + posun * 9)
+                                if(polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 3 + posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 9)
                                 {
                                     polohyKamenu[2] = true;
                                 }
-                                if(!(polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 3 || polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 6))
+                                if(!(polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 3 || polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 6))
                                 {
                                     continue;
                                 }
-                                if((polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 3 && jePoleVSpodnimPravemRohu(polePocitacovehoHrace[i].get_poz_X_PHr(), polePocitacovehoHrace[i].get_poz_Y_PHr(), true)) ||
-                                    (polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 6 && jePoleVSpodnimPravemRohu(polePocitacovehoHrace[i].get_poz_X_PHr(), polePocitacovehoHrace[i].get_poz_Y_PHr(), false)))
+                                if((polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 3 && JePoleVSpodnimPravemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), true)) ||
+                                    (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 6 && JePoleVSpodnimPravemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), false)))
                                 {
                                     pocetKamenu++;
                                 }
-                                if(polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 3 && polePocitacovehoHrace[i].get_poz_X_PHr() == leveOdsazeni + posun * 4 + posun / 2 && polePocitacovehoHrace[i].get_poz_Y_PHr() == horniOdsazeni + posun * 9)
+                                if(polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 3 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 4 + posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 9)
                                 {
                                     polohyKamenu[0] = true;
                                 }
-                                if (polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 3 && polePocitacovehoHrace[i].get_poz_X_PHr() == leveOdsazeni + posun * 3 && polePocitacovehoHrace[i].get_poz_Y_PHr() == horniOdsazeni + posun * 10)
+                                if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 3 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 3 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 10)
                                 {
                                     polohyKamenu[1] = true;
                                 }
                             }
-                            if(pocetKamenu == 9 && polohyKamenu[0] == true)
+                            if(pocetKamenu == 9 && polohyKamenu[0] == false)//bylo tu true
                             {
                                 if(polohyKamenu[1] == true && polohyKamenu[2] == false)
                                 {
@@ -1097,24 +1147,24 @@ namespace Čínská_dáma
                             int pocetKamenu = 0;
                             for (int i = 0; i < polePocitacovehoHrace.Count; i++)
                             {
-                                if (polePocitacovehoHrace[i].get_poz_X_PHr() == leveOdsazeni - posun * 3 - posun / 2 && polePocitacovehoHrace[i].get_poz_Y_PHr() == horniOdsazeni + posun * 9)
+                                if (polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni - posun * 3 - posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 9)
                                 {
                                     polohyKamenu[2] = true;
                                 }
-                                if (!(polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 4 || polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 5))
+                                if (!(polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4 || polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 5))
                                 {
                                     continue;
                                 }
-                                if ((polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 4 && jePoleVSpodnimLevemRohu(polePocitacovehoHrace[i].get_poz_X_PHr(), polePocitacovehoHrace[i].get_poz_Y_PHr(), true)) ||
-                                    (polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 5 && jePoleVSpodnimLevemRohu(polePocitacovehoHrace[i].get_poz_X_PHr(), polePocitacovehoHrace[i].get_poz_Y_PHr(), false)))
+                                if ((polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4 && JePoleVSpodnimLevemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), true)) ||
+                                    (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 5 && JePoleVSpodnimLevemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), false)))
                                 {
                                     pocetKamenu++;
                                 }
-                                if (polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 4 && polePocitacovehoHrace[i].get_poz_X_PHr() == leveOdsazeni - posun * 4 - posun / 2 && polePocitacovehoHrace[i].get_poz_Y_PHr() == horniOdsazeni + posun * 9)
+                                if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni - posun * 4 - posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 9)
                                 {
                                     polohyKamenu[0] = true;
                                 }
-                                if (polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 4 && polePocitacovehoHrace[i].get_poz_X_PHr() == leveOdsazeni - posun * 3 && polePocitacovehoHrace[i].get_poz_Y_PHr() == horniOdsazeni + posun * 10)
+                                if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni - posun * 3 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 10)
                                 {
                                     polohyKamenu[1] = true;
                                 }
@@ -1134,24 +1184,24 @@ namespace Čínská_dáma
                             int pocetKamenu = 0;
                             for (int i = 0; i < polePocitacovehoHrace.Count; i++)
                             {
-                                if (polePocitacovehoHrace[i].get_poz_X_PHr() == leveOdsazeni + posun * 3 + posun / 2 && polePocitacovehoHrace[i].get_poz_Y_PHr() == horniOdsazeni + posun * 7)
+                                if (polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 3 + posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 7)
                                 {
                                     polohyKamenu[2] = true;
                                 }
-                                if (!(polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 5 || polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 4))
+                                if (!(polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 5 || polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4))
                                 {
                                     continue;
                                 }
-                                if ((polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 5 && jePoleVHornimPravemRohu(polePocitacovehoHrace[i].get_poz_X_PHr(), polePocitacovehoHrace[i].get_poz_Y_PHr(), true)) ||
-                                    (polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 4 && jePoleVHornimPravemRohu(polePocitacovehoHrace[i].get_poz_X_PHr(), polePocitacovehoHrace[i].get_poz_Y_PHr(), false)))
+                                if ((polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 5 && JePoleVHornimPravemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), true)) ||
+                                    (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4 && JePoleVHornimPravemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), false)))
                                 {
                                     pocetKamenu++;
                                 }
-                                if (polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 5 && polePocitacovehoHrace[i].get_poz_X_PHr() == leveOdsazeni + posun * 4 + posun / 2 && polePocitacovehoHrace[i].get_poz_Y_PHr() == horniOdsazeni + posun * 7)
+                                if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 5 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 4 + posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 7)
                                 {
                                     polohyKamenu[0] = true;
                                 }
-                                if (polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 5 && polePocitacovehoHrace[i].get_poz_X_PHr() == leveOdsazeni + posun * 3 && polePocitacovehoHrace[i].get_poz_Y_PHr() == horniOdsazeni + posun * 6)
+                                if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 5 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 3 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 6)
                                 {
                                     polohyKamenu[1] = true;
                                 }
@@ -1171,24 +1221,24 @@ namespace Čínská_dáma
                             int pocetKamenu = 0;
                             for (int i = 0; i < polePocitacovehoHrace.Count; i++)
                             {
-                                if (polePocitacovehoHrace[i].get_poz_X_PHr() == leveOdsazeni - posun * 3 - posun / 2 && polePocitacovehoHrace[i].get_poz_Y_PHr() == horniOdsazeni + posun * 7)
+                                if (polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni - posun * 3 - posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 7)
                                 {
                                     polohyKamenu[2] = true;
                                 }
-                                if (!(polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 6 || polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 3))
+                                if (!(polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 6 || polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 3))
                                 {
                                     continue;
                                 }
-                                if ((polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 6 && jePoleVHornimLevemRohu(polePocitacovehoHrace[i].get_poz_X_PHr(), polePocitacovehoHrace[i].get_poz_Y_PHr(), true)) ||
-                                    (polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 3 && jePoleVHornimLevemRohu(polePocitacovehoHrace[i].get_poz_X_PHr(), polePocitacovehoHrace[i].get_poz_Y_PHr(), false)))
+                                if ((polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 6 && JePoleVHornimLevemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), true)) ||
+                                    (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 3 && JePoleVHornimLevemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), false)))
                                 {
                                     pocetKamenu++;
                                 }
-                                if (polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 6 && polePocitacovehoHrace[i].get_poz_X_PHr() == leveOdsazeni - posun * 4 - posun / 2 && polePocitacovehoHrace[i].get_poz_Y_PHr() == horniOdsazeni + posun * 7)
+                                if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 6 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni - posun * 4 - posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 7)
                                 {
                                     polohyKamenu[0] = true;
                                 }
-                                if (polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 6 && polePocitacovehoHrace[i].get_poz_X_PHr() == leveOdsazeni + posun * 3 && polePocitacovehoHrace[i].get_poz_Y_PHr() == horniOdsazeni + posun * 6)
+                                if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 6 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 3 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 6)
                                 {
                                     polohyKamenu[1] = true;
                                 }
@@ -1202,7 +1252,7 @@ namespace Čínská_dáma
                                 }
                             }
                         }
-
+                        
                         //ošetření případů, kdy nebyl nalezen žádný vhodný tah
                         if (novePoleX == 0 && novePoleY == 0)
                         {
@@ -1219,16 +1269,16 @@ namespace Čínská_dáma
                                 for (int i = 0; i < polePocitacovehoHrace.Count; i++)
                                 {
                                     PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
-                                    poz_X_PHr = pocitacovyHrac.get_poz_X_PHr();
-                                    poz_Y_PHr = pocitacovyHrac.get_poz_Y_PHr();
-                                    int _idPocitacovehoHrace = pocitacovyHrac.get_idPocitacovehoHrace();
+                                    poz_X_PHr = pocitacovyHrac.Get_poz_X_PHr();
+                                    poz_Y_PHr = pocitacovyHrac.Get_poz_Y_PHr();
+                                    int _idPocitacovehoHrace = pocitacovyHrac.Get_idPocitacovehoHrace();
                                     mozneTahyPocitacovehoHrace.Clear();
-                                    vypocetMoznychTahu.pridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                                    vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                                     for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
                                     {
                                         MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                        poz_X_MT = moznyTah.get_poz_X_MT();
-                                        poz_Y_MT = moznyTah.get_poz_Y_MT();
+                                        poz_X_MT = moznyTah.Get_poz_X_MT();
+                                        poz_Y_MT = moznyTah.Get_poz_Y_MT();
                                         if (n == 3 && poz_X_MT >= poz_X_PHr && poz_Y_MT >= poz_Y_PHr && n == _idPocitacovehoHrace)
                                         {
                                             novePoleX = poz_X_MT;
@@ -1267,7 +1317,7 @@ namespace Čínská_dáma
 
                         if (overovatVyhodnostTahu)
                         {
-                            if (!jeTahVyhodny(poleKeKontroleX, poleKeKontroleY, novePoleX, novePoleY, n, nejvyhodnejsiHracuvTah, pocetHracu))
+                            if (!JeTahVyhodny(poleKeKontroleX, poleKeKontroleY, novePoleX, novePoleY, n, nejvyhodnejsiHracuvTah, pocetHracu))
                             {
                                 provestTah = false;
                                 nevyhodnaPoleX.Add(novePoleX);
@@ -1280,12 +1330,12 @@ namespace Čínská_dáma
                         for (int i = 0; i < polePocitacovehoHrace.Count; i++)
                         {
                             PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
-                            if (pocitacovyHrac.get_poz_X_PHr() == poleKeKontroleX && pocitacovyHrac.get_poz_Y_PHr() == poleKeKontroleY)
+                            if (pocitacovyHrac.Get_poz_X_PHr() == poleKeKontroleX && pocitacovyHrac.Get_poz_Y_PHr() == poleKeKontroleY)
                             {
                                 idOdebiranehoPole = i;
                             }
                         }
-                        pridaniPolePocitacovehoHrace(idOdebiranehoPole, novePoleX, novePoleY, n);
+                        PridaniPolePocitacovehoHrace(idOdebiranehoPole, novePoleX, novePoleY, n);
                     }
                     else
                     {
@@ -1301,7 +1351,7 @@ namespace Čínská_dáma
             return (polePocitacovehoHrace, vychoziPolePocitacovehoHrace, zvyraznenaPolePocitacovehoHrace, kontumaceVyhra);
         }
 
-        private void vytvoreniTahuLidskehoHrace()
+        private void VytvoreniTahuLidskehoHrace()
         {
             int poz_X_MT, poz_Y_MT, poz_X_Hr, poz_Y_Hr, delkaSkokuX = 0, delkaSkokuY = 0;
             bool hracSePohlSkokem;
@@ -1310,15 +1360,15 @@ namespace Čínská_dáma
             {
                 hracSePohlSkokem = false;
                 LidskyHrac lidskyHrac = poleLidskehoHrace[i];
-                poz_X_Hr = lidskyHrac.get_poz_X_LHr();
-                poz_Y_Hr = lidskyHrac.get_poz_Y_LHr();
-                vypocetMoznychTahu.pridaniMoznychTahu(poz_X_Hr, poz_Y_Hr, 1, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                poz_X_Hr = lidskyHrac.Get_poz_X_LHr();
+                poz_Y_Hr = lidskyHrac.Get_poz_Y_LHr();
+                vypocetMoznychTahu.PridaniMoznychTahu(poz_X_Hr, poz_Y_Hr, 1, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
 
                 for (int j = 0; j < mozneTahyLidskehoHrace.Count; j++)
                 {
                     MoznyTahLidskehoHrace moznyTah = mozneTahyLidskehoHrace[j];
-                    poz_X_MT = moznyTah.get_poz_X_MT();
-                    poz_Y_MT = moznyTah.get_poz_Y_MT();
+                    poz_X_MT = moznyTah.Get_poz_X_MT();
+                    poz_Y_MT = moznyTah.Get_poz_Y_MT();
 
                     if (poz_Y_MT - poz_Y_Hr > posun)//na ověřovaný možný tah se budeme muset dostat skokem
                     {
@@ -1331,15 +1381,15 @@ namespace Čínská_dáma
 
                     if (hracSePohlSkokem)//na ověřované pole jsme se dostali skokem - zkontrolujeme možné tahy z tohoto pole
                     {
-                        delkaSkokuX = Math.Abs(moznyTah.get_poz_X_MT() - moznyTah.get_poz_X_KLHr());
-                        delkaSkokuY = Math.Abs(moznyTah.get_poz_Y_MT() - moznyTah.get_poz_Y_KLHr());
-                        vypocetMoznychTahu.pridaniMoznychTahu(poz_X_MT, poz_Y_MT, 1, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                        delkaSkokuX = Math.Abs(moznyTah.Get_poz_X_MT() - moznyTah.Get_poz_X_KLHr());
+                        delkaSkokuY = Math.Abs(moznyTah.Get_poz_Y_MT() - moznyTah.Get_poz_Y_KLHr());
+                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_MT, poz_Y_MT, 1, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                     }
                 }
             }
         }
 
-        private int vypocetNejvyhodnejsihoTahuLidskehoHrace(int pocetHracu)
+        private int VypocetNejvyhodnejsihoTahuLidskehoHrace(int pocetHracu)
         {
             int maxRozdilHrac = 0, poz_X_Hr, poz_Y_Hr, poz_X_MT, poz_Y_MT, delkaSkokuX = 0, delkaSkokuY = 0;
             bool hracSePohlSkokem;
@@ -1350,15 +1400,15 @@ namespace Čínská_dáma
                 mozneTahyLidskehoHrace.Clear();
                 hracSePohlSkokem = false;
                 LidskyHrac lidskyHrac = poleLidskehoHrace[i];
-                poz_X_Hr = lidskyHrac.get_poz_X_LHr();
-                poz_Y_Hr = lidskyHrac.get_poz_Y_LHr();
-                vypocetMoznychTahu.pridaniMoznychTahu(poz_X_Hr, poz_Y_Hr, 1, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                poz_X_Hr = lidskyHrac.Get_poz_X_LHr();
+                poz_Y_Hr = lidskyHrac.Get_poz_Y_LHr();
+                vypocetMoznychTahu.PridaniMoznychTahu(poz_X_Hr, poz_Y_Hr, 1, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
 
                 for (int j = 0; j < mozneTahyLidskehoHrace.Count; j++)
                 {
                     MoznyTahLidskehoHrace moznyTah = mozneTahyLidskehoHrace[j];
-                    poz_X_MT = moznyTah.get_poz_X_MT();
-                    poz_Y_MT = moznyTah.get_poz_Y_MT();
+                    poz_X_MT = moznyTah.Get_poz_X_MT();
+                    poz_Y_MT = moznyTah.Get_poz_Y_MT();
 
                     if (Math.Abs(poz_Y_Hr - poz_Y_MT) > posun || Math.Abs(poz_X_Hr - poz_X_MT) > posun)//na ověřovaný možný tah se budeme muset dostat skokem
                     {
@@ -1371,9 +1421,9 @@ namespace Čínská_dáma
 
                     if (hracSePohlSkokem)//na ověřované pole jsme se dostali skokem - zkontrolujeme možné tahy z tohoto pole
                     {
-                        delkaSkokuX = Math.Abs(moznyTah.get_poz_X_MT() - moznyTah.get_poz_X_KLHr());
-                        delkaSkokuY = Math.Abs(moznyTah.get_poz_Y_MT() - moznyTah.get_poz_Y_KLHr());
-                        vypocetMoznychTahu.pridaniMoznychTahu(poz_X_MT, poz_Y_MT, 1, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                        delkaSkokuX = Math.Abs(moznyTah.Get_poz_X_MT() - moznyTah.Get_poz_X_KLHr());
+                        delkaSkokuY = Math.Abs(moznyTah.Get_poz_Y_MT() - moznyTah.Get_poz_Y_KLHr());
+                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_MT, poz_Y_MT, 1, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                     }
 
                     if (pocetHracu != 4)
@@ -1396,7 +1446,7 @@ namespace Čínská_dáma
         }
 
         //funkce ověří, jestli je daný tah výhodný z hlediska možných tahů lidského hráče - jestli provedením tahu umožníme hráči doskočit dál než před provedením tohoto tahu
-        private bool jeTahVyhodny(int poz_X_PHr, int poz_Y_PHr, int poz_X_MT, int poz_Y_MT, int idPocitacovehoHrace, int nejvyhodnejsiHracuvTah, int pocetHracu)
+        private bool JeTahVyhodny(int poz_X_PHr, int poz_Y_PHr, int poz_X_MT, int poz_Y_MT, int idPocitacovehoHrace, int nejvyhodnejsiHracuvTah, int pocetHracu)
         {
             if(simulaceMod || (poz_X_PHr == 0 && poz_Y_PHr == 0))
             {
@@ -1410,7 +1460,7 @@ namespace Čínská_dáma
             for (int i = 0; i < polePocitacovehoHrace.Count; i++)
             {
                 PocitacovyHrac odebiranyPocitacovyHracOld = polePocitacovehoHrace[i];
-                if (poz_X_PHr == odebiranyPocitacovyHracOld.get_poz_X_PHr() && poz_Y_PHr == odebiranyPocitacovyHracOld.get_poz_Y_PHr())
+                if (poz_X_PHr == odebiranyPocitacovyHracOld.Get_poz_X_PHr() && poz_Y_PHr == odebiranyPocitacovyHracOld.Get_poz_Y_PHr())
                 {
                     odebranePolePocitacovehoHrace = i;
                     nalezeno = true;
@@ -1430,14 +1480,14 @@ namespace Čínská_dáma
                 mozneTahyLidskehoHrace.Clear();
                 hracSePohlSkokem = false;
                 LidskyHrac lidskyHrac = poleLidskehoHrace[i];
-                poz_X_Hr = lidskyHrac.get_poz_X_LHr();
-                poz_Y_Hr = lidskyHrac.get_poz_Y_LHr();
-                vypocetMoznychTahu.pridaniMoznychTahu(poz_X_Hr, poz_Y_Hr, 1, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                poz_X_Hr = lidskyHrac.Get_poz_X_LHr();
+                poz_Y_Hr = lidskyHrac.Get_poz_Y_LHr();
+                vypocetMoznychTahu.PridaniMoznychTahu(poz_X_Hr, poz_Y_Hr, 1, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                 for (int j = 0; j < mozneTahyLidskehoHrace.Count; j++)
                 {
                     MoznyTahLidskehoHrace moznyTah = mozneTahyLidskehoHrace[j];
-                    _poz_X_MT = moznyTah.get_poz_X_MT();
-                    _poz_Y_MT = moznyTah.get_poz_Y_MT();
+                    _poz_X_MT = moznyTah.Get_poz_X_MT();
+                    _poz_Y_MT = moznyTah.Get_poz_Y_MT();
 
                     if (Math.Abs(poz_Y_Hr - _poz_Y_MT) > posun || Math.Abs(poz_X_Hr - _poz_X_MT) > posun)//na ověřovaný možný tah se budeme muset dostat skokem
                     {
@@ -1450,9 +1500,9 @@ namespace Čínská_dáma
 
                     if (hracSePohlSkokem)//na ověřované pole jsme se dostali skokem - zkontrolujeme možné tahy z tohoto pole
                     {
-                        delkaSkokuX = Math.Abs(moznyTah.get_poz_X_MT() - moznyTah.get_poz_X_KLHr());
-                        delkaSkokuY = Math.Abs(moznyTah.get_poz_Y_MT() - moznyTah.get_poz_Y_KLHr());
-                        vypocetMoznychTahu.pridaniMoznychTahu(_poz_X_MT, _poz_Y_MT, 1, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                        delkaSkokuX = Math.Abs(moznyTah.Get_poz_X_MT() - moznyTah.Get_poz_X_KLHr());
+                        delkaSkokuY = Math.Abs(moznyTah.Get_poz_Y_MT() - moznyTah.Get_poz_Y_KLHr());
+                        vypocetMoznychTahu.PridaniMoznychTahu(_poz_X_MT, _poz_Y_MT, 1, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                     }
 
                     if ((pocetHracu != 4 && poz_Y_Hr - _poz_Y_MT > nejvyhodnejsiHracuvTah) || (pocetHracu == 4 && (poz_Y_Hr - _poz_Y_MT) + (_poz_X_MT - poz_Y_Hr) > nejvyhodnejsiHracuvTah))
@@ -1461,7 +1511,7 @@ namespace Čínská_dáma
                         polePocitacovehoHrace.Remove(pridavanyPocitacovyHracOld);
                         PocitacovyHrac pridavanyPocitacovyHracNew = new PocitacovyHrac(poz_X_PHr, poz_Y_PHr, sirkaPole, vyskaPole, idPocitacovehoHrace);
                         polePocitacovehoHrace.Insert(odebranePolePocitacovehoHrace, pridavanyPocitacovyHracNew);
-                        vytvoreniTahuLidskehoHrace();
+                        VytvoreniTahuLidskehoHrace();
                         return false;
                     }
                 }
@@ -1471,30 +1521,30 @@ namespace Čínská_dáma
             polePocitacovehoHrace.Remove(pridavanyPocitacovyHracOld);
             PocitacovyHrac pridavanyPocitacovyHracNew2 = new PocitacovyHrac(poz_X_PHr, poz_Y_PHr, sirkaPole, vyskaPole, idPocitacovehoHrace);
             polePocitacovehoHrace.Insert(odebranePolePocitacovehoHrace, pridavanyPocitacovyHracNew2);
-            vytvoreniTahuLidskehoHrace();
+            VytvoreniTahuLidskehoHrace();
             return true;
         }
 
-        private void pridaniPolePocitacovehoHrace(int idOdebiranehoPole, int novePoleX, int novePoleY, int idPocitacovehoHrace)
+        private void PridaniPolePocitacovehoHrace(int idOdebiranehoPole, int novePoleX, int novePoleY, int idPocitacovehoHrace)
         {
             if (novePoleX == 0 && novePoleY == 0)//tato chyba může nastat pokud jsou cílová pole daného nepřítele blokována poli nepřítele, který na těchto polích začínal
             {
                 for (int i = 0; i < polePocitacovehoHrace.Count; i++)
                 {
-                    if (polePocitacovehoHrace[i].get_idPocitacovehoHrace() == idPocitacovehoHrace)
+                    if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == idPocitacovehoHrace)
                     {
-                        if ((idPocitacovehoHrace == 0 && !jePoleVNejvyssimRohu(polePocitacovehoHrace[i].get_poz_X_PHr(), polePocitacovehoHrace[i].get_poz_Y_PHr(), true)) ||
-                            (idPocitacovehoHrace == 2 && !jePoleVNejnizsimRohu(polePocitacovehoHrace[i].get_poz_X_PHr(), polePocitacovehoHrace[i].get_poz_Y_PHr(), true)) ||
-                            (idPocitacovehoHrace == 3 && !jePoleVSpodnimPravemRohu(polePocitacovehoHrace[i].get_poz_X_PHr(), polePocitacovehoHrace[i].get_poz_Y_PHr(), true)) ||
-                            (idPocitacovehoHrace == 4 && !jePoleVSpodnimLevemRohu(polePocitacovehoHrace[i].get_poz_X_PHr(), polePocitacovehoHrace[i].get_poz_Y_PHr(), true)) ||
-                            (idPocitacovehoHrace == 5 && !jePoleVHornimPravemRohu(polePocitacovehoHrace[i].get_poz_X_PHr(), polePocitacovehoHrace[i].get_poz_Y_PHr(), true)) ||
-                            (idPocitacovehoHrace == 6 && !jePoleVHornimLevemRohu(polePocitacovehoHrace[i].get_poz_X_PHr(), polePocitacovehoHrace[i].get_poz_Y_PHr(), true)))
+                        if ((idPocitacovehoHrace == 0 && !JePoleVNejvyssimRohu(polePocitacovehoHrace[i].Get_poz_Y_PHr(), true)) ||
+                            (idPocitacovehoHrace == 2 && !JePoleVNejnizsimRohu( polePocitacovehoHrace[i].Get_poz_Y_PHr(), true)) ||
+                            (idPocitacovehoHrace == 3 && !JePoleVSpodnimPravemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), true)) ||
+                            (idPocitacovehoHrace == 4 && !JePoleVSpodnimLevemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), true)) ||
+                            (idPocitacovehoHrace == 5 && !JePoleVHornimPravemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), true)) ||
+                            (idPocitacovehoHrace == 6 && !JePoleVHornimLevemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), true)))
                         {
                             for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
                             {
-                                if (mozneTahyPocitacovehoHrace[j].get_poz_X_KPHr() == polePocitacovehoHrace[i].get_poz_X_PHr() && mozneTahyPocitacovehoHrace[j].get_poz_Y_KPHr() == polePocitacovehoHrace[i].get_poz_Y_PHr())
+                                if (mozneTahyPocitacovehoHrace[j].Get_poz_X_KPHr() == polePocitacovehoHrace[i].Get_poz_X_PHr() && mozneTahyPocitacovehoHrace[j].Get_poz_Y_KPHr() == polePocitacovehoHrace[i].Get_poz_Y_PHr())
                                 {
-                                    pridaniPolePocitacovehoHrace(i, mozneTahyPocitacovehoHrace[j].get_poz_X_MT(), mozneTahyPocitacovehoHrace[j].get_poz_Y_MT(), idPocitacovehoHrace);
+                                    PridaniPolePocitacovehoHrace(i, mozneTahyPocitacovehoHrace[j].Get_poz_X_MT(), mozneTahyPocitacovehoHrace[j].Get_poz_Y_MT(), idPocitacovehoHrace);
                                     break;
                                 }
                             }
@@ -1507,8 +1557,8 @@ namespace Čínská_dáma
             {
                 overovatVyhodnostTahu = true;
                 PocitacovyHrac staryPocitacovyHrac = polePocitacovehoHrace[idOdebiranehoPole];
-                int idHrace = staryPocitacovyHrac.get_idPocitacovehoHrace();
-                VychoziPolePocitacovehoHrace pole = new VychoziPolePocitacovehoHrace(staryPocitacovyHrac.get_poz_X_PHr(), staryPocitacovyHrac.get_poz_Y_PHr(), sirkaPole, vyskaPole, staryPocitacovyHrac.get_idPocitacovehoHrace());
+                int idHrace = staryPocitacovyHrac.Get_idPocitacovehoHrace();
+                VychoziPolePocitacovehoHrace pole = new VychoziPolePocitacovehoHrace(staryPocitacovyHrac.Get_poz_X_PHr(), staryPocitacovyHrac.Get_poz_Y_PHr(), sirkaPole, vyskaPole, staryPocitacovyHrac.Get_idPocitacovehoHrace());
                 vychoziPolePocitacovehoHrace.Add(pole);
                 polePocitacovehoHrace.Remove(staryPocitacovyHrac);
                 PocitacovyHrac novyPocitacovyHrac = new PocitacovyHrac(novePoleX, novePoleY, sirkaPole, vyskaPole, idHrace);
@@ -1516,10 +1566,10 @@ namespace Čínská_dáma
                 ZvyrazneniPolePocitacovehoHrace zvyrazneni = new ZvyrazneniPolePocitacovehoHrace(novePoleX, novePoleY, sirkaPole, vyskaPole);
                 zvyraznenaPolePocitacovehoHrace.Add(zvyrazneni);
             }
-            kontrolaKontumace();
+            KontrolaKontumace();
         }
 
-        private void kontrolaKontumace()
+        private void KontrolaKontumace()
         {
             if(!simulaceMod)
             {
@@ -1529,14 +1579,14 @@ namespace Čínská_dáma
                 {
                     if (pocetHracu != 4)
                     {
-                        if(jePoleVNejvyssimRohu(poleLidskehoHrace[i].get_poz_X_LHr(), poleLidskehoHrace[i].get_poz_Y_LHr(), true))
+                        if(JePoleVNejvyssimRohu(poleLidskehoHrace[i].Get_poz_Y_LHr(), true))
                         {
                             pocetKamenuLidskehoHraceVCilovemTrojuhelniku++;
                         }
                     }
                     else
                     {
-                        if (jePoleVHornimPravemRohu(poleLidskehoHrace[i].get_poz_X_LHr(), poleLidskehoHrace[i].get_poz_Y_LHr(), true))
+                        if (JePoleVHornimPravemRohu(poleLidskehoHrace[i].Get_poz_X_LHr(), poleLidskehoHrace[i].Get_poz_Y_LHr(), true))
                         {
                             pocetKamenuLidskehoHraceVCilovemTrojuhelniku++;
                         }
@@ -1546,14 +1596,14 @@ namespace Čínská_dáma
                 {
                     if (pocetHracu != 4)
                     {
-                        if(polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 2 && jePoleVNejvyssimRohu(polePocitacovehoHrace[i].get_poz_X_PHr(), polePocitacovehoHrace[i].get_poz_Y_PHr(), false))
+                        if(polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 2 && JePoleVNejvyssimRohu(polePocitacovehoHrace[i].Get_poz_Y_PHr(), false))
                         {
                             pocetKamenuPocitacovehoHraceVCilovemTrojuhelniku++;
                         }
                     }
                     else
                     {
-                        if (polePocitacovehoHrace[i].get_idPocitacovehoHrace() == 4 && jePoleVHornimPravemRohu(polePocitacovehoHrace[i].get_poz_X_PHr(), polePocitacovehoHrace[i].get_poz_Y_PHr(), false))
+                        if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4 && JePoleVHornimPravemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), false))
                         {
                             pocetKamenuPocitacovehoHraceVCilovemTrojuhelniku++;
                         }
@@ -1574,11 +1624,11 @@ namespace Čínská_dáma
                     switch(i)
                     {
                         case 0:
-                            if (polePocitacovehoHrace[j].get_idPocitacovehoHrace() == 0 && jePoleVNejvyssimRohu(polePocitacovehoHrace[j].get_poz_X_PHr(), polePocitacovehoHrace[j].get_poz_Y_PHr(), true))
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 0 && JePoleVNejvyssimRohu( polePocitacovehoHrace[j].Get_poz_Y_PHr(), true))
                             {
                                 pocetPrichozichKamenuVCilovemTrojuhelniku++;
                             }
-                            if(polePocitacovehoHrace[j].get_idPocitacovehoHrace() == 2 && jePoleVNejvyssimRohu(polePocitacovehoHrace[j].get_poz_X_PHr(), polePocitacovehoHrace[j].get_poz_Y_PHr(), false))
+                            if(polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 2 && JePoleVNejvyssimRohu(polePocitacovehoHrace[j].Get_poz_Y_PHr(), false))
                             {
                                 pocetPuvodnichKamenuVCilovemTrojuhelniku++;
                             }
@@ -1589,11 +1639,11 @@ namespace Čínská_dáma
                             break;
 
                         case 2:
-                            if (polePocitacovehoHrace[j].get_idPocitacovehoHrace() == 2 && jePoleVNejnizsimRohu(polePocitacovehoHrace[j].get_poz_X_PHr(), polePocitacovehoHrace[j].get_poz_Y_PHr(), true))
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 2 && JePoleVNejnizsimRohu(polePocitacovehoHrace[j].Get_poz_Y_PHr(), true))
                             {
                                 pocetPrichozichKamenuVCilovemTrojuhelniku++;
                             }
-                            if (polePocitacovehoHrace[j].get_idPocitacovehoHrace() == 0 && jePoleVNejnizsimRohu(polePocitacovehoHrace[j].get_poz_X_PHr(), polePocitacovehoHrace[j].get_poz_Y_PHr(), false))
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 0 && JePoleVNejnizsimRohu(polePocitacovehoHrace[j].Get_poz_Y_PHr(), false))
                             {
                                 pocetPuvodnichKamenuVCilovemTrojuhelniku++;
                             }
@@ -1604,11 +1654,11 @@ namespace Čínská_dáma
                             break;
 
                         case 3:                                
-                            if (polePocitacovehoHrace[j].get_idPocitacovehoHrace() == 3 && jePoleVSpodnimPravemRohu(polePocitacovehoHrace[j].get_poz_X_PHr(), polePocitacovehoHrace[j].get_poz_Y_PHr(), true))
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 3 && JePoleVSpodnimPravemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), true))
                             {
                                 pocetPrichozichKamenuVCilovemTrojuhelniku++;
                             }
-                            if (polePocitacovehoHrace[j].get_idPocitacovehoHrace() == 6 && jePoleVSpodnimPravemRohu(polePocitacovehoHrace[j].get_poz_X_PHr(), polePocitacovehoHrace[j].get_poz_Y_PHr(), false))
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 6 && JePoleVSpodnimPravemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), false))
                             {
                                 pocetPuvodnichKamenuVCilovemTrojuhelniku++;
                             }
@@ -1619,11 +1669,11 @@ namespace Čínská_dáma
                             break;
 
                         case 4:
-                            if (polePocitacovehoHrace[j].get_idPocitacovehoHrace() == 4 && jePoleVSpodnimLevemRohu(polePocitacovehoHrace[j].get_poz_X_PHr(), polePocitacovehoHrace[j].get_poz_Y_PHr(), true))
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 4 && JePoleVSpodnimLevemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), true))
                             {
                                 pocetPrichozichKamenuVCilovemTrojuhelniku++;
                             }
-                            if (polePocitacovehoHrace[j].get_idPocitacovehoHrace() == 5 && jePoleVSpodnimLevemRohu(polePocitacovehoHrace[j].get_poz_X_PHr(), polePocitacovehoHrace[j].get_poz_Y_PHr(), false))
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 5 && JePoleVSpodnimLevemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), false))
                             {
                                 pocetPuvodnichKamenuVCilovemTrojuhelniku++;
                             }
@@ -1634,11 +1684,11 @@ namespace Čínská_dáma
                             break;
 
                         case 5:
-                            if (polePocitacovehoHrace[j].get_idPocitacovehoHrace() == 5 && jePoleVHornimPravemRohu(polePocitacovehoHrace[j].get_poz_X_PHr(), polePocitacovehoHrace[j].get_poz_Y_PHr(), true))
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 5 && JePoleVHornimPravemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), true))
                             {
                                 pocetPrichozichKamenuVCilovemTrojuhelniku++;
                             }
-                            if (polePocitacovehoHrace[j].get_idPocitacovehoHrace() == 4 && jePoleVHornimPravemRohu(polePocitacovehoHrace[j].get_poz_X_PHr(), polePocitacovehoHrace[j].get_poz_Y_PHr(), false))
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 4 && JePoleVHornimPravemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), false))
                             {
                                 pocetPuvodnichKamenuVCilovemTrojuhelniku++;
                             }
@@ -1649,11 +1699,11 @@ namespace Čínská_dáma
                             break;
 
                         case 6:
-                            if (polePocitacovehoHrace[j].get_idPocitacovehoHrace() == 6 && jePoleVHornimLevemRohu(polePocitacovehoHrace[j].get_poz_X_PHr(), polePocitacovehoHrace[j].get_poz_Y_PHr(), true))
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 6 && JePoleVHornimLevemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), true))
                             {
                                 pocetPrichozichKamenuVCilovemTrojuhelniku++;
                             }
-                            if (polePocitacovehoHrace[j].get_idPocitacovehoHrace() == 3 && jePoleVHornimLevemRohu(polePocitacovehoHrace[j].get_poz_X_PHr(), polePocitacovehoHrace[j].get_poz_Y_PHr(), false))
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 3 && JePoleVHornimLevemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), false))
                             {
                                 pocetPuvodnichKamenuVCilovemTrojuhelniku++;
                             }
@@ -1667,7 +1717,7 @@ namespace Čínská_dáma
             }
         }
 
-        private bool jePoleVNejvyssimRohu(int poz_X_PHr, int poz_Y_PHr, bool kontrolovatCelyTrojUhelnik)
+        private bool JePoleVNejvyssimRohu(int poz_Y_PHr, bool kontrolovatCelyTrojUhelnik)
         {
             if (kontrolovatCelyTrojUhelnik)
             {
@@ -1688,7 +1738,7 @@ namespace Čínská_dáma
 
         }
 
-        private bool jePoleVNejnizsimRohu(int poz_X_PHr, int poz_Y_PHr, bool kontrolovatCelyTrojUhelnik)
+        private bool JePoleVNejnizsimRohu(int poz_Y_PHr, bool kontrolovatCelyTrojUhelnik)
         {
             if (kontrolovatCelyTrojUhelnik)
             {
@@ -1708,7 +1758,7 @@ namespace Čínská_dáma
             }
         }
 
-        private bool jePoleVSpodnimLevemRohu(int poz_X_PHr, int poz_Y_PHr, bool kontrolovatCelyTrojUhelnik)
+        private bool JePoleVSpodnimLevemRohu(int poz_X_PHr, int poz_Y_PHr, bool kontrolovatCelyTrojUhelnik)
         {
             if (kontrolovatCelyTrojUhelnik)
             {
@@ -1728,7 +1778,7 @@ namespace Čínská_dáma
             }
         }
 
-        private bool jePoleVHornimPravemRohu(int poz_X_PHr, int poz_Y_PHr, bool kontrolovatCelyTrojUhelnik)
+        private bool JePoleVHornimPravemRohu(int poz_X_PHr, int poz_Y_PHr, bool kontrolovatCelyTrojUhelnik)
         {
             if (kontrolovatCelyTrojUhelnik)
             {
@@ -1748,7 +1798,7 @@ namespace Čínská_dáma
             }
         }
 
-        private bool jePoleVSpodnimPravemRohu(int poz_X_PHr, int poz_Y_PHr, bool kontrolovatCelyTrojUhelnik)
+        private bool JePoleVSpodnimPravemRohu(int poz_X_PHr, int poz_Y_PHr, bool kontrolovatCelyTrojUhelnik)
         {
             if(kontrolovatCelyTrojUhelnik)
             {
@@ -1768,7 +1818,7 @@ namespace Čínská_dáma
             }
         }
 
-        private bool jePoleVHornimLevemRohu(int poz_X_PHr, int poz_Y_PHr, bool kontrolovatCelyTrojUhelnik)
+        private bool JePoleVHornimLevemRohu(int poz_X_PHr, int poz_Y_PHr, bool kontrolovatCelyTrojUhelnik)
         {
             if (kontrolovatCelyTrojUhelnik)
             {

@@ -27,17 +27,17 @@ namespace Čínská_dáma
             this.idPocitacovehoHrace = idPocitacovehoHrace;
         }
 
-        public int get_poz_X_PHr()
+        public int Get_poz_X_PHr()
         {
             return poz_X_PHr;
         }
 
-        public int get_poz_Y_PHr()
+        public int Get_poz_Y_PHr()
         {
             return poz_Y_PHr;
         }
 
-        public int get_idPocitacovehoHrace()
+        public int Get_idPocitacovehoHrace()
         {
             return idPocitacovehoHrace;
         }

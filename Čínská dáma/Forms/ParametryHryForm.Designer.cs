@@ -80,8 +80,8 @@
             this.prvniHracPanel.Name = "prvniHracPanel";
             this.prvniHracPanel.Size = new System.Drawing.Size(209, 50);
             this.prvniHracPanel.TabIndex = 4;
-            this.prvniHracPanel.Click += new System.EventHandler(this.prvniHracPanel_Click);
-            this.prvniHracPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.prvniHracPanel_Paint);
+            this.prvniHracPanel.Click += new System.EventHandler(this.PrvniHracPanel_Click);
+            this.prvniHracPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.PrvniHracPanel_Paint);
             // 
             // prvniHracLabel
             // 
@@ -92,7 +92,7 @@
             this.prvniHracLabel.Size = new System.Drawing.Size(172, 24);
             this.prvniHracLabel.TabIndex = 0;
             this.prvniHracLabel.Text = "První tah má hráč";
-            this.prvniHracLabel.Click += new System.EventHandler(this.prvniHracLabel_Click);
+            this.prvniHracLabel.Click += new System.EventHandler(this.PrvniHracLabel_Click);
             // 
             // groupBox1
             // 
@@ -114,8 +114,8 @@
             this.nahodnePanel.Name = "nahodnePanel";
             this.nahodnePanel.Size = new System.Drawing.Size(209, 50);
             this.nahodnePanel.TabIndex = 5;
-            this.nahodnePanel.Click += new System.EventHandler(this.nahodnePanel_Click);
-            this.nahodnePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.nahodnePanel_Paint);
+            this.nahodnePanel.Click += new System.EventHandler(this.NahodnePanel_Click);
+            this.nahodnePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.NahodnePanel_Paint);
             // 
             // nahodneLabel
             // 
@@ -126,7 +126,7 @@
             this.nahodneLabel.Size = new System.Drawing.Size(158, 24);
             this.nahodneLabel.TabIndex = 0;
             this.nahodneLabel.Text = "Vybrat náhodně";
-            this.nahodneLabel.Click += new System.EventHandler(this.nahodneLabel_Click);
+            this.nahodneLabel.Click += new System.EventHandler(this.NahodneLabel_Click);
             // 
             // prvniPocitacPanel
             // 
@@ -136,8 +136,8 @@
             this.prvniPocitacPanel.Name = "prvniPocitacPanel";
             this.prvniPocitacPanel.Size = new System.Drawing.Size(209, 50);
             this.prvniPocitacPanel.TabIndex = 5;
-            this.prvniPocitacPanel.Click += new System.EventHandler(this.prvniPocitacPanel_Click);
-            this.prvniPocitacPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.prvniPocitacPanel_Paint);
+            this.prvniPocitacPanel.Click += new System.EventHandler(this.PrvniPocitacPanel_Click);
+            this.prvniPocitacPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.PrvniPocitacPanel_Paint);
             // 
             // prvniPocitacLabel
             // 
@@ -148,7 +148,7 @@
             this.prvniPocitacLabel.Size = new System.Drawing.Size(198, 24);
             this.prvniPocitacLabel.TabIndex = 0;
             this.prvniPocitacLabel.Text = "První tah má počítač";
-            this.prvniPocitacLabel.Click += new System.EventHandler(this.prvniPocitacLabel_Click);
+            this.prvniPocitacLabel.Click += new System.EventHandler(this.PrvniPocitacLabel_Click);
             // 
             // groupBox2
             // 
@@ -172,8 +172,8 @@
             this.sestHracuPanel.Name = "sestHracuPanel";
             this.sestHracuPanel.Size = new System.Drawing.Size(185, 254);
             this.sestHracuPanel.TabIndex = 3;
-            this.sestHracuPanel.Click += new System.EventHandler(this.sestHracuPanel_Click);
-            this.sestHracuPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.sestHracuPanel_Paint);
+            this.sestHracuPanel.Click += new System.EventHandler(this.SestHracuPanel_Click);
+            this.sestHracuPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.SestHracuPanel_Paint);
             // 
             // sestHracu
             // 
@@ -184,7 +184,7 @@
             this.sestHracu.Size = new System.Drawing.Size(80, 24);
             this.sestHracu.TabIndex = 1;
             this.sestHracu.Text = "6 hráčů";
-            this.sestHracu.Click += new System.EventHandler(this.sestHracu_Click);
+            this.sestHracu.Click += new System.EventHandler(this.SestHracu_Click);
             // 
             // sestHracuPB
             // 
@@ -195,7 +195,7 @@
             this.sestHracuPB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.sestHracuPB.TabIndex = 0;
             this.sestHracuPB.TabStop = false;
-            this.sestHracuPB.Click += new System.EventHandler(this.sestHracuPB_Click);
+            this.sestHracuPB.Click += new System.EventHandler(this.SestHracuPB_Click);
             // 
             // ctyriHraciPanel
             // 
@@ -206,8 +206,8 @@
             this.ctyriHraciPanel.Name = "ctyriHraciPanel";
             this.ctyriHraciPanel.Size = new System.Drawing.Size(185, 254);
             this.ctyriHraciPanel.TabIndex = 2;
-            this.ctyriHraciPanel.Click += new System.EventHandler(this.ctyriHraciPanel_Click);
-            this.ctyriHraciPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.ctyriHraciPanel_Paint);
+            this.ctyriHraciPanel.Click += new System.EventHandler(this.CtyriHraciPanel_Click);
+            this.ctyriHraciPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.CtyriHraciPanel_Paint);
             // 
             // ctyriHraciLabel
             // 
@@ -218,7 +218,7 @@
             this.ctyriHraciLabel.Size = new System.Drawing.Size(73, 24);
             this.ctyriHraciLabel.TabIndex = 1;
             this.ctyriHraciLabel.Text = "4 hráči";
-            this.ctyriHraciLabel.Click += new System.EventHandler(this.ctyriHraciLabel_Click);
+            this.ctyriHraciLabel.Click += new System.EventHandler(this.CtyriHraciLabel_Click);
             // 
             // ctyriHraciPB
             // 
@@ -229,7 +229,7 @@
             this.ctyriHraciPB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ctyriHraciPB.TabIndex = 0;
             this.ctyriHraciPB.TabStop = false;
-            this.ctyriHraciPB.Click += new System.EventHandler(this.ctyriHraciPB_Click);
+            this.ctyriHraciPB.Click += new System.EventHandler(this.CtyriHraciPB_Click);
             // 
             // triHraciPanel
             // 
@@ -240,8 +240,8 @@
             this.triHraciPanel.Name = "triHraciPanel";
             this.triHraciPanel.Size = new System.Drawing.Size(185, 254);
             this.triHraciPanel.TabIndex = 2;
-            this.triHraciPanel.Click += new System.EventHandler(this.triHraciPanel_Click);
-            this.triHraciPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.triHraciPanel_Paint);
+            this.triHraciPanel.Click += new System.EventHandler(this.TriHraciPanel_Click);
+            this.triHraciPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.TriHraciPanel_Paint);
             // 
             // triHraciLabel
             // 
@@ -252,7 +252,7 @@
             this.triHraciLabel.Size = new System.Drawing.Size(73, 24);
             this.triHraciLabel.TabIndex = 1;
             this.triHraciLabel.Text = "3 hráči";
-            this.triHraciLabel.Click += new System.EventHandler(this.triHraciLabel_Click);
+            this.triHraciLabel.Click += new System.EventHandler(this.TriHraciLabel_Click);
             // 
             // triHraciPB
             // 
@@ -263,7 +263,7 @@
             this.triHraciPB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.triHraciPB.TabIndex = 0;
             this.triHraciPB.TabStop = false;
-            this.triHraciPB.Click += new System.EventHandler(this.triHraciPB_Click);
+            this.triHraciPB.Click += new System.EventHandler(this.TriHraciPB_Click);
             // 
             // dvaHraciPanel
             // 
@@ -274,8 +274,8 @@
             this.dvaHraciPanel.Name = "dvaHraciPanel";
             this.dvaHraciPanel.Size = new System.Drawing.Size(185, 254);
             this.dvaHraciPanel.TabIndex = 1;
-            this.dvaHraciPanel.Click += new System.EventHandler(this.dvaHraciPanel_Click);
-            this.dvaHraciPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.dvaHraciPanel_Paint);
+            this.dvaHraciPanel.Click += new System.EventHandler(this.DvaHraciPanel_Click);
+            this.dvaHraciPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.DvaHraciPanel_Paint);
             // 
             // dvaHraciLabel
             // 
@@ -286,7 +286,7 @@
             this.dvaHraciLabel.Size = new System.Drawing.Size(73, 24);
             this.dvaHraciLabel.TabIndex = 1;
             this.dvaHraciLabel.Text = "2 hráči";
-            this.dvaHraciLabel.Click += new System.EventHandler(this.dvaHraciLabel_Click);
+            this.dvaHraciLabel.Click += new System.EventHandler(this.DvaHraciLabel_Click);
             // 
             // dvaHraciPB
             // 
@@ -297,7 +297,7 @@
             this.dvaHraciPB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.dvaHraciPB.TabIndex = 0;
             this.dvaHraciPB.TabStop = false;
-            this.dvaHraciPB.Click += new System.EventHandler(this.dvaHraciPB_Click);
+            this.dvaHraciPB.Click += new System.EventHandler(this.DvaHraciPB_Click);
             // 
             // zacitHruButton
             // 
@@ -308,7 +308,7 @@
             this.zacitHruButton.TabIndex = 7;
             this.zacitHruButton.Text = "Začít hru";
             this.zacitHruButton.UseVisualStyleBackColor = true;
-            this.zacitHruButton.Click += new System.EventHandler(this.zacitHruButton_Click);
+            this.zacitHruButton.Click += new System.EventHandler(this.ZacitHruButton_Click);
             // 
             // groupBox3
             // 
@@ -374,7 +374,6 @@
             this.Name = "ParametryHryForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Čínská dáma - Zvolte parametry hry";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ParametryHry_FormClosing);
             this.prvniHracPanel.ResumeLayout(false);
             this.prvniHracPanel.PerformLayout();
             this.groupBox1.ResumeLayout(false);

@@ -15,7 +15,7 @@ namespace Čínská_dáma
             InitializeComponent();
         }
 
-        private void prvniHracPanel_Click(object sender, EventArgs e)
+        private void PrvniHracPanel_Click(object sender, EventArgs e)
         {
             prvniTah = 1;
             prvniHracPanel.BackColor = Color.Cyan;
@@ -23,7 +23,7 @@ namespace Čínská_dáma
             nahodnePanel.BackColor = Color.White;
         }
 
-        private void prvniPocitacPanel_Click(object sender, EventArgs e)
+        private void PrvniPocitacPanel_Click(object sender, EventArgs e)
         {
             prvniTah = 2;
             prvniHracPanel.BackColor = Color.White;
@@ -31,7 +31,7 @@ namespace Čínská_dáma
             nahodnePanel.BackColor = Color.White;
         }
 
-        private void nahodnePanel_Click(object sender, EventArgs e)
+        private void NahodnePanel_Click(object sender, EventArgs e)
         {
             Random random = new Random();
             prvniTah = random.Next(1, 3);
@@ -40,47 +40,42 @@ namespace Čínská_dáma
             nahodnePanel.BackColor = Color.Cyan;
         }
 
-        private void prvniHracLabel_Click(object sender, EventArgs e)
+        private void PrvniHracLabel_Click(object sender, EventArgs e)
         {
-            prvniHracPanel_Click(prvniHracPanel, EventArgs.Empty);
+            PrvniHracPanel_Click(prvniHracPanel, EventArgs.Empty);
         }
 
-        private void prvniPocitacLabel_Click(object sender, EventArgs e)
+        private void PrvniPocitacLabel_Click(object sender, EventArgs e)
         {
-            prvniPocitacPanel_Click(prvniPocitacPanel, EventArgs.Empty);
+            PrvniPocitacPanel_Click(prvniPocitacPanel, EventArgs.Empty);
         }
 
-        private void nahodneLabel_Click(object sender, EventArgs e)
+        private void NahodneLabel_Click(object sender, EventArgs e)
         {
-            nahodnePanel_Click(nahodnePanel, EventArgs.Empty);
+            NahodnePanel_Click(nahodnePanel, EventArgs.Empty);
         }
 
-        private void ParametryHry_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            pen.Dispose();
-        }
-
-        private void dvaHraciPanel_Paint(object sender, PaintEventArgs e)
+        private void DvaHraciPanel_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawRectangle(pen, 0, 0, dvaHraciPanel.Width - 1, dvaHraciPanel.Height - 1);
         }
 
-        private void triHraciPanel_Paint(object sender, PaintEventArgs e)
+        private void TriHraciPanel_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawRectangle(pen, 0, 0, triHraciPanel.Width - 1, triHraciPanel.Height - 1);
         }
 
-        private void ctyriHraciPanel_Paint(object sender, PaintEventArgs e)
+        private void CtyriHraciPanel_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawRectangle(pen, 0, 0, ctyriHraciPanel.Width - 1, ctyriHraciPanel.Height - 1);
         }
 
-        private void sestHracuPanel_Paint(object sender, PaintEventArgs e)
+        private void SestHracuPanel_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawRectangle(pen, 0, 0, sestHracuPanel.Width - 1, sestHracuPanel.Height - 1);
         }
 
-        private void dvaHraciPanel_Click(object sender, EventArgs e)
+        private void DvaHraciPanel_Click(object sender, EventArgs e)
         {
             pocetHracu = 2;
             dvaHraciPanel.BackColor = Color.Cyan;
@@ -89,17 +84,17 @@ namespace Čínská_dáma
             sestHracuPanel.BackColor = Color.White;
         }
 
-        private void dvaHraciPB_Click(object sender, EventArgs e)
+        private void DvaHraciPB_Click(object sender, EventArgs e)
         {
-            dvaHraciPanel_Click(dvaHraciPanel, EventArgs.Empty);
+            DvaHraciPanel_Click(dvaHraciPanel, EventArgs.Empty);
         }
 
-        private void dvaHraciLabel_Click(object sender, EventArgs e)
+        private void DvaHraciLabel_Click(object sender, EventArgs e)
         {
-            dvaHraciPanel_Click(dvaHraciPanel, EventArgs.Empty);
+            DvaHraciPanel_Click(dvaHraciPanel, EventArgs.Empty);
         }
 
-        private void triHraciPanel_Click(object sender, EventArgs e)
+        private void TriHraciPanel_Click(object sender, EventArgs e)
         {
             pocetHracu = 3;
             dvaHraciPanel.BackColor = Color.White;
@@ -108,17 +103,17 @@ namespace Čínská_dáma
             sestHracuPanel.BackColor = Color.White;
         }
 
-        private void triHraciPB_Click(object sender, EventArgs e)
+        private void TriHraciPB_Click(object sender, EventArgs e)
         {
-            triHraciPanel_Click(triHraciPanel, EventArgs.Empty);
+            TriHraciPanel_Click(triHraciPanel, EventArgs.Empty);
         }
 
-        private void triHraciLabel_Click(object sender, EventArgs e)
+        private void TriHraciLabel_Click(object sender, EventArgs e)
         {
-            triHraciPanel_Click(triHraciPanel, EventArgs.Empty);
+            TriHraciPanel_Click(triHraciPanel, EventArgs.Empty);
         }
 
-        private void ctyriHraciPanel_Click(object sender, EventArgs e)
+        private void CtyriHraciPanel_Click(object sender, EventArgs e)
         {
             pocetHracu = 4;
             dvaHraciPanel.BackColor = Color.White;
@@ -127,17 +122,17 @@ namespace Čínská_dáma
             sestHracuPanel.BackColor = Color.White;
         }
 
-        private void ctyriHraciPB_Click(object sender, EventArgs e)
+        private void CtyriHraciPB_Click(object sender, EventArgs e)
         {
-            ctyriHraciPanel_Click(ctyriHraciPanel, EventArgs.Empty);
+            CtyriHraciPanel_Click(ctyriHraciPanel, EventArgs.Empty);
         }
 
-        private void ctyriHraciLabel_Click(object sender, EventArgs e)
+        private void CtyriHraciLabel_Click(object sender, EventArgs e)
         {
-            ctyriHraciPanel_Click(ctyriHraciPanel, EventArgs.Empty);
+            CtyriHraciPanel_Click(ctyriHraciPanel, EventArgs.Empty);
         }
 
-        private void sestHracuPanel_Click(object sender, EventArgs e)
+        private void SestHracuPanel_Click(object sender, EventArgs e)
         {
             pocetHracu = 6;
             dvaHraciPanel.BackColor = Color.White;
@@ -146,17 +141,17 @@ namespace Čínská_dáma
             sestHracuPanel.BackColor = Color.Cyan;
         }
 
-        private void sestHracuPB_Click(object sender, EventArgs e)
+        private void SestHracuPB_Click(object sender, EventArgs e)
         {
-            sestHracuPanel_Click(sestHracuPanel, EventArgs.Empty);
+            SestHracuPanel_Click(sestHracuPanel, EventArgs.Empty);
         }
 
-        private void sestHracu_Click(object sender, EventArgs e)
+        private void SestHracu_Click(object sender, EventArgs e)
         {
-            sestHracuPanel_Click(sestHracuPanel, EventArgs.Empty);
+            SestHracuPanel_Click(sestHracuPanel, EventArgs.Empty);
         }
 
-        private void zacitHruButton_Click(object sender, EventArgs e)
+        private void ZacitHruButton_Click(object sender, EventArgs e)
         {
             if(pocetHracu == 0 || prvniTah == 0)
             {
@@ -165,22 +160,22 @@ namespace Čínská_dáma
             else
             {
                 int[] obtiznosti = new int[] { 0, 0};
-                new HraForm(pocetHracu, prvniTah, obtiznostTB.Value, false, obtiznosti).Show();
+                new HraForm(pocetHracu, prvniTah, obtiznostTB.Value, false, obtiznosti, false, 0).Show();
                 Close();
             }
         }
 
-        private void prvniHracPanel_Paint(object sender, PaintEventArgs e)
+        private void PrvniHracPanel_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawRectangle(pen, 0, 0, prvniHracPanel.Width - 1, prvniHracPanel.Height - 1);
         }
 
-        private void prvniPocitacPanel_Paint(object sender, PaintEventArgs e)
+        private void PrvniPocitacPanel_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawRectangle(pen, 0, 0, prvniPocitacPanel.Width - 1, prvniPocitacPanel.Height - 1);
         }
 
-        private void nahodnePanel_Paint(object sender, PaintEventArgs e)
+        private void NahodnePanel_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawRectangle(pen, 0, 0, nahodnePanel.Width - 1, nahodnePanel.Height - 1);
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Media;
+using Čínská_dáma.Forms;
 
 namespace Čínská_dáma
 {
@@ -13,6 +14,8 @@ namespace Čínská_dáma
         private int obtiznost;
         private bool simulaceMod;
         private int[] simulaceObtiznost = new int[2];
+        private bool hromadnaSimulace;
+        private int pocetSimulaci;
         private static int konzoleZprava = 2;
         private static int viteziciPocitacovyHrac;
         private bool kontumaceVyhra;
@@ -23,27 +26,58 @@ namespace Čínská_dáma
 
         private static Hra hra;
 
-        public HraForm(int pocetHracu, int prvniTah, int obtiznost, bool simulaceMod, int[] simulaceObtiznost)
+        public HraForm(int pocetHracu, int prvniTah, int obtiznost, bool simulaceMod, int[] simulaceObtiznost, bool hromadnaSimulace, int pocetSimulaci)
         {
             this.pocetHracu = pocetHracu;
             this.prvniTah = prvniTah;
             this.obtiznost = obtiznost;
             this.simulaceMod = simulaceMod;
             this.simulaceObtiznost = simulaceObtiznost;
-            hra = new Hra(pocetHracu, prvniTah, obtiznost, simulaceMod, simulaceObtiznost);
+            this.hromadnaSimulace = hromadnaSimulace;
+            this.pocetSimulaci = pocetSimulaci;
+            if (!hromadnaSimulace)
+            {
+                hra = new Hra(pocetHracu, prvniTah, obtiznost, simulaceMod, simulaceObtiznost);
+            }  
+
             InitializeComponent();
-            if(simulaceMod)
+
+            if(hromadnaSimulace)
+            {
+                for (int i = 0; i < pocetSimulaci; i++)
+                {
+                    hra = new Hra(pocetHracu, prvniTah, obtiznost, true, simulaceObtiznost);
+                    hra.NovaHra(herniPanel.Width, this);
+                    for (int j = 0; ; j++)
+                    {
+                        hra.PocitacovyHracPohyb(this);
+                        if (konzoleZprava == 7)
+                        {
+                            konzoleZprava = 2;
+                            break;
+                        }
+                    }
+                }
+                MessageBox.Show("Hromadná simulace byla úspěšně ukončena. Výsledky byly zapsány do statistik.", "Hromadná simulace ukončena", MessageBoxButtons.OK);
+                new MenuForm().Show();
+                Close();
+            }
+
+            if (simulaceMod)
             {
                 pausePB.Visible = false;
                 restartPB.Visible = false;
-                ukoncitPB.Visible = false;
+                UkoncitPB.Visible = false;
                 konecTahuPB.Visible = false;
                 zvukPB.Visible = false;
                 casLabel.Visible = false;
                 zacitSimulaciButton.Visible = true;
             }
-            hra.novaHra(herniPanel.Width, this);
-            if(konzoleZprava == 7)
+            if (!hromadnaSimulace)
+            {
+                hra.NovaHra(herniPanel.Width, this);
+            }    
+            if (konzoleZprava == 7)
             {
                 konzoleZprava = 2;
             }
@@ -57,7 +91,7 @@ namespace Čínská_dáma
             e.Graphics.DrawRectangle(pen, kontrolniPanel.Location.X - 4, kontrolniPanel.Location.Y - 4, kontrolniPanel.Width + 7, kontrolniPanel.Height + 7);
         }
 
-        private void nakreslitSouradnice(PaintEventArgs e, List<Pole> herniPole)
+        private void NakreslitSouradnice(PaintEventArgs e, List<Pole> herniPole)
         {
             int pozX, pozY, xc, yc;
             Font drawFont = new Font("Arial", 8);
@@ -65,8 +99,8 @@ namespace Čínská_dáma
             for (int i = 0; i < herniPole.Count; i++)
             {
                 Pole pole = (Pole)herniPole[i];
-                pozX = pole.get_poz_X_He();
-                pozY = pole.get_poz_Y_He();
+                pozX = pole.Get_poz_X_He();
+                pozY = pole.Get_poz_Y_He();
                 xc = pozX + (35 / 2);
                 yc = pozY + (35 / 2);
 
@@ -80,11 +114,11 @@ namespace Čínská_dáma
             br2.Dispose();
         }
 
-        private void herniPanel_Paint(object sender, PaintEventArgs e)
+        private void HerniPanel_Paint(object sender, PaintEventArgs e)
         {
-            pocetTahuLabel.Text = "Počet tahů: " + hra.getPocetTahu();
+            pocetTahuLabel.Text = "Počet tahů: " + hra.GetPocetTahu();
 
-            (List<Pole> herniPole, List<LidskyHrac> poleLidskehoHrace, List<PocitacovyHrac> polePocitacovehoHrace, List<MoznyTahLidskehoHrace> mozneTahyLidskehoHrace, ZvyrazneniPoleLidskehoHrace zvyrazneniPoleLidskehoHrace, List <ZvyrazneniPolePocitacovehoHrace> zvyrazneniPolePocitacovehoHrace, List<VychoziPolePocitacovehoHrace> vychoziPolePocitacovehoHrace) = hra.herniPrvky();
+            (List<Pole> herniPole, List<LidskyHrac> poleLidskehoHrace, List<PocitacovyHrac> polePocitacovehoHrace, List<MoznyTahLidskehoHrace> mozneTahyLidskehoHrace, ZvyrazneniPoleLidskehoHrace zvyrazneniPoleLidskehoHrace, List <ZvyrazneniPolePocitacovehoHrace> zvyrazneniPolePocitacovehoHrace, List<VychoziPolePocitacovehoHrace> vychoziPolePocitacovehoHrace) = hra.HerniPrvky();
 
             foreach (Pole p in herniPole)
             {
@@ -94,7 +128,7 @@ namespace Čínská_dáma
             for (int i = 0; i < vychoziPolePocitacovehoHrace.Count; i++)
             {
                 VychoziPolePocitacovehoHrace v = vychoziPolePocitacovehoHrace[i];
-                int idPocitacovehoHrace = v.get_idPocitacovehoHrace();
+                int idPocitacovehoHrace = v.Get_idPocitacovehoHrace();
                 v.NakresliVychoziPolePocitacovehoHrace(e, idPocitacovehoHrace);
             }
 
@@ -106,7 +140,7 @@ namespace Čínská_dáma
             for (int i = 0; i < polePocitacovehoHrace.Count; i++)
             {
                 PocitacovyHrac p = polePocitacovehoHrace[i];
-                int idPocitacovehoHrace = p.get_idPocitacovehoHrace();
+                int idPocitacovehoHrace = p.Get_idPocitacovehoHrace();
                 p.NakresliPocitacovehoHrace(e, idPocitacovehoHrace);
             }
 
@@ -125,51 +159,51 @@ namespace Čínská_dáma
                 z.NakresliZvyrazeneniPole(e);
             }
 
-        //    nakreslitSouradnice(e, herniPole); - není určeno pro hráče, funkce slouží k vývoji a nebude ve finální verzi zahrnuta
+         //   NakreslitSouradnice(e, herniPole); //- není určeno pro hráče, funkce slouží k vývoji a nebude ve finální verzi zahrnuta
         }
 
-        private void herniPanel_MouseClick(object sender, MouseEventArgs e)
+        private void HerniPanel_MouseClick(object sender, MouseEventArgs e)
         {
             Casovac.Enabled = true;
             konzolePanel.Refresh();
-            hra.panelKliknuti(e.X, e.Y, this);
-            konzoleRefresh(vypocetTahu);
+            hra.PanelKliknuti(e.X, e.Y, this);
+            KonzoleRefresh(vypocetTahu);
             herniPanel.Refresh();
             konzolePanel.Refresh();
         }
 
-        public void konzoleRefresh(int vt)
+        public void KonzoleRefresh(int vt)
         {
             vypocetTahu = vt;
-            (konzoleZprava, viteziciPocitacovyHrac, kontumaceVyhra) = hra.getKonzoleZprava();
+            (konzoleZprava, viteziciPocitacovyHrac, kontumaceVyhra) = hra.GetKonzoleZprava();
             konzolePanel.Refresh();
         }
 
-        public void konecTahuButton()
+        public void KonecTahuButton()
         {
             konecTahuPB.Enabled = !konecTahuPB.Enabled;
         }
 
-        private void pausePB_Click(object sender, EventArgs e)
+        private void PausePB_Click(object sender, EventArgs e)
         {
             Casovac.Enabled = !Casovac.Enabled;
             switch (konzoleZprava)
             {
                 case 0:
                     pausePB.Image = Čínská_dáma.Properties.Resources.play;
-                    herniPanel.MouseClick -= herniPanel_MouseClick;
+                    herniPanel.MouseClick -= HerniPanel_MouseClick;
                     konzoleZprava = 3;
                     break;
                 case 3:
                     pausePB.Image = Čínská_dáma.Properties.Resources.pause;
-                    herniPanel.MouseClick += herniPanel_MouseClick;
+                    herniPanel.MouseClick += HerniPanel_MouseClick;
                     konzoleZprava = 0;
                     break;
             }
             konzolePanel.Refresh();
         }
 
-        private void konzolePanel_Paint(object sender, PaintEventArgs e)
+        private void KonzolePanel_Paint(object sender, PaintEventArgs e)
         {
             Font drawFont = new Font("Arial", 16);
             SolidBrush brBlack = new SolidBrush(Color.Black);
@@ -180,19 +214,19 @@ namespace Čínská_dáma
                     switch (vypocetTahu)
                     {
                         case 2:
-                            e.Graphics.DrawString("Probíhá výpočet nejvýhodnějšího tahu pro červeného hráče.", drawFont, brBlack, 5, 15);
+                            e.Graphics.DrawString("Probíhá výpočet tahu pro červeného hráče.", drawFont, brBlack, 100, 15);
                             break;
                         case 3:
-                            e.Graphics.DrawString("Probíhá výpočet nejvýhodnějšího tahu pro zeleného hráče.", drawFont, brBlack, 5, 15);
+                            e.Graphics.DrawString("Probíhá výpočet tahu pro zeleného hráče.", drawFont, brBlack, 100, 15);
                             break;
                         case 4:
-                            e.Graphics.DrawString("Probíhá výpočet nejvýhodnějšího tahu pro žlutého hráče.", drawFont, brBlack, 5, 15);
+                            e.Graphics.DrawString("Probíhá výpočet tahu pro žlutého hráče.", drawFont, brBlack, 100, 15);
                             break;
                         case 5:
-                            e.Graphics.DrawString("Probíhá výpočet nejvýhodnějšího tahu pro fialového hráče.", drawFont, brBlack, 5, 15);
+                            e.Graphics.DrawString("Probíhá výpočet tahu pro fialového hráče.", drawFont, brBlack, 100, 15);
                             break;
                         case 6:
-                            e.Graphics.DrawString("Probíhá výpočet nejvýhodnějšího tahu pro hnědého hráče.", drawFont, brBlack, 5, 15);
+                            e.Graphics.DrawString("Probíhá výpočet tahu pro hnědého hráče.", drawFont, brBlack, 100, 15);
                             break;
                     }
                     break;
@@ -217,10 +251,10 @@ namespace Čínská_dáma
                     e.Graphics.DrawString("Hra je pozastavena.", drawFont, brBlack, 200, 15);
                     break;
                 case 4:
-                    herniPanel.MouseClick -= herniPanel_MouseClick;
+                    herniPanel.MouseClick -= HerniPanel_MouseClick;
                     pausePB.Enabled = false;
                     Casovac.Enabled = false;
-                    prehratZvuk(3);
+                    PrehratZvuk(3);
                     if(!kontumaceVyhra)
                     {
                         e.Graphics.DrawString("Gratulujeme, vyhrál jste.", drawFont, brBlack, 180, 15);
@@ -231,10 +265,10 @@ namespace Čínská_dáma
                     }
                     break;
                 case 5:
-                    herniPanel.MouseClick -= herniPanel_MouseClick;
+                    herniPanel.MouseClick -= HerniPanel_MouseClick;
                     pausePB.Enabled = false;
                     Casovac.Enabled = false;
-                    prehratZvuk(4);
+                    PrehratZvuk(4);
                     switch (viteziciPocitacovyHrac)
                     {
                         case 2:
@@ -255,10 +289,10 @@ namespace Čínská_dáma
                     }
                     break;
                 case 6:
-                    herniPanel.MouseClick -= herniPanel_MouseClick;
+                    herniPanel.MouseClick -= HerniPanel_MouseClick;
                     pausePB.Enabled = false;
                     Casovac.Enabled = false;
-                    prehratZvuk(5);
+                    PrehratZvuk(5);
                     e.Graphics.DrawString("Hra skončila remízou.", drawFont, brBlack, 170, 15);
                     break;
                 case 7:
@@ -304,7 +338,7 @@ namespace Čínská_dáma
             }
         }
 
-        private void restartPB_Click(object sender, EventArgs e)
+        private void RestartPB_Click(object sender, EventArgs e)
         {
             int[] obtiznosti = new int[] { 0, 0 };
             if (konzoleZprava < 4)
@@ -312,18 +346,18 @@ namespace Čínská_dáma
                 DialogResult vysledek = MessageBox.Show("Restartováním hry bude současná hra ukončena. Chcete pokračovat?", "Restartování hry", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (vysledek == DialogResult.Yes)
                 {
-                    new HraForm(pocetHracu, prvniTah, obtiznost, false, obtiznosti).Show();
+                    new HraForm(pocetHracu, prvniTah, obtiznost, false, obtiznosti, false, 0).Show();
                     Close();
                 }
             }
             else
             {
-                new HraForm(pocetHracu, prvniTah, obtiznost, false, obtiznosti).Show();
+                new HraForm(pocetHracu, prvniTah, obtiznost, false, obtiznosti, false, 0).Show();
                 Close();
             }
         }
 
-        private void ukoncitPB_Click(object sender, EventArgs e)
+        private void UkoncitPB_Click(object sender, EventArgs e)
         {
             if (konzoleZprava < 3)
             {
@@ -341,13 +375,13 @@ namespace Čínská_dáma
             }
         }
 
-        private void konecTahuPB_Click(object sender, EventArgs e)
+        private void KonecTahuPB_Click(object sender, EventArgs e)
         {
-            hra.konecTahu(this);
+            hra.KonecTahu(this);
             herniPanel.Refresh();
         }
 
-        private void konecTahuPB_EnabledChanged(object sender, EventArgs e)
+        private void KonecTahuPB_EnabledChanged(object sender, EventArgs e)
         {
             if (konecTahuPB.Enabled)
             {
@@ -359,7 +393,7 @@ namespace Čínská_dáma
             }
         }
 
-        private void zvukPB_Click(object sender, EventArgs e)
+        private void ZvukPB_Click(object sender, EventArgs e)
         {
             if (prehravaniZvuku)
             {
@@ -373,7 +407,7 @@ namespace Čínská_dáma
             }
         }
 
-        public static void prehratZvuk(int idZvuku)
+        public static void PrehratZvuk(int idZvuku)
         {
             if(prehravaniZvuku)
             {
@@ -403,7 +437,7 @@ namespace Čínská_dáma
             }
         }
 
-        private void nováHraToolStripMenuItem_Click(object sender, EventArgs e)
+        private void NováHraToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult vysledek = MessageBox.Show("Vytvořením nové hry bude současná hra ztracena. Chcete pokračovat?", "Nová hra", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (vysledek == DialogResult.Yes)
@@ -413,17 +447,17 @@ namespace Čínská_dáma
             }
         }
 
-        private void restartovatHruToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RestartovatHruToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            restartPB_Click(konecTahuPB, null);
+            RestartPB_Click(konecTahuPB, null);
         }
 
-        private void návratDoMenuToolStripMenuItem_Click(object sender, EventArgs e)
+        private void NávratDoMenuToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ukoncitPB_Click(konecTahuPB, null);
+            UkoncitPB_Click(konecTahuPB, null);
         }
 
-        private void ukončitAplikaciToolStripMenuItem_Click(object sender, EventArgs e)
+        private void UkončitAplikaciToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult vysledek = MessageBox.Show("Ukončením aplikace bude současná hra ztracena. Chcete pokračovat?", "Ukončit aplikaci", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (vysledek == DialogResult.Yes)
@@ -432,34 +466,34 @@ namespace Čínská_dáma
             }
         }
 
-        private void pozastavitpokračovatToolStripMenuItem_Click(object sender, EventArgs e)
+        private void PozastavitpokračovatToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            pausePB_Click(konecTahuPB, null);
+            PausePB_Click(konecTahuPB, null);
         }
 
-        private void konecTahuToolStripMenuItem_Click(object sender, EventArgs e)
+        private void KonecTahuToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (konecTahuPB.Enabled)
             {
-                konecTahuPB_Click(konecTahuPB, null);
+                KonecTahuPB_Click(konecTahuPB, null);
             }
         }
 
-        private void zapnoutvypnoutZvukyToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ZapnoutvypnoutZvukyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            zvukPB_Click(konecTahuPB, null);
+            ZvukPB_Click(konecTahuPB, null);
         }
 
-        private void oAplikaciToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OAplikaciToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new InformaceForm().Show();
         }
 
-        private void zacitSimulaciButton_Click(object sender, EventArgs e)
+        private void ZacitSimulaciButton_Click(object sender, EventArgs e)
         {
             for (int i = 0; ; i++)
             {
-                hra.pocitacovyHracPohyb(this);
+                hra.PocitacovyHracPohyb(this);
                 herniPanel.Refresh();
                 if (konzoleZprava == 7)
                 {

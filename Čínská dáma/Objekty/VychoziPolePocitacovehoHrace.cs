@@ -27,7 +27,7 @@ namespace Čínská_dáma
             this.idPocitacovehoHrace = idPocitacovehoHrace;
         }
 
-        public int get_idPocitacovehoHrace()
+        public int Get_idPocitacovehoHrace()
         {
             return idPocitacovehoHrace;
         }

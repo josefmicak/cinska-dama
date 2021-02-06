@@ -20,12 +20,12 @@ namespace Čínská_dáma
             this.vyskaPole = vyskaPole;
         }
         
-        public int get_poz_X_LHr()
+        public int Get_poz_X_LHr()
         {
             return poz_X_LHr;
         }
 
-        public int get_poz_Y_LHr()
+        public int Get_poz_Y_LHr()
         {
             return poz_Y_LHr;
         }

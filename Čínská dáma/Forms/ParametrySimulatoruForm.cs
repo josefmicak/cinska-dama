@@ -15,10 +15,10 @@ namespace Čínská_dáma.Forms
         public ParametrySimulatoruForm()
         {
             InitializeComponent();
-            pocetHracu();
+            PocetHracu();
         }
 
-        private void zacitSimulaciButton_Click(object sender, EventArgs e)
+        private void ZacitSimulaciButton_Click(object sender, EventArgs e)
         {
             int[] obtiznosti = new int[] { obtiznost1TB.Value, obtiznost2TB.Value, obtiznost3TB.Value, obtiznost4TB.Value, obtiznost5TB.Value, obtiznost6TB.Value };
             int pocetHracu;
@@ -38,31 +38,31 @@ namespace Čínská_dáma.Forms
             {
                 pocetHracu = 6;
             }
-            new HraForm(pocetHracu, 1, 1, true, obtiznosti).Show();
+            new HraForm(pocetHracu, 1, 1, true, obtiznosti, false, 1).Show();
             Close();
         }
 
-        private void dvaHraciRB_CheckedChanged(object sender, EventArgs e)
+        private void DvaHraciRB_CheckedChanged(object sender, EventArgs e)
         {
-            pocetHracu();
+            PocetHracu();
         }
 
-        private void triHraciRB_CheckedChanged(object sender, EventArgs e)
+        private void TriHraciRB_CheckedChanged(object sender, EventArgs e)
         {
-            pocetHracu();
+            PocetHracu();
         }
 
-        private void ctyriHraciRB_CheckedChanged(object sender, EventArgs e)
+        private void CtyriHraciRB_CheckedChanged(object sender, EventArgs e)
         {
-            pocetHracu();
+            PocetHracu();
         }
 
-        private void sestHracuRB_CheckedChanged(object sender, EventArgs e)
+        private void SestHracuRB_CheckedChanged(object sender, EventArgs e)
         {
-            pocetHracu();
+            PocetHracu();
         }
 
-        private void pocetHracu()
+        private void PocetHracu()
         {
             foreach (Control C in this.Controls)
             {
@@ -102,6 +102,41 @@ namespace Čínská_dáma.Forms
                         C.Enabled = true;
                     }
                 }
+            }
+        }
+
+        private void HromadnaSimulace_Click(object sender, EventArgs e)
+        {
+            if (!int.TryParse(pocetSimulaciTB.Text, out _))
+            {
+                MessageBox.Show("Chyba - zadaný počet simulací je ve špatném formátu.", "Chybný počet simulací", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            else
+            {
+                hromadnaSimulaceLabel.Text = "Probíhají určené simulace. Provedení simulací může chvílí trvat.";
+                hromadnaSimulaceLabel.Visible = true;
+                this.Refresh();
+                int[] obtiznosti = new int[] { obtiznost1TB.Value, obtiznost2TB.Value, obtiznost3TB.Value, obtiznost4TB.Value, obtiznost5TB.Value, obtiznost6TB.Value };
+                int pocetHracu;
+                if (dvaHraciRB.Checked)
+                {
+                    pocetHracu = 2;
+                }
+                else if (triHraciRB.Checked)
+                {
+                    pocetHracu = 3;
+                }
+                else if (ctyriHraciRB.Checked)
+                {
+                    pocetHracu = 4;
+                }
+                else
+                {
+                    pocetHracu = 6;
+                }
+                new HraForm(pocetHracu, 1, 1, true, obtiznosti, true, int.Parse(pocetSimulaciTB.Text));
+                Close();
             }
         }
     }
