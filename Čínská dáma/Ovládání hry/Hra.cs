@@ -68,74 +68,7 @@ namespace Čínská_dáma
             {
                 Pole pole = new Pole(poz_X_He, poz_Y_He, sirkaPole, vyskaPole, true);
                 herniPole.Add(pole);
-                switch (i)
-                {
-                    case 0:
-                        poz_Y_He += posun;
-                        poz_X_He -= (posun / 2) + posun;
-                        break;
-                    case 2:
-                        poz_Y_He += posun;
-                        poz_X_He -= (posun / 2) + (posun * 2);
-                        break;
-                    case 5:
-                        poz_Y_He += posun;
-                        poz_X_He -= (posun / 2) + (posun * 3);
-                        break;
-                    case 9:
-                        poz_Y_He += posun;
-                        poz_X_He -= (posun / 2) + (posun * 8);
-                        break;
-                    case 22:
-                        poz_Y_He += posun;
-                        poz_X_He -= (posun / 2) + (posun * 12);
-                        break;
-                    case 34:
-                        poz_Y_He += posun;
-                        poz_X_He -= (posun / 2) + (posun * 11);
-                        break;
-                    case 45:
-                        poz_Y_He += posun;
-                        poz_X_He -= (posun / 2) + (posun * 10);
-                        break;
-                    case 55:
-                        poz_Y_He += posun;
-                        poz_X_He -= (posun / 2) + (posun * 9);
-                        break;
-                    case 64:
-                        poz_Y_He += posun;
-                        poz_X_He -= (posun / 2) + (posun * 9);
-                        break;
-                    case 74:
-                        poz_Y_He += posun;
-                        poz_X_He -= (posun / 2) + (posun * 10);
-                        break;
-                    case 85:
-                        poz_Y_He += posun;
-                        poz_X_He -= (posun / 2) + (posun * 11);
-                        break;
-                    case 97:
-                        poz_Y_He += posun;
-                        poz_X_He -= (posun / 2) + (posun * 12);
-                        break;
-                    case 110:
-                        poz_Y_He += posun;
-                        poz_X_He -= (posun / 2) + (posun * 8);
-                        break;
-                    case 114:
-                        poz_Y_He += posun;
-                        poz_X_He -= (posun / 2) + (posun * 3);
-                        break;
-                    case 117:
-                        poz_Y_He += posun;
-                        poz_X_He -= (posun / 2) + (posun * 2);
-                        break;
-                    case 119:
-                        poz_Y_He += posun;
-                        poz_X_He -= (posun / 2) + posun;
-                        break;
-                }
-                poz_X_He += posun;
+                (poz_X_He, poz_Y_He) = PrepocetPozicPoli(i, poz_X_He, poz_Y_He);
             }
 
             for (int i = 0; i < herniPole.Count; i++)
@@ -148,7 +81,7 @@ namespace Čínská_dáma
                 {
                     if (pocetHracu != 4)
                     {
-                        if (JePoleVNejnizsimRohu(poz_Y_He) && poleLidskehoHrace.Count < 10)
+                        if (JePoleVNejnizsimRohu(poz_Y_He, true) && poleLidskehoHrace.Count < 10)
                         {
                             LidskyHrac lidskyHrac = new LidskyHrac(poz_X_He, poz_Y_He, sirkaPole, vyskaPole);
                             poleLidskehoHrace.Add(lidskyHrac);
@@ -156,7 +89,7 @@ namespace Čínská_dáma
                     }
                     else
                     {
-                        if (JePoleVSpodnimLevemRohu(poz_X_He, poz_Y_He) && poleLidskehoHrace.Count < 10)
+                        if (JePoleVSpodnimLevemRohu(poz_X_He, poz_Y_He, true) && poleLidskehoHrace.Count < 10)
                         {
                             LidskyHrac lidskyHrac = new LidskyHrac(poz_X_He, poz_Y_He, sirkaPole, vyskaPole);
                             poleLidskehoHrace.Add(lidskyHrac);
@@ -165,27 +98,21 @@ namespace Čínská_dáma
                 }
 
                 //zašedění neaktivních polí
-                if((pocetHracu == 2 && (JePoleVHornimLevemRohu(poz_X_He, poz_Y_He) || JePoleVHornimPravemRohu(poz_X_He, poz_Y_He) || JePoleVSpodnimLevemRohu(poz_X_He, poz_Y_He) || JePoleVSpodnimPravemRohu(poz_X_He, poz_Y_He))) ||
-                    (pocetHracu == 4 && (JePoleVNejnizsimRohu(poz_Y_He) || JePoleVNejvyssimRohu(poz_Y_He))))
+                if(ZaseditPole(pocetHracu, poz_X_He, poz_Y_He))
                 {
                     herniPole[i].Set_jeAktivni(false);
                 }
 
                 for (int n = 0; n <= 6; n++)
                 {
-                    if ((pocetHracu == 2 && ((n > 2) || ((!simulaceMod && polePocitacovehoHrace.Count == 10) || (simulaceMod && polePocitacovehoHrace.Count == 20)))) || (pocetHracu == 3 && ((n == 2 || n > 4) || (!simulaceMod && polePocitacovehoHrace.Count == 20) || (simulaceMod && polePocitacovehoHrace.Count == 30))) || (pocetHracu == 4 && ((n == 2 || (!simulaceMod && n == 5) || (simulaceMod && n == 0)) || (!simulaceMod && polePocitacovehoHrace.Count == 30) || (simulaceMod && polePocitacovehoHrace.Count == 40))) || (pocetHracu == 6 && (!simulaceMod && polePocitacovehoHrace.Count == 50) || (simulaceMod && polePocitacovehoHrace.Count == 60)))
+                    if(PrekrocenPocetPoli(pocetHracu, n, simulaceMod, polePocitacovehoHrace.Count))
                     {
                         continue;
                     }
-                    if ((n == 0 && JePoleVNejnizsimRohu(poz_Y_He) && simulaceMod) ||
-                        (n == 2 && JePoleVNejvyssimRohu(poz_Y_He)) ||
-                        (n == 3 && JePoleVHornimLevemRohu(poz_X_He, poz_Y_He)) ||
-                        (n == 4 && JePoleVHornimPravemRohu(poz_X_He, poz_Y_He)) ||
-                        (n == 5 && JePoleVSpodnimLevemRohu(poz_X_He, poz_Y_He)) ||
-                        (n == 6 && JePoleVSpodnimPravemRohu(poz_X_He, poz_Y_He)))
+                    if (PridatPolePocitacovehoHrace(n, poz_X_He, poz_Y_He, simulaceMod))
                     {
                         PocitacovyHrac pocitacovyHrac = new PocitacovyHrac(poz_X_He, poz_Y_He, sirkaPole, vyskaPole, n);
-                       polePocitacovehoHrace.Add(pocitacovyHrac);
+                        polePocitacovehoHrace.Add(pocitacovyHrac);
                     }
                 }
             }
@@ -193,6 +120,79 @@ namespace Čínská_dáma
             {
                 PocitacovyHracPohyb(hraform);
             }
+        }
+
+        private (int, int) PrepocetPozicPoli(int i, int poz_X_He, int poz_Y_He)
+        {
+            switch (i)
+            {
+                case 0:
+                    poz_Y_He += posun;
+                    poz_X_He -= (posun / 2) + posun;
+                    break;
+                case 2:
+                    poz_Y_He += posun;
+                    poz_X_He -= (posun / 2) + (posun * 2);
+                    break;
+                case 5:
+                    poz_Y_He += posun;
+                    poz_X_He -= (posun / 2) + (posun * 3);
+                    break;
+                case 9:
+                    poz_Y_He += posun;
+                    poz_X_He -= (posun / 2) + (posun * 8);
+                    break;
+                case 22:
+                    poz_Y_He += posun;
+                    poz_X_He -= (posun / 2) + (posun * 12);
+                    break;
+                case 34:
+                    poz_Y_He += posun;
+                    poz_X_He -= (posun / 2) + (posun * 11);
+                    break;
+                case 45:
+                    poz_Y_He += posun;
+                    poz_X_He -= (posun / 2) + (posun * 10);
+                    break;
+                case 55:
+                    poz_Y_He += posun;
+                    poz_X_He -= (posun / 2) + (posun * 9);
+                    break;
+                case 64:
+                    poz_Y_He += posun;
+                    poz_X_He -= (posun / 2) + (posun * 9);
+                    break;
+                case 74:
+                    poz_Y_He += posun;
+                    poz_X_He -= (posun / 2) + (posun * 10);
+                    break;
+                case 85:
+                    poz_Y_He += posun;
+                    poz_X_He -= (posun / 2) + (posun * 11);
+                    break;
+                case 97:
+                    poz_Y_He += posun;
+                    poz_X_He -= (posun / 2) + (posun * 12);
+                    break;
+                case 110:
+                    poz_Y_He += posun;
+                    poz_X_He -= (posun / 2) + (posun * 8);
+                    break;
+                case 114:
+                    poz_Y_He += posun;
+                    poz_X_He -= (posun / 2) + (posun * 3);
+                    break;
+                case 117:
+                    poz_Y_He += posun;
+                    poz_X_He -= (posun / 2) + (posun * 2);
+                    break;
+                case 119:
+                    poz_Y_He += posun;
+                    poz_X_He -= (posun / 2) + posun;
+                    break;
+            }
+            poz_X_He += posun;
+            return (poz_X_He, poz_Y_He);
         }
 
         public void PanelKliknuti(int x, int y, HraForm hraform)
@@ -315,6 +315,7 @@ namespace Čínská_dáma
 
         private void KontrolaVitezstvi()//při dokončení kola (všichni hráči táhli) je zkontrolováno, jestli některý z hráčů nevyhrál (všechna jeho pole se nalézají na protější straně herního pole)
         {
+            KontrolaKontumace();
             int poz_X_LHr, poz_Y_LHr, poz_X_PHr, poz_Y_PHr, idPocitacovehoHrace;
             bool lidskyHracVyhral = true;
 
@@ -325,14 +326,14 @@ namespace Čínská_dáma
                 poz_Y_LHr = lidskyHrac.Get_poz_Y_LHr();
                 if (pocetHracu != 4)
                 {
-                    if(!JePoleVNejvyssimRohu(poz_Y_LHr))
+                    if(!JePoleVNejvyssimRohu(poz_Y_LHr, true))
                     {
                         lidskyHracVyhral = false;
                     }
                 }
                 else
                 {
-                    if (!JePoleVHornimPravemRohu(poz_X_LHr, poz_Y_LHr))
+                    if (!JePoleVHornimPravemRohu(poz_X_LHr, poz_Y_LHr, true))
                     {
                         lidskyHracVyhral = false;
                     }
@@ -364,32 +365,32 @@ namespace Čínská_dáma
                         pocetPoliPocitacovehoHrace[idPocitacovehoHrace - 2] += 1;
                     }
 
-                    if(idPocitacovehoHrace == 0 && !JePoleVNejvyssimRohu(poz_Y_PHr))
+                    if(idPocitacovehoHrace == 0 && !JePoleVNejvyssimRohu(poz_Y_PHr, true))
                     {
                         vyhraPocitacovehoHrace[5] = false;
                     }
 
-                    if(idPocitacovehoHrace == 2 && !JePoleVNejnizsimRohu(poz_Y_PHr))
+                    if(idPocitacovehoHrace == 2 && !JePoleVNejnizsimRohu(poz_Y_PHr, true))
                     {
                         vyhraPocitacovehoHrace[0] = false;
                     }
 
-                    if(idPocitacovehoHrace == 3 && !JePoleVSpodnimPravemRohu(poz_X_PHr, poz_Y_PHr))
+                    if(idPocitacovehoHrace == 3 && !JePoleVSpodnimPravemRohu(poz_X_PHr, poz_Y_PHr, true))
                     {
                         vyhraPocitacovehoHrace[1] = false;
                     }
 
-                    if(idPocitacovehoHrace == 4 && !JePoleVSpodnimLevemRohu(poz_X_PHr, poz_Y_PHr))
+                    if(idPocitacovehoHrace == 4 && !JePoleVSpodnimLevemRohu(poz_X_PHr, poz_Y_PHr, true))
                     {
                         vyhraPocitacovehoHrace[2] = false;
                     }
 
-                    if(idPocitacovehoHrace == 5 && !JePoleVHornimPravemRohu(poz_X_PHr, poz_Y_PHr))
+                    if(idPocitacovehoHrace == 5 && !JePoleVHornimPravemRohu(poz_X_PHr, poz_Y_PHr, true))
                     {
                         vyhraPocitacovehoHrace[3] = false;
                     }
 
-                    if(idPocitacovehoHrace == 6 && !JePoleVHornimLevemRohu(poz_X_PHr, poz_Y_PHr))
+                    if(idPocitacovehoHrace == 6 && !JePoleVHornimLevemRohu(poz_X_PHr, poz_Y_PHr, true))
                     {
                         vyhraPocitacovehoHrace[4] = false;
                     }
@@ -444,7 +445,155 @@ namespace Čínská_dáma
             }
         }
 
-        public void ZapisDoStatistik(int viteziciPocitacovyHrac)
+        private void KontrolaKontumace()
+        {
+            if (!simulaceMod)
+            {
+                int pocetKamenuLidskehoHraceVCilovemTrojuhelniku = 0;
+                int pocetKamenuPocitacovehoHraceVCilovemTrojuhelniku = 0;
+                for (int i = 0; i < poleLidskehoHrace.Count; i++)
+                {
+                    if (pocetHracu != 4)
+                    {
+                        if (JePoleVNejvyssimRohu(poleLidskehoHrace[i].Get_poz_Y_LHr(), true))
+                        {
+                            pocetKamenuLidskehoHraceVCilovemTrojuhelniku++;
+                        }
+                    }
+                    else
+                    {
+                        if (JePoleVHornimPravemRohu(poleLidskehoHrace[i].Get_poz_X_LHr(), poleLidskehoHrace[i].Get_poz_Y_LHr(), true))
+                        {
+                            pocetKamenuLidskehoHraceVCilovemTrojuhelniku++;
+                        }
+                    }
+                }
+                for (int i = 0; i < polePocitacovehoHrace.Count; i++)
+                {
+                    if (pocetHracu != 4)
+                    {
+                        if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 2 && JePoleVNejvyssimRohu(polePocitacovehoHrace[i].Get_poz_Y_PHr(), false))
+                        {
+                            pocetKamenuPocitacovehoHraceVCilovemTrojuhelniku++;
+                        }
+                    }
+                    else
+                    {
+                        if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4 && JePoleVHornimPravemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), false))
+                        {
+                            pocetKamenuPocitacovehoHraceVCilovemTrojuhelniku++;
+                        }
+                    }
+                }
+                if (pocetKamenuLidskehoHraceVCilovemTrojuhelniku + pocetKamenuPocitacovehoHraceVCilovemTrojuhelniku == 10 && pocetKamenuPocitacovehoHraceVCilovemTrojuhelniku > 0)
+                {
+                    kontumaceVyhraHrac = 1;
+                }
+            }
+
+            for (int i = 0; i < 7; i++)
+            {
+                int pocetPuvodnichKamenuVCilovemTrojuhelniku = 0;
+                int pocetPrichozichKamenuVCilovemTrojuhelniku = 0;
+                for (int j = 0; j < polePocitacovehoHrace.Count; j++)
+                {
+                    switch (i)
+                    {
+                        case 0:
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 0 && JePoleVNejvyssimRohu(polePocitacovehoHrace[j].Get_poz_Y_PHr(), true))
+                            {
+                                pocetPrichozichKamenuVCilovemTrojuhelniku++;
+                            }
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 2 && JePoleVNejvyssimRohu(polePocitacovehoHrace[j].Get_poz_Y_PHr(), false))
+                            {
+                                pocetPuvodnichKamenuVCilovemTrojuhelniku++;
+                            }
+                            if (pocetPrichozichKamenuVCilovemTrojuhelniku + pocetPuvodnichKamenuVCilovemTrojuhelniku == 10 && pocetPuvodnichKamenuVCilovemTrojuhelniku > 0)
+                            {
+                                kontumaceVyhraHrac = 7;
+                            }
+                            break;
+
+                        case 2:
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 2 && JePoleVNejnizsimRohu(polePocitacovehoHrace[j].Get_poz_Y_PHr(), true))
+                            {
+                                pocetPrichozichKamenuVCilovemTrojuhelniku++;
+                            }
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 0 && JePoleVNejnizsimRohu(polePocitacovehoHrace[j].Get_poz_Y_PHr(), false))
+                            {
+                                pocetPuvodnichKamenuVCilovemTrojuhelniku++;
+                            }
+                            if (pocetPrichozichKamenuVCilovemTrojuhelniku + pocetPuvodnichKamenuVCilovemTrojuhelniku == 10 && pocetPuvodnichKamenuVCilovemTrojuhelniku > 0)
+                            {
+                                kontumaceVyhraHrac = 2;
+                            }
+                            break;
+
+                        case 3:
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 3 && JePoleVSpodnimPravemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), true))
+                            {
+                                pocetPrichozichKamenuVCilovemTrojuhelniku++;
+                            }
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 6 && JePoleVSpodnimPravemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), false))
+                            {
+                                pocetPuvodnichKamenuVCilovemTrojuhelniku++;
+                            }
+                            if (pocetPrichozichKamenuVCilovemTrojuhelniku + pocetPuvodnichKamenuVCilovemTrojuhelniku == 10 && pocetPuvodnichKamenuVCilovemTrojuhelniku > 0)
+                            {
+                                kontumaceVyhraHrac = 3;
+                            }
+                            break;
+
+                        case 4:
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 4 && JePoleVSpodnimLevemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), true))
+                            {
+                                pocetPrichozichKamenuVCilovemTrojuhelniku++;
+                            }
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 5 && JePoleVSpodnimLevemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), false))
+                            {
+                                pocetPuvodnichKamenuVCilovemTrojuhelniku++;
+                            }
+                            if (pocetPrichozichKamenuVCilovemTrojuhelniku + pocetPuvodnichKamenuVCilovemTrojuhelniku == 10 && pocetPuvodnichKamenuVCilovemTrojuhelniku > 0)
+                            {
+                                kontumaceVyhraHrac = 4;
+                            }
+                            break;
+
+                        case 5:
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 5 && JePoleVHornimPravemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), true))
+                            {
+                                pocetPrichozichKamenuVCilovemTrojuhelniku++;
+                            }
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 4 && JePoleVHornimPravemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), false))
+                            {
+                                pocetPuvodnichKamenuVCilovemTrojuhelniku++;
+                            }
+                            if (pocetPrichozichKamenuVCilovemTrojuhelniku + pocetPuvodnichKamenuVCilovemTrojuhelniku == 10 && pocetPuvodnichKamenuVCilovemTrojuhelniku > 0)
+                            {
+                                kontumaceVyhraHrac = 5;
+                            }
+                            break;
+
+                        case 6:
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 6 && JePoleVHornimLevemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), true))
+                            {
+                                pocetPrichozichKamenuVCilovemTrojuhelniku++;
+                            }
+                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 3 && JePoleVHornimLevemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), false))
+                            {
+                                pocetPuvodnichKamenuVCilovemTrojuhelniku++;
+                            }
+                            if (pocetPrichozichKamenuVCilovemTrojuhelniku + pocetPuvodnichKamenuVCilovemTrojuhelniku == 10 && pocetPuvodnichKamenuVCilovemTrojuhelniku > 0)
+                            {
+                                kontumaceVyhraHrac = 6;
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void ZapisDoStatistik(int viteziciPocitacovyHrac)
         {
             string[] radky = File.ReadAllLines(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\Statistiky.txt");
 
@@ -481,8 +630,8 @@ namespace Čínská_dáma
                 konzoleZprava = 1;
             }
             hraform.KonzoleRefresh(0);
-            PohybPocitacovehoHrace pohybPocitacovehoHrace = new PohybPocitacovehoHrace(pocetHracu, prvniTah, pocetTahu, sirkaPole, vyskaPole, posun, horniOdsazeni, leveOdsazeni, herniPole, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace, zvyraznenaPolePocitacovehoHrace, vychoziPolePocitacovehoHrace, kontumaceVyhraHrac, simulaceMod);
-            (polePocitacovehoHrace, vychoziPolePocitacovehoHrace, zvyraznenaPolePocitacovehoHrace, kontumaceVyhraHrac) = pohybPocitacovehoHrace.ProvestPohyb(hraform, obtiznost, simulaceObtiznost);
+            PohybPocitacovehoHrace pohybPocitacovehoHrace = new PohybPocitacovehoHrace(pocetHracu, prvniTah, pocetTahu, sirkaPole, vyskaPole, posun, horniOdsazeni, leveOdsazeni, herniPole, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace, zvyraznenaPolePocitacovehoHrace, vychoziPolePocitacovehoHrace, simulaceMod);
+            (polePocitacovehoHrace, vychoziPolePocitacovehoHrace, zvyraznenaPolePocitacovehoHrace) = pohybPocitacovehoHrace.ProvestPohyb(hraform, obtiznost, simulaceObtiznost);
             if (simulaceMod)
             {
                 pocetTahu++;
@@ -512,58 +661,161 @@ namespace Čínská_dáma
             return (konzoleZprava, viteziciPocitacovyHrac, kontumaceVyhra);
         }
 
-        private bool JePoleVNejvyssimRohu(int poz_Y_He)
+        private bool JePoleVNejvyssimRohu(int poz_Y_PHr, bool kontrolovatCelyTrojUhelnik)
         {
-            if (poz_Y_He > horniOdsazeni + posun * 3)
+            if (kontrolovatCelyTrojUhelnik)
             {
+                if (poz_Y_PHr > horniOdsazeni + posun * 3)
+                {
+                    return false;
+                }
+                return true;
+            }
+            else
+            {
+                if (poz_Y_PHr <= horniOdsazeni + posun)
+                {
+                    return true;
+                }
                 return false;
             }
-            return true;
+
         }
 
-        private bool JePoleVNejnizsimRohu(int poz_Y_He)
+        private bool JePoleVNejnizsimRohu(int poz_Y_PHr, bool kontrolovatCelyTrojUhelnik)
         {
-            if (poz_Y_He < horniOdsazeni + posun * 13)
+            if (kontrolovatCelyTrojUhelnik)
             {
+                if (poz_Y_PHr < horniOdsazeni + posun * 13)
+                {
+                    return false;
+                }
+                return true;
+            }
+            else
+            {
+                if (poz_Y_PHr >= horniOdsazeni + posun * 15)
+                {
+                    return true;
+                }
                 return false;
             }
-            return true;
         }
 
-        private bool JePoleVSpodnimLevemRohu(int poz_X_He, int poz_Y_He)
+        private bool JePoleVSpodnimLevemRohu(int poz_X_PHr, int poz_Y_PHr, bool kontrolovatCelyTrojUhelnik)
         {
-            if ((poz_Y_He <= horniOdsazeni + posun * 8) || (poz_Y_He >= horniOdsazeni + posun * 13) || (poz_Y_He == posun * 9 + horniOdsazeni && poz_X_He > leveOdsazeni - posun * 4 - posun / 2) || (poz_Y_He == posun * 10 + horniOdsazeni && poz_X_He > leveOdsazeni - posun * 4) || (poz_Y_He == posun * 11 + horniOdsazeni && poz_X_He > leveOdsazeni - posun * 3 - posun / 2) || (poz_Y_He == posun * 12 + horniOdsazeni && poz_X_He > leveOdsazeni - posun * 3))
+            if (kontrolovatCelyTrojUhelnik)
             {
+                if ((poz_Y_PHr <= horniOdsazeni + posun * 8) || (poz_Y_PHr >= horniOdsazeni + posun * 13) || (poz_Y_PHr == posun * 9 + horniOdsazeni && poz_X_PHr > leveOdsazeni - posun * 4 - posun / 2) || (poz_Y_PHr == posun * 10 + horniOdsazeni && poz_X_PHr > leveOdsazeni - posun * 4) || (poz_Y_PHr == posun * 11 + horniOdsazeni && poz_X_PHr > leveOdsazeni - posun * 3 - posun / 2) || (poz_Y_PHr == posun * 12 + horniOdsazeni && poz_X_PHr > leveOdsazeni - posun * 3))
+                {
+                    return false;
+                }
+                return true;
+            }
+            else
+            {
+                if ((poz_Y_PHr == posun * 11 + horniOdsazeni && poz_X_PHr == leveOdsazeni - posun * 5 - posun / 2) || (poz_Y_PHr == posun * 12 + horniOdsazeni && poz_X_PHr <= leveOdsazeni - posun * 5))
+                {
+                    return true;
+                }
                 return false;
             }
-            return true;
         }
 
-        private bool JePoleVHornimPravemRohu(int poz_X_He, int poz_Y_He)
+        private bool JePoleVHornimPravemRohu(int poz_X_PHr, int poz_Y_PHr, bool kontrolovatCelyTrojUhelnik)
         {
-            if ((poz_Y_He >= horniOdsazeni + posun * 8) || (poz_Y_He <= horniOdsazeni + posun * 3) || (poz_Y_He == horniOdsazeni + posun * 7 && poz_X_He < leveOdsazeni + posun * 4 + posun / 2) || (poz_Y_He == horniOdsazeni + posun * 6 && poz_X_He < leveOdsazeni + posun * 4) || (poz_Y_He == horniOdsazeni + posun * 5 && poz_X_He < leveOdsazeni + posun * 3 + posun / 2) || (poz_Y_He == horniOdsazeni + posun * 4 && poz_X_He < leveOdsazeni + posun * 3))
+            if (kontrolovatCelyTrojUhelnik)
             {
+                if ((poz_Y_PHr >= horniOdsazeni + posun * 8) || (poz_Y_PHr <= horniOdsazeni + posun * 3) || (poz_Y_PHr == horniOdsazeni + posun * 7 && poz_X_PHr < leveOdsazeni + posun * 4 + posun / 2) || (poz_Y_PHr == horniOdsazeni + posun * 6 && poz_X_PHr < leveOdsazeni + posun * 4) || (poz_Y_PHr == horniOdsazeni + posun * 5 && poz_X_PHr < leveOdsazeni + posun * 3 + posun / 2) || (poz_Y_PHr == horniOdsazeni + posun * 4 && poz_X_PHr < leveOdsazeni + posun * 3))
+                {
+                    return false;
+                }
+                return true;
+            }
+            else
+            {
+                if ((poz_Y_PHr == posun * 5 + horniOdsazeni && poz_X_PHr == leveOdsazeni + posun * 5 + posun / 2) || (poz_Y_PHr == posun * 4 + horniOdsazeni && poz_X_PHr >= leveOdsazeni + posun * 5))
+                {
+                    return true;
+                }
                 return false;
             }
-            return true;
         }
 
-        private bool JePoleVSpodnimPravemRohu(int poz_X_He, int poz_Y_He)
+        private bool JePoleVSpodnimPravemRohu(int poz_X_PHr, int poz_Y_PHr, bool kontrolovatCelyTrojUhelnik)
         {
-            if ((poz_Y_He <= horniOdsazeni + posun * 8) || (poz_Y_He >= horniOdsazeni + posun * 13) || (poz_Y_He == posun * 9 + horniOdsazeni && poz_X_He < leveOdsazeni + posun * 4 + posun / 2) || (poz_Y_He == posun * 10 + horniOdsazeni && poz_X_He < leveOdsazeni + posun * 4) || (poz_Y_He == posun * 11 + horniOdsazeni && poz_X_He < leveOdsazeni + posun * 3 + posun / 2) || (poz_Y_He == posun * 12 + horniOdsazeni && poz_X_He < leveOdsazeni + posun * 3))
+            if (kontrolovatCelyTrojUhelnik)
             {
+                if ((poz_Y_PHr <= horniOdsazeni + posun * 8) || (poz_Y_PHr >= horniOdsazeni + posun * 13) || (poz_Y_PHr == posun * 9 + horniOdsazeni && poz_X_PHr < leveOdsazeni + posun * 4 + posun / 2) || (poz_Y_PHr == posun * 10 + horniOdsazeni && poz_X_PHr < leveOdsazeni + posun * 4) || (poz_Y_PHr == posun * 11 + horniOdsazeni && poz_X_PHr < leveOdsazeni + posun * 3 + posun / 2) || (poz_Y_PHr == posun * 12 + horniOdsazeni && poz_X_PHr < leveOdsazeni + posun * 3))
+                {
+                    return false;
+                }
+                return true;
+            }
+            else
+            {
+                if ((poz_Y_PHr == posun * 11 + horniOdsazeni && poz_X_PHr == leveOdsazeni + posun * 5 + posun / 2) || (poz_Y_PHr == posun * 12 + horniOdsazeni && poz_X_PHr >= leveOdsazeni + posun * 5))
+                {
+                    return true;
+                }
                 return false;
             }
-            return true;
         }
 
-        private bool JePoleVHornimLevemRohu(int poz_X_He, int poz_Y_He)
+        private bool JePoleVHornimLevemRohu(int poz_X_PHr, int poz_Y_PHr, bool kontrolovatCelyTrojUhelnik)
         {
-            if ((poz_Y_He >= horniOdsazeni + posun * 8) || (poz_Y_He <= horniOdsazeni + posun * 3) || (poz_Y_He == horniOdsazeni + posun * 7 && poz_X_He > leveOdsazeni - posun * 4 - posun / 2) || (poz_Y_He == horniOdsazeni + posun * 6 && poz_X_He > leveOdsazeni - posun * 4) || (poz_Y_He == horniOdsazeni + posun * 5 && poz_X_He > leveOdsazeni - posun * 3 - posun / 2) || (poz_Y_He == horniOdsazeni + posun * 4 && poz_X_He > leveOdsazeni - posun * 3))
+            if (kontrolovatCelyTrojUhelnik)
             {
+                if ((poz_Y_PHr >= horniOdsazeni + posun * 8) || (poz_Y_PHr <= horniOdsazeni + posun * 3) || (poz_Y_PHr == horniOdsazeni + posun * 7 && poz_X_PHr > leveOdsazeni - posun * 4 - posun / 2) || (poz_Y_PHr == horniOdsazeni + posun * 6 && poz_X_PHr > leveOdsazeni - posun * 4) || (poz_Y_PHr == horniOdsazeni + posun * 5 && poz_X_PHr > leveOdsazeni - posun * 3 - posun / 2) || (poz_Y_PHr == horniOdsazeni + posun * 4 && poz_X_PHr > leveOdsazeni - posun * 3))
+                {
+                    return false;
+                }
+                return true;
+            }
+            else
+            {
+                if ((poz_Y_PHr == posun * 5 - horniOdsazeni && poz_X_PHr == leveOdsazeni - posun * 5 - posun / 2) || (poz_Y_PHr == posun * 4 + horniOdsazeni && poz_X_PHr <= leveOdsazeni - posun * 5))
+                {
+                    return true;
+                }
                 return false;
             }
-            return true;
+        }
+
+        private bool PridatPolePocitacovehoHrace(int n, int poz_X_He, int poz_Y_He, bool simulaceMod)
+        {
+            if ((n == 0 && JePoleVNejnizsimRohu(poz_Y_He, true) && simulaceMod) ||
+                (n == 2 && JePoleVNejvyssimRohu(poz_Y_He, true)) ||
+                (n == 3 && JePoleVHornimLevemRohu(poz_X_He, poz_Y_He, true)) ||
+                (n == 4 && JePoleVHornimPravemRohu(poz_X_He, poz_Y_He, true)) ||
+                (n == 5 && JePoleVSpodnimLevemRohu(poz_X_He, poz_Y_He, true)) ||
+                (n == 6 && JePoleVSpodnimPravemRohu(poz_X_He, poz_Y_He, true)))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool ZaseditPole(int pocetHracu, int poz_X_He, int poz_Y_He)
+        {
+            if ((pocetHracu == 2 && (JePoleVHornimLevemRohu(poz_X_He, poz_Y_He, true) || JePoleVHornimPravemRohu(poz_X_He, poz_Y_He, true) || JePoleVSpodnimLevemRohu(poz_X_He, poz_Y_He, true) || JePoleVSpodnimPravemRohu(poz_X_He, poz_Y_He, true))) ||
+                (pocetHracu == 4 && (JePoleVNejnizsimRohu(poz_Y_He, true) || JePoleVNejvyssimRohu(poz_Y_He, true))))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool PrekrocenPocetPoli(int pocetHracu, int n, bool simulaceMod, int pocetPoli)
+        {
+            if ((pocetHracu == 2 && ((n > 2) || ((!simulaceMod && pocetPoli == 10) || (simulaceMod && pocetPoli == 20)))) || 
+                (pocetHracu == 3 && ((n == 2 || n > 4) || (!simulaceMod && pocetPoli == 20) || (simulaceMod && pocetPoli == 30))) || 
+                (pocetHracu == 4 && ((n == 2 || (!simulaceMod && n == 5) || (simulaceMod && n == 0)) || (!simulaceMod && pocetPoli == 30) || (simulaceMod && pocetPoli == 40))) || 
+                (pocetHracu == 6 && (!simulaceMod && pocetPoli == 50) || (simulaceMod && pocetPoli == 60)))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

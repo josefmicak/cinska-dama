@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Media;
-using Čínská_dáma.Forms;
 
 namespace Čínská_dáma
 {
@@ -190,12 +189,12 @@ namespace Čínská_dáma
             switch (konzoleZprava)
             {
                 case 0:
-                    pausePB.Image = Čínská_dáma.Properties.Resources.play;
+                    pausePB.Image = Properties.Resources.play;
                     herniPanel.MouseClick -= HerniPanel_MouseClick;
                     konzoleZprava = 3;
                     break;
                 case 3:
-                    pausePB.Image = Čínská_dáma.Properties.Resources.pause;
+                    pausePB.Image = Properties.Resources.pause;
                     herniPanel.MouseClick += HerniPanel_MouseClick;
                     konzoleZprava = 0;
                     break;
@@ -385,11 +384,11 @@ namespace Čínská_dáma
         {
             if (konecTahuPB.Enabled)
             {
-                konecTahuPB.Image = Čínská_dáma.Properties.Resources.konecTahuEnabled;
+                konecTahuPB.Image = Properties.Resources.konecTahuEnabled;
             }
             else
             {
-                konecTahuPB.Image = Čínská_dáma.Properties.Resources.konecTahuDisabled;
+                konecTahuPB.Image = Properties.Resources.konecTahuDisabled;
             }
         }
 
@@ -398,12 +397,12 @@ namespace Čínská_dáma
             if (prehravaniZvuku)
             {
                 prehravaniZvuku = false;
-                zvukPB.Image = Čínská_dáma.Properties.Resources.zvukOff;
+                zvukPB.Image = Properties.Resources.zvukOff;
             }
             else
             {
                 prehravaniZvuku = true;
-                zvukPB.Image = Čínská_dáma.Properties.Resources.zvukOn;
+                zvukPB.Image = Properties.Resources.zvukOn;
             }
         }
 
@@ -414,23 +413,23 @@ namespace Čínská_dáma
                 switch (idZvuku)
                 {
                     case 1:
-                        SoundPlayer click = new SoundPlayer(Čínská_dáma.Properties.Resources.click);
+                        SoundPlayer click = new SoundPlayer(Properties.Resources.click);
                         click.Play();
                         break;
                     case 2:
-                        SoundPlayer hracPohyb = new SoundPlayer(Čínská_dáma.Properties.Resources.hracPohyb);
+                        SoundPlayer hracPohyb = new SoundPlayer(Properties.Resources.hracPohyb);
                         hracPohyb.Play();
                         break;
                     case 3:
-                        SoundPlayer vyhra = new SoundPlayer(Čínská_dáma.Properties.Resources.vyhra);
+                        SoundPlayer vyhra = new SoundPlayer(Properties.Resources.vyhra);
                         vyhra.Play();
                         break;
                     case 4:
-                        SoundPlayer prohra = new SoundPlayer(Čínská_dáma.Properties.Resources.prohra);
+                        SoundPlayer prohra = new SoundPlayer(Properties.Resources.prohra);
                         prohra.Play();
                         break;
                     case 5:
-                        SoundPlayer remiza = new SoundPlayer(Čínská_dáma.Properties.Resources.remiza);
+                        SoundPlayer remiza = new SoundPlayer(Properties.Resources.remiza);
                         remiza.Play();
                         break;
                 }

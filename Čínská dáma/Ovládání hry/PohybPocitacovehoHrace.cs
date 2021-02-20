@@ -13,7 +13,6 @@ namespace Čínská_dáma
         private int horniOdsazeni;
         private int leveOdsazeni;
         private int pocetTahu;
-        private int kontumaceVyhra = 0;
         private bool simulaceMod;
 
         private bool overovatVyhodnostTahu;
@@ -29,7 +28,7 @@ namespace Čínská_dáma
         private VypocetMoznychTahu vypocetMoznychTahu;
         Random random = new Random();
 
-        public PohybPocitacovehoHrace(int pocetHracu, int prvniTah, int pocetTahu, int sirkaPole, int vyskaPole, int posun, int horniOdsazeni, int leveOdsazeni, List<Pole> herniPole, List<LidskyHrac> poleLidskehoHrace, List<PocitacovyHrac> polePocitacovehoHrace, List<MoznyTahLidskehoHrace> mozneTahyLidskehoHrace, List<MoznyTahPocitacovehoHrace> mozneTahyPocitacovehoHrace, List<ZvyrazneniPolePocitacovehoHrace> zvyraznenaPolePocitacovehoHrace, List<VychoziPolePocitacovehoHrace> vychoziPolePocitacovehoHrace, int kontumaceVyhra, bool simulaceMod)
+        public PohybPocitacovehoHrace(int pocetHracu, int prvniTah, int pocetTahu, int sirkaPole, int vyskaPole, int posun, int horniOdsazeni, int leveOdsazeni, List<Pole> herniPole, List<LidskyHrac> poleLidskehoHrace, List<PocitacovyHrac> polePocitacovehoHrace, List<MoznyTahLidskehoHrace> mozneTahyLidskehoHrace, List<MoznyTahPocitacovehoHrace> mozneTahyPocitacovehoHrace, List<ZvyrazneniPolePocitacovehoHrace> zvyraznenaPolePocitacovehoHrace, List<VychoziPolePocitacovehoHrace> vychoziPolePocitacovehoHrace, bool simulaceMod)
         {
             this.pocetHracu = pocetHracu;
             this.prvniTah = prvniTah;
@@ -46,11 +45,10 @@ namespace Čínská_dáma
             this.mozneTahyPocitacovehoHrace = mozneTahyPocitacovehoHrace;
             this.zvyraznenaPolePocitacovehoHrace = zvyraznenaPolePocitacovehoHrace;
             this.vychoziPolePocitacovehoHrace = vychoziPolePocitacovehoHrace;
-            this.kontumaceVyhra = kontumaceVyhra;
             this.simulaceMod = simulaceMod;
         }
 
-        public (List<PocitacovyHrac>, List<VychoziPolePocitacovehoHrace>, List<ZvyrazneniPolePocitacovehoHrace>, int) ProvestPohyb(HraForm hraform, int obtiznost, int[] simulaceObtiznost)
+        public (List<PocitacovyHrac>, List<VychoziPolePocitacovehoHrace>, List<ZvyrazneniPolePocitacovehoHrace>) ProvestPohyb(HraForm hraform, int obtiznost, int[] simulaceObtiznost)
         {
             int poz_X_PHr, poz_Y_PHr, poz_X_MT, poz_Y_MT, idOdebiranehoPole = 0, novePoleX, novePoleY, poleKeKontroleX, poleKeKontroleY, delkaSkokuX = 0, delkaSkokuY = 0;
             int maxRozdilY, rozdilX = 0, idPocitacovehoHrace, maxRozdil, pocetPosledniRadek, pocetPredposledniRadek, pozXPosledniRadek = 0, pozXPredposledniRadek = 0;
@@ -70,36 +68,13 @@ namespace Čínská_dáma
 
             for (int n = 0; n <= 6; n++)
             {
-                if ((n == 0 && !simulaceMod) || n == 1 || (pocetHracu == 2 && n > 2) || (pocetHracu == 3 && (n == 2 || n > 4)) || (pocetHracu == 4 && (!simulaceMod && (n == 2 || n == 5) || simulaceMod && (n == 0 || n == 2))))
+                if (!SplnenyPodminkyProPohyb(n, simulaceMod))
                 {
                     continue;
                 }
                 if(simulaceMod)
                 {
-                    if (n == 0)
-                    {
-                        obtiznost = simulaceObtiznost[5];
-                    }
-                    if(n == 2)
-                    {
-                        obtiznost = simulaceObtiznost[0];
-                    }
-                    if(n == 3)
-                    {
-                        obtiznost = simulaceObtiznost[1];
-                    }
-                    if (n == 4)
-                    {
-                        obtiznost = simulaceObtiznost[2];
-                    }
-                    if (n == 5)
-                    {
-                        obtiznost = simulaceObtiznost[3];
-                    }
-                    if (n == 6)
-                    {
-                        obtiznost = simulaceObtiznost[4];
-                    }
+                    obtiznost = NastaveniObtiznosti(n, simulaceObtiznost);
                 }
                 if (obtiznost <= 2)
                 {
@@ -118,150 +93,31 @@ namespace Čínská_dáma
                         }
                         vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                     }
-                    if (obtiznost == 1)
+
+                    List<int> proveditelnePohyby = new List<int>();
+                    for (int i = 0; i < mozneTahyPocitacovehoHrace.Count; i++)
                     {
-                        List<int> proveditelnePohyby = new List<int>();
-                        for (int i = 0; i < mozneTahyPocitacovehoHrace.Count; i++)
+                        if(n != mozneTahyPocitacovehoHrace[i].Get_idPocitacovehoHrace())
                         {
-                            MoznyTahPocitacovehoHrace moznyTahPocitacovehoHrace = mozneTahyPocitacovehoHrace[i];
-                            idPocitacovehoHrace = moznyTahPocitacovehoHrace.Get_idPocitacovehoHrace();
-                            if (n != idPocitacovehoHrace)
-                            {
-                                continue;
-                            }
-                            poz_X_MT = moznyTahPocitacovehoHrace.Get_poz_X_MT();
-                            poz_Y_MT = moznyTahPocitacovehoHrace.Get_poz_Y_MT();
-                            poz_X_PHr = moznyTahPocitacovehoHrace.Get_poz_X_KPHr();
-                            poz_Y_PHr = moznyTahPocitacovehoHrace.Get_poz_Y_KPHr();
-                            switch (n)
-                            {
-                                case 0:
-                                    if (poz_Y_MT <= poz_Y_PHr)
-                                    {
-                                        proveditelnePohyby.Add(i);
-                                    }
-                                    break;
-                                case 2:
-                                    if (poz_Y_MT >= poz_Y_PHr)
-                                    {
-                                        proveditelnePohyby.Add(i);
-                                    }
-                                    break;
-                                case 3:
-                                    if (poz_X_MT > poz_X_PHr && poz_Y_MT > poz_Y_PHr)
-                                    {
-                                        proveditelnePohyby.Add(i);
-                                    }
-                                    break;
-                                case 4:
-                                    if (poz_X_MT < poz_X_PHr && poz_Y_MT > poz_Y_PHr)
-                                    {
-                                        proveditelnePohyby.Add(i);
-                                    }
-                                    break;
-                                case 5:
-                                    if (poz_X_MT > poz_X_PHr && poz_Y_MT < poz_Y_PHr)
-                                    {
-                                        proveditelnePohyby.Add(i);
-                                    }
-                                    break;
-                                case 6:
-                                    if (poz_X_MT < poz_X_PHr && poz_Y_MT < poz_Y_PHr)
-                                    {
-                                        proveditelnePohyby.Add(i);
-                                    }
-                                    break;
-                            }
+                            continue;
                         }
-                        int cislo = random.Next(0, proveditelnePohyby.Count);
-                        int idPohybu;
-                        if (proveditelnePohyby.Count == 0)//pokud není k dispozici žádný pohyb, provedeme náhodně vybraný tah
+                        if(PridatTahHrace(obtiznost, n, mozneTahyPocitacovehoHrace[i].Get_poz_X_MT(), mozneTahyPocitacovehoHrace[i].Get_poz_Y_MT(), mozneTahyPocitacovehoHrace[i].Get_poz_X_KPHr(), mozneTahyPocitacovehoHrace[i].Get_poz_Y_KPHr(), 0))
                         {
-                            idPohybu = random.Next(0, mozneTahyPocitacovehoHrace.Count);
+                            proveditelnePohyby.Add(i);
                         }
-                        else
-                        {
-                            idPohybu = proveditelnePohyby[cislo];
-                        }
-                        if(mozneTahyPocitacovehoHrace.Count > 0)//u her více hráčů se může ve velmi vzácných případech stát, že není k dispozici žádný možný tah
-                        {
-                            for (int i = 0; i < polePocitacovehoHrace.Count; i++)
-                            {
-                                PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
-                                if (pocitacovyHrac.Get_poz_X_PHr() == mozneTahyPocitacovehoHrace[idPohybu].Get_poz_X_KPHr() && pocitacovyHrac.Get_poz_Y_PHr() == mozneTahyPocitacovehoHrace[idPohybu].Get_poz_Y_KPHr())
-                                {
-                                    idOdebiranehoPole = i;
-                                    break;
-                                }
-                            }
-                            PridaniPolePocitacovehoHrace(idOdebiranehoPole, mozneTahyPocitacovehoHrace[idPohybu].Get_poz_X_MT(), mozneTahyPocitacovehoHrace[idPohybu].Get_poz_Y_MT(), n);
-                        }
+                    }
+                    int cislo = random.Next(0, proveditelnePohyby.Count);
+                    int idPohybu;
+                    if (proveditelnePohyby.Count == 0)//pokud není k dispozici žádný pohyb, provedeme náhodně vybraný tah
+                    {
+                        idPohybu = random.Next(0, mozneTahyPocitacovehoHrace.Count);
                     }
                     else
                     {
-                        List<int> proveditelnePohyby = new List<int>();
-                        for(int i = 0; i < mozneTahyPocitacovehoHrace.Count; i++)
-                        {
-                            MoznyTahPocitacovehoHrace moznyTahPocitacovehoHrace = mozneTahyPocitacovehoHrace[i];
-                            idPocitacovehoHrace = moznyTahPocitacovehoHrace.Get_idPocitacovehoHrace();
-                            if(n != idPocitacovehoHrace)
-                            {
-                                continue;
-                            }
-                            poz_X_MT = moznyTahPocitacovehoHrace.Get_poz_X_MT();
-                            poz_Y_MT = moznyTahPocitacovehoHrace.Get_poz_Y_MT();
-                            poz_X_PHr = moznyTahPocitacovehoHrace.Get_poz_X_KPHr();
-                            poz_Y_PHr = moznyTahPocitacovehoHrace.Get_poz_Y_KPHr();
-                            switch (n)
-                            {
-                                case 0:
-                                    if (poz_Y_MT < poz_Y_PHr)
-                                    {
-                                        proveditelnePohyby.Add(i);
-                                    }
-                                    break;
-                                case 2:
-                                    if(poz_Y_MT > poz_Y_PHr)
-                                    {
-                                        proveditelnePohyby.Add(i);
-                                    }
-                                    break;
-                                case 3:
-                                    if (poz_X_MT >= poz_X_PHr && poz_Y_MT >= poz_Y_PHr)
-                                    {
-                                        proveditelnePohyby.Add(i);
-                                    }
-                                    break;
-                                case 4:
-                                    if (poz_X_MT <= poz_X_PHr && poz_Y_MT >= poz_Y_PHr)
-                                    {
-                                        proveditelnePohyby.Add(i);
-                                    }
-                                    break;
-                                case 5:
-                                    if (poz_X_MT >= poz_X_PHr && poz_Y_MT <= poz_Y_PHr)
-                                    {
-                                        proveditelnePohyby.Add(i);
-                                    }
-                                    break;
-                                case 6:
-                                    if (poz_X_MT <= poz_X_PHr && poz_Y_MT <= poz_Y_PHr)
-                                    {
-                                        proveditelnePohyby.Add(i);
-                                    }
-                                    break;
-                            }
-                        }
-                        int cislo = random.Next(0, proveditelnePohyby.Count);
-                        int idPohybu;
-                        if (proveditelnePohyby.Count == 0)//pokud není k dispozici žádný pohyb, provedeme náhodně vybraný tah
-                        {
-                            idPohybu = random.Next(0, mozneTahyPocitacovehoHrace.Count);
-                        }
-                        else
-                        {
-                            idPohybu = proveditelnePohyby[cislo];
-                        }
+                        idPohybu = proveditelnePohyby[cislo];
+                    }
+                    if (mozneTahyPocitacovehoHrace.Count > 0)//u her více hráčů se může ve velmi vzácných případech stát, že není k dispozici žádný možný tah
+                    {
                         for (int i = 0; i < polePocitacovehoHrace.Count; i++)
                         {
                             PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
@@ -311,77 +167,7 @@ namespace Čínská_dáma
                             continue;
                         }
 
-                        if (n == 3 && poz_Y_PHr == horniOdsazeni + posun * 12 && poz_X_PHr >= leveOdsazeni + posun + 2)
-                        {
-                            pocetPosledniRadek++;
-                            if (poz_X_PHr < pozXPosledniRadek)
-                            {
-                                pozXPosledniRadek = poz_X_PHr;
-                            }
-                        }
-
-                        if (n == 4 && poz_Y_PHr == horniOdsazeni + posun * 12 && poz_X_PHr <= leveOdsazeni - posun - 2)
-                        {
-                            pocetPosledniRadek++;
-                            if (poz_X_PHr > pozXPosledniRadek)
-                            {
-                                pozXPosledniRadek = poz_X_PHr;
-                            }
-                        }
-
-                        if (n == 5 && poz_Y_PHr == horniOdsazeni + posun * 4 && poz_X_PHr >= leveOdsazeni + posun + 2)
-                        {
-                            pocetPosledniRadek++;
-                            if (poz_X_PHr < pozXPosledniRadek)
-                            {
-                                pozXPosledniRadek = poz_X_PHr;
-                            }
-                        }
-
-                        if (n == 6 && poz_Y_PHr == horniOdsazeni + posun * 4 && poz_X_PHr <= leveOdsazeni - posun - 2)
-                        {
-                            pocetPosledniRadek++;
-                            if (poz_X_PHr > pozXPosledniRadek)
-                            {
-                                pozXPosledniRadek = poz_X_PHr;
-                            }
-                        }
-
-                        if (n == 3 && poz_Y_PHr == horniOdsazeni + posun * 11 && poz_X_PHr >= leveOdsazeni + posun * 2 + posun / 2)
-                        {
-                            pocetPredposledniRadek++;
-                            if (poz_X_PHr < pozXPredposledniRadek)
-                            {
-                                pozXPredposledniRadek = poz_X_PHr;
-                            }
-                        }
-
-                        if (n == 4 && poz_Y_PHr == horniOdsazeni + posun * 11 && poz_X_PHr <= leveOdsazeni - posun * 2 - posun / 2)
-                        {
-                            pocetPredposledniRadek++;
-                            if (poz_X_PHr > pozXPredposledniRadek)
-                            {
-                                pozXPredposledniRadek = poz_X_PHr;
-                            }
-                        }
-
-                        if (n == 5 && poz_Y_PHr == horniOdsazeni + posun * 5 && poz_X_PHr >= leveOdsazeni + posun * 2 + posun / 2)
-                        {
-                            pocetPredposledniRadek++;
-                            if (poz_X_PHr < pozXPredposledniRadek)
-                            {
-                                pozXPredposledniRadek = poz_X_PHr;
-                            }
-                        }
-
-                        if (n == 6 && poz_Y_PHr == horniOdsazeni + posun * 5 && poz_X_PHr <= leveOdsazeni - posun * 2 - posun / 2)
-                        {
-                            pocetPredposledniRadek++;
-                            if (poz_X_PHr > pozXPredposledniRadek)
-                            {
-                                pozXPredposledniRadek = poz_X_PHr;
-                            }
-                        }
+                        (pocetPosledniRadek, pocetPredposledniRadek, pozXPosledniRadek, pozXPredposledniRadek) = PripravaKoncovychTahu(n, pocetPosledniRadek, pocetPredposledniRadek, pozXPosledniRadek, pozXPredposledniRadek, poz_X_PHr, poz_Y_PHr);
                         
                         vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
                         for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
@@ -496,9 +282,9 @@ namespace Čínská_dáma
                                     }
                                 }
                             }
-                            else if (n == 3)
+                            else
                             {
-                                if ((poz_X_MT - poz_X_PHr) + (poz_Y_MT - poz_Y_PHr) > maxRozdil && poz_Y_MT < horniOdsazeni + posun * 13)
+                                if(PridatTahHrace(obtiznost, n, poz_X_MT, poz_Y_MT, poz_X_PHr, poz_Y_PHr, maxRozdil))
                                 {
                                     for (int k = 0; k < nevyhodnaPoleX.Count; k++)
                                     {
@@ -509,29 +295,22 @@ namespace Čínská_dáma
                                     }
                                     if (pridatMoznyTah)
                                     {
-                                        maxRozdil = (poz_X_MT - poz_X_PHr) + (poz_Y_MT - poz_Y_PHr);
-                                        idOdebiranehoPole = i;
-                                        novePoleX = poz_X_MT;
-                                        novePoleY = poz_Y_MT;
-                                        poleKeKontroleX = poz_X_PHr;
-                                        poleKeKontroleY = poz_Y_PHr;
-                                    }
-                                }
-                            }
-                            else if (n == 4)
-                            {
-                                if ((poz_X_PHr - poz_X_MT) + (poz_Y_MT - poz_Y_PHr) > maxRozdil && poz_Y_MT < horniOdsazeni + posun * 13)
-                                {
-                                    for (int k = 0; k < nevyhodnaPoleX.Count; k++)
-                                    {
-                                        if (poz_X_MT == nevyhodnaPoleX[k] && poz_Y_MT == nevyhodnaPoleY[k])
+                                        switch(n)
                                         {
-                                            pridatMoznyTah = false;
+                                            case 3:
+                                                maxRozdil = (poz_X_MT - poz_X_PHr) + (poz_Y_MT - poz_Y_PHr);
+                                                break;
+                                            case 4:
+                                                maxRozdil = (poz_X_PHr - poz_X_MT) + (poz_Y_MT - poz_Y_PHr);
+                                                break;
+                                            case 5:
+                                                maxRozdil = (poz_X_MT - poz_X_PHr) + (poz_Y_PHr - poz_Y_MT);
+                                                break;
+                                            case 6:
+                                                maxRozdil = (poz_X_PHr - poz_X_MT) + (poz_Y_PHr - poz_Y_MT);
+                                                break;
                                         }
-                                    }
-                                    if (pridatMoznyTah)
-                                    {
-                                        maxRozdil = (poz_X_PHr - poz_X_MT) + (poz_Y_MT - poz_Y_PHr);
+                                        
                                         idOdebiranehoPole = i;
                                         novePoleX = poz_X_MT;
                                         novePoleY = poz_Y_MT;
@@ -540,54 +319,9 @@ namespace Čínská_dáma
                                     }
                                 }
                             }
-                            else if (n == 5)
-                            {
-                                if ((poz_X_MT - poz_X_PHr) + (poz_Y_PHr - poz_Y_MT) > maxRozdil && poz_Y_MT < horniOdsazeni + posun * 13)
-                                {
-                                    for (int k = 0; k < nevyhodnaPoleX.Count; k++)
-                                    {
-                                        if (poz_X_MT == nevyhodnaPoleX[k] && poz_Y_MT == nevyhodnaPoleY[k])
-                                        {
-                                            pridatMoznyTah = false;
-                                        }
-                                    }
-                                    if (pridatMoznyTah)
-                                    {
-                                        maxRozdil = (poz_X_MT - poz_X_PHr) + (poz_Y_PHr - poz_Y_MT);
-                                        idOdebiranehoPole = i;
-                                        novePoleX = poz_X_MT;
-                                        novePoleY = poz_Y_MT;
-                                        poleKeKontroleX = poz_X_PHr;
-                                        poleKeKontroleY = poz_Y_PHr;
-                                    }
-                                }
-                            }
-                            else if (n == 6)
-                            {
-                                if ((poz_X_PHr - poz_X_MT) + (poz_Y_PHr - poz_Y_MT) > maxRozdil && poz_Y_MT > horniOdsazeni + posun * 3)
-                                {
-                                    for (int k = 0; k < nevyhodnaPoleX.Count; k++)
-                                    {
-                                        if (poz_X_MT == nevyhodnaPoleX[k] && poz_Y_MT == nevyhodnaPoleY[k])
-                                        {
-                                            pridatMoznyTah = false;
-                                        }
-                                    }
-                                    if (pridatMoznyTah)
-                                    {
-                                        maxRozdil = (poz_X_PHr - poz_X_MT) + (poz_Y_PHr - poz_Y_MT);
-                                        idOdebiranehoPole = i;
-                                        novePoleX = poz_X_MT;
-                                        novePoleY = poz_Y_MT;
-                                        poleKeKontroleX = poz_X_PHr;
-                                        poleKeKontroleY = poz_Y_PHr;
-                                    }
-                                }
-                            }
-
                         }
                     }
-                    //započítání kamenů hráče, pro kterého byl trojúhelník výchozím (pokud bychom tyto kameny nezapočítali, hráč by neměl jak dokončit hru)
+                    //započítání kamenů hráče, pro kterého byl trojúhelník výchozím (pokud bychom tyto kameny nezapočítali, mohlo by se stát, že by blokovaný hráč nemohl dokončit hru)
                     for(int i = 0; i < polePocitacovehoHrace.Count; i++)
                     {
                         PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
@@ -598,69 +332,12 @@ namespace Čínská_dáma
                         {
                             continue;
                         }
-                        if(n == 3 && poz_X_PHr >= leveOdsazeni + posun * 5 && poz_Y_PHr == horniOdsazeni + posun * 12)
-                        {
-                            pocetPosledniRadek++;
-                        }
-                        if (n == 3 && poz_X_PHr == leveOdsazeni + posun * 4 + posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 11)
-                        {
-                            pocetPredposledniRadek++;
-                        }
-
-                        if (n == 4 && poz_X_PHr <= leveOdsazeni - posun * 5 && poz_Y_PHr == horniOdsazeni + posun * 12)
-                        {
-                            pocetPosledniRadek++;
-                        }
-                        if (n == 4 && poz_X_PHr == leveOdsazeni - posun * 4 - posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 11)
-                        {
-                            pocetPredposledniRadek++;
-                        }
-
-                        if (n == 5 && poz_X_PHr >= leveOdsazeni + posun * 5 && poz_Y_PHr == horniOdsazeni + posun * 4)
-                        {
-                            pocetPosledniRadek++;
-                        }
-                        if (n == 5 && poz_X_PHr == leveOdsazeni + posun * 4 + posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 5)
-                        {
-                            pocetPredposledniRadek++;
-                        }
-
-                        if (n == 6 && poz_X_PHr <= leveOdsazeni - posun * 5 && poz_Y_PHr == horniOdsazeni + posun * 4)
-                        {
-                            pocetPosledniRadek++;
-                        }
-                        if (n == 6 && poz_X_PHr == leveOdsazeni - posun * 4 - posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 5)
-                        {
-                            pocetPredposledniRadek++;
-                        }
+                        (pocetPosledniRadek, pocetPredposledniRadek) = ZapocitaniKamenuVychozihoHrace(n, pocetPosledniRadek, pocetPredposledniRadek, poz_X_PHr, poz_Y_PHr);
                     }
 
                     if (n == 0)
                     {
-                        if(pocetTahu == 0)
-                        {
-                            idOdebiranehoPole = 10;
-                            novePoleX = leveOdsazeni - posun;
-                            novePoleY = horniOdsazeni + posun * 12;
-                            poleKeKontroleX = 0;
-                            poleKeKontroleY = 0;
-                        }
-                        if(pocetTahu == 1)
-                        {
-                            idOdebiranehoPole = 11;
-                            novePoleX = leveOdsazeni + posun;
-                            novePoleY = horniOdsazeni + posun * 12;
-                            poleKeKontroleX = 0;
-                            poleKeKontroleY = 0;
-                        }
-                        if(pocetTahu == 4)
-                        {
-                            idOdebiranehoPole = 11;
-                            novePoleX = leveOdsazeni + posun * 2;
-                            novePoleY = horniOdsazeni + posun * 12;
-                            poleKeKontroleX = 0;
-                            poleKeKontroleY = 0;
-                        }
+                        (idOdebiranehoPole, novePoleX, novePoleY, poleKeKontroleX, poleKeKontroleY) = ProvedeniPocatecnichTahu(n, pocetTahu, idOdebiranehoPole, novePoleX, novePoleY, poleKeKontroleX, poleKeKontroleY, prvniTah, simulaceMod);
                         if (novePoleX == 0 && novePoleY == 0)//ošetření pohybu na úplném konci hry, kdy se nepřítel nemůže posunout směrem vzad na y-ové ose
                         {
                             int posunX = 1000;
@@ -735,30 +412,7 @@ namespace Čínská_dáma
                         }
                         if (pocetHracu == 2)
                         {
-                            if ((prvniTah == 1 && pocetTahu == 1 && !simulaceMod) || (prvniTah == 2 && pocetTahu == 0 && !simulaceMod) || (simulaceMod && pocetTahu == 0))//první tah - předem daný
-                            {
-                                idOdebiranehoPole = 6;
-                                novePoleX = leveOdsazeni - posun;
-                                novePoleY = horniOdsazeni + posun * 4;
-                                poleKeKontroleX = 0;
-                                poleKeKontroleY = 0;
-                            }
-                            if ((prvniTah == 1 && pocetTahu == 2 && !simulaceMod) || (prvniTah == 2 && pocetTahu == 1 && !simulaceMod) || (simulaceMod && pocetTahu == 1))//druhý tah - předem daný
-                            {
-                                idOdebiranehoPole = 8;
-                                novePoleX = leveOdsazeni + posun;
-                                novePoleY = horniOdsazeni + posun * 4;
-                                poleKeKontroleX = 0;
-                                poleKeKontroleY = 0;
-                            }
-                            if ((prvniTah == 1 && pocetTahu == 5 && !simulaceMod) || (prvniTah == 2 && pocetTahu == 4 && !simulaceMod) || (simulaceMod && pocetTahu == 4))//zajistí, že na y-ové pozici nejnižší nepřítelovo pole nezůstane samo vzadu
-                            {
-                                idOdebiranehoPole = 0;
-                                novePoleX = leveOdsazeni - posun * 2;
-                                novePoleY = horniOdsazeni + posun * 4;
-                                poleKeKontroleX = 0;
-                                poleKeKontroleY = 0;
-                            }
+                            (idOdebiranehoPole, novePoleX, novePoleY, poleKeKontroleX, poleKeKontroleY) = ProvedeniPocatecnichTahu(n, pocetTahu, idOdebiranehoPole, novePoleX, novePoleY, poleKeKontroleX, poleKeKontroleY, prvniTah, simulaceMod);
                         }
                         if (novePoleX == 0 && novePoleY == 0)//ošetření pohybu na úplném konci hry, kdy se nepřítel nemůže posunout směrem vpřed na y-ové ose
                         {
@@ -825,433 +479,8 @@ namespace Čínská_dáma
                         }
                     }
                     else
-                    {   
-                        if ((pocetPosledniRadek == 5 && pocetPredposledniRadek >= 3) || (pocetPosledniRadek >= 4 && pocetPredposledniRadek == 4))
-                        {
-                            poleKeKontroleX = 0;
-                            poleKeKontroleY = 0;
-                            overovatVyhodnostTahu = false;
-                            hracSePohlSkokem = false;
-                            for (int i = 0; i < polePocitacovehoHrace.Count; i++)
-                            {
-                                PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
-                                poz_X_PHr = pocitacovyHrac.Get_poz_X_PHr();
-                                poz_Y_PHr = pocitacovyHrac.Get_poz_Y_PHr();
-                                int _idPocitacovehoHrace = pocitacovyHrac.Get_idPocitacovehoHrace();
-                                if (_idPocitacovehoHrace != n)
-                                {
-                                    continue;
-                                }
-
-                                if (n == 3 && ((poz_X_PHr == leveOdsazeni + posun * 2 && poz_Y_PHr == horniOdsazeni + posun * 12) || (poz_X_PHr == leveOdsazeni + posun * 2 + posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 11)))
-                                {
-                                    mozneTahyPocitacovehoHrace.Clear();
-                                    vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
-                                    for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
-                                    {
-                                        MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                        poz_X_MT = moznyTah.Get_poz_X_MT();
-                                        poz_Y_MT = moznyTah.Get_poz_Y_MT();
-
-                                        if (poz_X_MT > poz_X_PHr && poz_Y_MT < poz_Y_PHr && poz_Y_PHr - poz_Y_MT == posun)
-                                        {
-                                            novePoleX = poz_X_MT;
-                                            novePoleY = poz_Y_MT;
-                                            idOdebiranehoPole = i;
-                                        }
-                                    }
-                                }
-
-                                if (n == 4 && ((poz_X_PHr == leveOdsazeni - posun * 2 && poz_Y_PHr == horniOdsazeni + posun * 12) || (poz_X_PHr == leveOdsazeni - posun * 2 - posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 11)))
-                                {
-                                    mozneTahyPocitacovehoHrace.Clear();
-                                    vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
-                                    for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
-                                    {
-                                        MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                        poz_X_MT = moznyTah.Get_poz_X_MT();
-                                        poz_Y_MT = moznyTah.Get_poz_Y_MT();
-
-                                        if (poz_X_MT < poz_X_PHr && poz_Y_MT < poz_Y_PHr && poz_Y_PHr - poz_Y_MT == posun)
-                                        {
-                                            novePoleX = poz_X_MT;
-                                            novePoleY = poz_Y_MT;
-                                            idOdebiranehoPole = i;
-                                        }
-                                    }
-                                }
-
-                                if (n == 5 && ((poz_X_PHr == leveOdsazeni + posun * 2 && poz_Y_PHr == horniOdsazeni + posun * 4) || (poz_X_PHr == leveOdsazeni + posun * 2 + posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 5)))
-                                {
-                                    mozneTahyPocitacovehoHrace.Clear();
-                                    vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
-                                    for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
-                                    {
-                                        MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                        poz_X_MT = moznyTah.Get_poz_X_MT();
-                                        poz_Y_MT = moznyTah.Get_poz_Y_MT();
-
-                                        if (poz_X_MT > poz_X_PHr && poz_Y_MT > poz_Y_PHr && poz_Y_MT - poz_Y_PHr == posun)
-                                        {
-                                            novePoleX = poz_X_MT;
-                                            novePoleY = poz_Y_MT;
-                                            idOdebiranehoPole = i;
-                                        }
-                                    }
-                                }
-
-                                if (n == 6 && ((poz_X_PHr == leveOdsazeni - posun * 2 && poz_Y_PHr == horniOdsazeni + posun * 4) || (poz_X_PHr == leveOdsazeni - posun * 2 - posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 5)))
-                                {
-                                    mozneTahyPocitacovehoHrace.Clear();
-                                    vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
-                                    for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
-                                    {
-                                        MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                        poz_X_MT = moznyTah.Get_poz_X_MT();
-                                        poz_Y_MT = moznyTah.Get_poz_Y_MT();
-
-                                        if (poz_X_MT < poz_X_PHr && poz_Y_MT > poz_Y_PHr && poz_Y_MT - poz_Y_PHr == posun)
-                                        {
-                                            novePoleX = poz_X_MT;
-                                            novePoleY = poz_Y_MT;
-                                            idOdebiranehoPole = i;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        //pokud má nepřítel na posledním a předposledním řádku na y-ové ose správně rozmístěná pole k ukončení hry, zajistíme přesun nesprávně umístěného pole na 3. řádku odspodu
-                        //pohyb provedeme na x-ové ose směrem v závislosti na tom, o kterého nepřítele se jedná (popř. pokud tento tah není možný, provedeme tah směrem dolů na y-ové ose)
-                        if (pocetPosledniRadek == 4 && pocetPredposledniRadek == 3)
-                        {
-                            poleKeKontroleX = 0;
-                            poleKeKontroleY = 0;
-                            overovatVyhodnostTahu = false;
-                            hracSePohlSkokem = false;
-                            for (int i = 0; i < polePocitacovehoHrace.Count; i++)
-                            {
-                                PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
-                                poz_X_PHr = pocitacovyHrac.Get_poz_X_PHr();
-                                poz_Y_PHr = pocitacovyHrac.Get_poz_Y_PHr();
-                                int _idPocitacovehoHrace = pocitacovyHrac.Get_idPocitacovehoHrace();
-                                if (_idPocitacovehoHrace != n)
-                                {
-                                    continue;
-                                }
-
-                                //hledáme vhodný tah na x-ové ose
-                                if (n == 3 && pozXPosledniRadek == leveOdsazeni + posun * 3 && pozXPredposledniRadek == leveOdsazeni + posun * 3 + posun / 2 && poz_X_PHr == leveOdsazeni + posun * 3 && poz_Y_PHr == horniOdsazeni + posun * 10)
-                                {
-                                    bool nalezenTah = false;
-                                    mozneTahyPocitacovehoHrace.Clear();
-                                    vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
-                                    for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
-                                    {
-                                        MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                        poz_X_MT = moznyTah.Get_poz_X_MT();
-                                        poz_Y_MT = moznyTah.Get_poz_Y_MT();
-
-                                        if (poz_X_MT > poz_X_PHr && poz_Y_MT == poz_Y_PHr)
-                                        {
-                                            novePoleX = poz_X_MT;
-                                            novePoleY = poz_Y_MT;
-                                            idOdebiranehoPole = i;
-                                            nalezenTah = true;
-                                        }
-                                    }
-
-                                    if (!nalezenTah)//tah na x-ové ose nenalezen, provedeme tedy tah směrem dolů na y-ové ose
-                                    {
-                                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
-                                        for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
-                                        {
-                                            MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                            poz_X_MT = moznyTah.Get_poz_X_MT();
-                                            poz_Y_MT = moznyTah.Get_poz_Y_MT();
-
-                                            if (poz_Y_MT < poz_Y_PHr && poz_X_MT > poz_X_PHr)
-                                            {
-                                                novePoleX = poz_X_MT;
-                                                novePoleY = poz_Y_MT;
-                                                idOdebiranehoPole = i;
-                                            }
-                                        }
-                                    }
-                                }
-
-                                //hledáme vhodný tah na x-ové ose
-                                if (n == 4 && pozXPosledniRadek == leveOdsazeni - posun * 3 && pozXPredposledniRadek == leveOdsazeni - posun * 3 - posun / 2 && poz_X_PHr == leveOdsazeni - posun * 3 && poz_Y_PHr == horniOdsazeni + posun * 10)
-                                {
-                                    bool nalezenTah = false;
-                                    mozneTahyPocitacovehoHrace.Clear();
-                                    vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
-                                    for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
-                                    {
-                                        MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                        poz_X_MT = moznyTah.Get_poz_X_MT();
-                                        poz_Y_MT = moznyTah.Get_poz_Y_MT();
-
-                                        if (poz_X_MT < poz_X_PHr && poz_Y_MT == poz_Y_PHr)
-                                        {
-                                            novePoleX = poz_X_MT;
-                                            novePoleY = poz_Y_MT;
-                                            idOdebiranehoPole = i;
-                                            nalezenTah = true;
-                                        }
-                                    }
-
-                                    if (!nalezenTah)//tah na x-ové ose nenalezen, provedeme tedy tah směrem dolů na y-ové ose
-                                    {
-                                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
-                                        for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
-                                        {
-                                            MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                            poz_X_MT = moznyTah.Get_poz_X_MT();
-                                            poz_Y_MT = moznyTah.Get_poz_Y_MT();
-
-                                            if (poz_Y_MT < poz_Y_PHr && poz_X_MT < poz_X_PHr)
-                                            {
-                                                novePoleX = poz_X_MT;
-                                                novePoleY = poz_Y_MT;
-                                                idOdebiranehoPole = i;
-                                            }
-                                        }
-                                    }
-                                }
-
-                                //hledáme vhodný tah na x-ové ose
-                                if (n == 5 && pozXPosledniRadek == leveOdsazeni + posun * 3 && pozXPredposledniRadek == leveOdsazeni + posun * 3 + posun / 2 && poz_X_PHr == leveOdsazeni + posun * 3 && poz_Y_PHr == horniOdsazeni + posun * 6)
-                                {
-                                    bool nalezenTah = false;
-                                    mozneTahyPocitacovehoHrace.Clear();
-                                    vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
-                                    for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
-                                    {
-                                        MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                        poz_X_MT = moznyTah.Get_poz_X_MT();
-                                        poz_Y_MT = moznyTah.Get_poz_Y_MT();
-
-                                        if (poz_X_MT > poz_X_PHr && poz_Y_MT == poz_Y_PHr)
-                                        {
-                                            novePoleX = poz_X_MT;
-                                            novePoleY = poz_Y_MT;
-                                            idOdebiranehoPole = i;
-                                            nalezenTah = true;
-                                        }
-                                    }
-
-                                    if (!nalezenTah)//tah na x-ové ose nenalezen, provedeme tedy tah směrem nahoru na y-ové ose
-                                    {
-                                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
-                                        for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
-                                        {
-                                            MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                            poz_X_MT = moznyTah.Get_poz_X_MT();
-                                            poz_Y_MT = moznyTah.Get_poz_Y_MT();
-
-                                            if (poz_Y_MT > poz_Y_PHr && poz_X_MT > poz_X_PHr)
-                                            {
-                                                novePoleX = poz_X_MT;
-                                                novePoleY = poz_Y_MT;
-                                                idOdebiranehoPole = i;
-                                            }
-                                        }
-                                    }
-                                }
-
-                                //hledáme vhodný tah na x-ové ose
-                                if (n == 6 && pozXPosledniRadek == leveOdsazeni - posun * 3 && pozXPredposledniRadek == leveOdsazeni - posun * 3 - posun / 2 && poz_X_PHr == leveOdsazeni - posun * 3 && poz_Y_PHr == horniOdsazeni + posun * 6)
-                                {
-                                    bool nalezenTah = false;
-                                    mozneTahyPocitacovehoHrace.Clear();
-                                    vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
-                                    for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
-                                    {
-                                        MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                        poz_X_MT = moznyTah.Get_poz_X_MT();
-                                        poz_Y_MT = moznyTah.Get_poz_Y_MT();
-
-                                        if (poz_X_MT < poz_X_PHr && poz_Y_MT == poz_Y_PHr)
-                                        {
-                                            novePoleX = poz_X_MT;
-                                            novePoleY = poz_Y_MT;
-                                            idOdebiranehoPole = i;
-                                            nalezenTah = true;
-                                        }
-                                    }
-
-                                    if (!nalezenTah)//tah na x-ové ose nenalezen, provedeme tedy tah směrem nahoru na y-ové ose
-                                    {
-                                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
-                                        for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
-                                        {
-                                            MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
-                                            poz_X_MT = moznyTah.Get_poz_X_MT();
-                                            poz_Y_MT = moznyTah.Get_poz_Y_MT();
-
-                                            if (poz_Y_MT > poz_Y_PHr && poz_X_MT < poz_X_PHr)
-                                            {
-                                                novePoleX = poz_X_MT;
-                                                novePoleY = poz_Y_MT;
-                                                idOdebiranehoPole = i;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        
-                        //ošetření případů, kdy je počítačový hráč blokován protilehlým hráčem, a zbývá mu dosadit jeden kámen do rohu nejbližšího ke středu herní desky
-                        if(n == 3)
-                        {
-                            bool[] polohyKamenu = { false, false, false };
-                            int pocetKamenu = 0;
-                            for(int i = 0; i < polePocitacovehoHrace.Count; i++)
-                            {
-                                if(polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 3 + posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 9)
-                                {
-                                    polohyKamenu[2] = true;
-                                }
-                                if(!(polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 3 || polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 6))
-                                {
-                                    continue;
-                                }
-                                if((polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 3 && JePoleVSpodnimPravemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), true)) ||
-                                    (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 6 && JePoleVSpodnimPravemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), false)))
-                                {
-                                    pocetKamenu++;
-                                }
-                                if(polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 3 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 4 + posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 9)
-                                {
-                                    polohyKamenu[0] = true;
-                                }
-                                if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 3 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 3 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 10)
-                                {
-                                    polohyKamenu[1] = true;
-                                }
-                            }
-                            if(pocetKamenu == 9 && polohyKamenu[0] == false)//bylo tu true
-                            {
-                                if(polohyKamenu[1] == true && polohyKamenu[2] == false)
-                                {
-                                    novePoleX = leveOdsazeni + posun * 3 + posun / 2;
-                                    novePoleY = horniOdsazeni + posun * 9;
-                                }
-                            }
-                        }
-                        else if (n == 4)
-                        {
-                            bool[] polohyKamenu = { false, false, false };
-                            int pocetKamenu = 0;
-                            for (int i = 0; i < polePocitacovehoHrace.Count; i++)
-                            {
-                                if (polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni - posun * 3 - posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 9)
-                                {
-                                    polohyKamenu[2] = true;
-                                }
-                                if (!(polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4 || polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 5))
-                                {
-                                    continue;
-                                }
-                                if ((polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4 && JePoleVSpodnimLevemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), true)) ||
-                                    (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 5 && JePoleVSpodnimLevemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), false)))
-                                {
-                                    pocetKamenu++;
-                                }
-                                if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni - posun * 4 - posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 9)
-                                {
-                                    polohyKamenu[0] = true;
-                                }
-                                if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni - posun * 3 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 10)
-                                {
-                                    polohyKamenu[1] = true;
-                                }
-                            }
-                            if (pocetKamenu == 9 && polohyKamenu[0] == true)
-                            {
-                                if (polohyKamenu[1] == true && polohyKamenu[2] == false)
-                                {
-                                    novePoleX = leveOdsazeni - posun * 3 - posun / 2;
-                                    novePoleY = horniOdsazeni + posun * 9;
-                                }
-                            }
-                        }
-                        else if(n == 5)
-                        {
-                            bool[] polohyKamenu = { false, false, false };
-                            int pocetKamenu = 0;
-                            for (int i = 0; i < polePocitacovehoHrace.Count; i++)
-                            {
-                                if (polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 3 + posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 7)
-                                {
-                                    polohyKamenu[2] = true;
-                                }
-                                if (!(polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 5 || polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4))
-                                {
-                                    continue;
-                                }
-                                if ((polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 5 && JePoleVHornimPravemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), true)) ||
-                                    (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4 && JePoleVHornimPravemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), false)))
-                                {
-                                    pocetKamenu++;
-                                }
-                                if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 5 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 4 + posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 7)
-                                {
-                                    polohyKamenu[0] = true;
-                                }
-                                if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 5 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 3 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 6)
-                                {
-                                    polohyKamenu[1] = true;
-                                }
-                            }
-                            if (pocetKamenu == 9 && polohyKamenu[0] == true)
-                            {
-                                if (polohyKamenu[1] == true && polohyKamenu[2] == false)
-                                {
-                                    novePoleX = leveOdsazeni + posun * 3 + posun / 2;
-                                    novePoleY = horniOdsazeni + posun * 7;
-                                }
-                            }
-                        }
-                        else if (n == 6)
-                        {
-                            bool[] polohyKamenu = { false, false, false };
-                            int pocetKamenu = 0;
-                            for (int i = 0; i < polePocitacovehoHrace.Count; i++)
-                            {
-                                if (polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni - posun * 3 - posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 7)
-                                {
-                                    polohyKamenu[2] = true;
-                                }
-                                if (!(polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 6 || polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 3))
-                                {
-                                    continue;
-                                }
-                                if ((polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 6 && JePoleVHornimLevemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), true)) ||
-                                    (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 3 && JePoleVHornimLevemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), false)))
-                                {
-                                    pocetKamenu++;
-                                }
-                                if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 6 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni - posun * 4 - posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 7)
-                                {
-                                    polohyKamenu[0] = true;
-                                }
-                                if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 6 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 3 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 6)
-                                {
-                                    polohyKamenu[1] = true;
-                                }
-                            }
-                            if (pocetKamenu == 9 && polohyKamenu[0] == true)
-                            {
-                                if (polohyKamenu[1] == true && polohyKamenu[2] == false)
-                                {
-                                    novePoleX = leveOdsazeni - posun * 3 - posun / 2;
-                                    novePoleY = horniOdsazeni + posun * 7;
-                                }
-                            }
-                        }
+                    {
+                        (novePoleX, novePoleY, idOdebiranehoPole, poleKeKontroleX, poleKeKontroleY) = OsetreniKoncovychTahu(n, pocetPosledniRadek, pocetPredposledniRadek, pozXPosledniRadek, pozXPredposledniRadek, novePoleX, novePoleY, idOdebiranehoPole, delkaSkokuX, delkaSkokuY, poleKeKontroleX, poleKeKontroleY);
                         
                         //ošetření případů, kdy nebyl nalezen žádný vhodný tah
                         if (novePoleX == 0 && novePoleY == 0)
@@ -1348,7 +577,692 @@ namespace Čínská_dáma
             mozneTahyPocitacovehoHrace.Clear();
             nevyhodnaPoleX.Clear();
             nevyhodnaPoleY.Clear();
-            return (polePocitacovehoHrace, vychoziPolePocitacovehoHrace, zvyraznenaPolePocitacovehoHrace, kontumaceVyhra);
+            return (polePocitacovehoHrace, vychoziPolePocitacovehoHrace, zvyraznenaPolePocitacovehoHrace);
+        }
+
+        private int NastaveniObtiznosti(int n, int[] simulaceObtiznost)
+        {
+            if (n == 0)
+            {
+                return simulaceObtiznost[5];
+            }
+            if (n == 2)
+            {
+                return simulaceObtiznost[0];
+            }
+            if (n == 3)
+            {
+                return simulaceObtiznost[1];
+            }
+            if (n == 4)
+            {
+                return simulaceObtiznost[2];
+            }
+            if (n == 5)
+            {
+                return simulaceObtiznost[3];
+            }
+            if (n == 6)
+            {
+                return simulaceObtiznost[4];
+            }
+            return 0;
+        }
+
+        private bool PridatTahHrace(int obtiznost, int n, int poz_X_MT, int poz_Y_MT, int poz_X_PHr, int poz_Y_PHr, int maxRozdil)
+        {
+            if(obtiznost == 1)
+            {
+                if((n == 0 && poz_Y_MT <= poz_Y_PHr) ||
+                    (n == 2 && poz_Y_MT >= poz_Y_PHr) ||
+                    (n == 3 && poz_X_MT > poz_X_PHr && poz_Y_MT > poz_Y_PHr) ||
+                    (n == 4 && poz_X_MT < poz_X_PHr && poz_Y_MT > poz_Y_PHr) ||
+                    (n == 5 && poz_X_MT > poz_X_PHr && poz_Y_MT < poz_Y_PHr) ||
+                    (n == 6 && poz_X_MT < poz_X_PHr && poz_Y_MT < poz_Y_PHr))
+                {
+                    return true;
+                }
+            }
+            else if(obtiznost == 2)
+            {
+                if ((n == 0 && poz_Y_MT < poz_Y_PHr) ||
+                    (n == 2 && poz_Y_MT > poz_Y_PHr) ||
+                    (n == 3 && poz_X_MT >= poz_X_PHr && poz_Y_MT >= poz_Y_PHr) ||
+                    (n == 4 && poz_X_MT <= poz_X_PHr && poz_Y_MT >= poz_Y_PHr) ||
+                    (n == 5 && poz_X_MT >= poz_X_PHr && poz_Y_MT <= poz_Y_PHr) ||
+                    (n == 6 && poz_X_MT <= poz_X_PHr && poz_Y_MT <= poz_Y_PHr))
+                {
+                    return true;
+                }
+            }
+            else if(obtiznost == 3)
+            {
+                if((n == 3 && (poz_X_MT - poz_X_PHr) + (poz_Y_MT - poz_Y_PHr) > maxRozdil) ||
+                    (n == 4 && (poz_X_PHr - poz_X_MT) + (poz_Y_MT - poz_Y_PHr) > maxRozdil) ||
+                    (n == 5 && (poz_X_MT - poz_X_PHr) + (poz_Y_PHr - poz_Y_MT) > maxRozdil ||
+                    (n == 6 && (poz_X_PHr - poz_X_MT) + (poz_Y_PHr - poz_Y_MT) > maxRozdil)))
+                return true;
+            }
+            return false;
+        }
+
+        private(int, int, int, int, int) ProvedeniPocatecnichTahu(int n, int pocetTahu, int idOdebiranehoPole, int novePoleX, int novePoleY, int poleKeKontroleX, int poleKeKontroleY, int prvniTah, bool simulaceMod)
+        {
+            if(n == 0)
+            {
+                if (pocetTahu == 0)
+                {
+                    idOdebiranehoPole = 10;
+                    novePoleX = leveOdsazeni - posun;
+                    novePoleY = horniOdsazeni + posun * 12;
+                    poleKeKontroleX = 0;
+                    poleKeKontroleY = 0;
+                }
+                if (pocetTahu == 1)
+                {
+                    idOdebiranehoPole = 11;
+                    novePoleX = leveOdsazeni + posun;
+                    novePoleY = horniOdsazeni + posun * 12;
+                    poleKeKontroleX = 0;
+                    poleKeKontroleY = 0;
+                }
+                if (pocetTahu == 4)
+                {
+                    idOdebiranehoPole = 11;
+                    novePoleX = leveOdsazeni + posun * 2;
+                    novePoleY = horniOdsazeni + posun * 12;
+                    poleKeKontroleX = 0;
+                    poleKeKontroleY = 0;
+                }
+            }
+            else if(n == 2)
+            {
+                if ((prvniTah == 1 && pocetTahu == 1 && !simulaceMod) || (prvniTah == 2 && pocetTahu == 0 && !simulaceMod) || (simulaceMod && pocetTahu == 0))//první tah - předem daný
+                {
+                    idOdebiranehoPole = 6;
+                    novePoleX = leveOdsazeni - posun;
+                    novePoleY = horniOdsazeni + posun * 4;
+                    poleKeKontroleX = 0;
+                    poleKeKontroleY = 0;
+                }
+                if ((prvniTah == 1 && pocetTahu == 2 && !simulaceMod) || (prvniTah == 2 && pocetTahu == 1 && !simulaceMod) || (simulaceMod && pocetTahu == 1))//druhý tah - předem daný
+                {
+                    idOdebiranehoPole = 8;
+                    novePoleX = leveOdsazeni + posun;
+                    novePoleY = horniOdsazeni + posun * 4;
+                    poleKeKontroleX = 0;
+                    poleKeKontroleY = 0;
+                }
+                if ((prvniTah == 1 && pocetTahu == 5 && !simulaceMod) || (prvniTah == 2 && pocetTahu == 4 && !simulaceMod) || (simulaceMod && pocetTahu == 4))//zajistí, že na y-ové pozici nejnižší nepřítelovo pole nezůstane samo vzadu
+                {
+                    idOdebiranehoPole = 0;
+                    novePoleX = leveOdsazeni - posun * 2;
+                    novePoleY = horniOdsazeni + posun * 4;
+                    poleKeKontroleX = 0;
+                    poleKeKontroleY = 0;
+                }
+            }
+            return (idOdebiranehoPole, novePoleX, novePoleY, poleKeKontroleX, poleKeKontroleY);
+        }
+
+        private(int, int, int, int) PripravaKoncovychTahu(int n, int pocetPosledniRadek, int pocetPredposledniRadek, int pozXPosledniRadek, int pozXPredposledniRadek, int poz_X_PHr, int poz_Y_PHr)
+        {
+            if (n == 3 && poz_Y_PHr == horniOdsazeni + posun * 12 && poz_X_PHr >= leveOdsazeni + posun + 2)
+            {
+                pocetPosledniRadek++;
+                if (poz_X_PHr < pozXPosledniRadek)
+                {
+                    pozXPosledniRadek = poz_X_PHr;
+                }
+            }
+
+            if (n == 4 && poz_Y_PHr == horniOdsazeni + posun * 12 && poz_X_PHr <= leveOdsazeni - posun - 2)
+            {
+                pocetPosledniRadek++;
+                if (poz_X_PHr > pozXPosledniRadek)
+                {
+                    pozXPosledniRadek = poz_X_PHr;
+                }
+            }
+
+            if (n == 5 && poz_Y_PHr == horniOdsazeni + posun * 4 && poz_X_PHr >= leveOdsazeni + posun + 2)
+            {
+                pocetPosledniRadek++;
+                if (poz_X_PHr < pozXPosledniRadek)
+                {
+                    pozXPosledniRadek = poz_X_PHr;
+                }
+            }
+
+            if (n == 6 && poz_Y_PHr == horniOdsazeni + posun * 4 && poz_X_PHr <= leveOdsazeni - posun - 2)
+            {
+                pocetPosledniRadek++;
+                if (poz_X_PHr > pozXPosledniRadek)
+                {
+                    pozXPosledniRadek = poz_X_PHr;
+                }
+            }
+
+            if (n == 3 && poz_Y_PHr == horniOdsazeni + posun * 11 && poz_X_PHr >= leveOdsazeni + posun * 2 + posun / 2)
+            {
+                pocetPredposledniRadek++;
+                if (poz_X_PHr < pozXPredposledniRadek)
+                {
+                    pozXPredposledniRadek = poz_X_PHr;
+                }
+            }
+
+            if (n == 4 && poz_Y_PHr == horniOdsazeni + posun * 11 && poz_X_PHr <= leveOdsazeni - posun * 2 - posun / 2)
+            {
+                pocetPredposledniRadek++;
+                if (poz_X_PHr > pozXPredposledniRadek)
+                {
+                    pozXPredposledniRadek = poz_X_PHr;
+                }
+            }
+
+            if (n == 5 && poz_Y_PHr == horniOdsazeni + posun * 5 && poz_X_PHr >= leveOdsazeni + posun * 2 + posun / 2)
+            {
+                pocetPredposledniRadek++;
+                if (poz_X_PHr < pozXPredposledniRadek)
+                {
+                    pozXPredposledniRadek = poz_X_PHr;
+                }
+            }
+
+            if (n == 6 && poz_Y_PHr == horniOdsazeni + posun * 5 && poz_X_PHr <= leveOdsazeni - posun * 2 - posun / 2)
+            {
+                pocetPredposledniRadek++;
+                if (poz_X_PHr > pozXPredposledniRadek)
+                {
+                    pozXPredposledniRadek = poz_X_PHr;
+                }
+            }
+            return (pocetPosledniRadek, pocetPredposledniRadek, pozXPosledniRadek, pozXPredposledniRadek);
+        }
+
+        private (int, int) ZapocitaniKamenuVychozihoHrace(int n, int pocetPosledniRadek, int pocetPredposledniRadek, int poz_X_PHr, int poz_Y_PHr)
+        {
+            if (n == 3 && poz_X_PHr >= leveOdsazeni + posun * 5 && poz_Y_PHr == horniOdsazeni + posun * 12)
+            {
+                pocetPosledniRadek++;
+            }
+            if (n == 3 && poz_X_PHr == leveOdsazeni + posun * 4 + posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 11)
+            {
+                pocetPredposledniRadek++;
+            }
+
+            if (n == 4 && poz_X_PHr <= leveOdsazeni - posun * 5 && poz_Y_PHr == horniOdsazeni + posun * 12)
+            {
+                pocetPosledniRadek++;
+            }
+            if (n == 4 && poz_X_PHr == leveOdsazeni - posun * 4 - posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 11)
+            {
+                pocetPredposledniRadek++;
+            }
+
+            if (n == 5 && poz_X_PHr >= leveOdsazeni + posun * 5 && poz_Y_PHr == horniOdsazeni + posun * 4)
+            {
+                pocetPosledniRadek++;
+            }
+            if (n == 5 && poz_X_PHr == leveOdsazeni + posun * 4 + posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 5)
+            {
+                pocetPredposledniRadek++;
+            }
+
+            if (n == 6 && poz_X_PHr <= leveOdsazeni - posun * 5 && poz_Y_PHr == horniOdsazeni + posun * 4)
+            {
+                pocetPosledniRadek++;
+            }
+            if (n == 6 && poz_X_PHr == leveOdsazeni - posun * 4 - posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 5)
+            {
+                pocetPredposledniRadek++;
+            }
+            return (pocetPosledniRadek, pocetPredposledniRadek);
+        }
+
+        private (int, int, int, int, int) OsetreniKoncovychTahu(int n, int pocetPosledniRadek, int pocetPredposledniRadek, int pozXPosledniRadek, int pozXPredposledniRadek, int novePoleX, int novePoleY, int idOdebiranehoPole, int delkaSkokuX, int delkaSkokuY, int poleKeKontroleX, int poleKeKontroleY)
+        {
+            int poz_X_PHr, poz_Y_PHr, poz_X_MT, poz_Y_MT;
+            bool hracSePohlSkokem;
+
+            if ((pocetPosledniRadek == 5 && pocetPredposledniRadek >= 3) || (pocetPosledniRadek >= 4 && pocetPredposledniRadek == 4))
+            {
+                poleKeKontroleX = 0;
+                poleKeKontroleY = 0;
+                overovatVyhodnostTahu = false;
+                hracSePohlSkokem = false;
+                for (int i = 0; i < polePocitacovehoHrace.Count; i++)
+                {
+                    PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
+                    poz_X_PHr = pocitacovyHrac.Get_poz_X_PHr();
+                    poz_Y_PHr = pocitacovyHrac.Get_poz_Y_PHr();
+                    int _idPocitacovehoHrace = pocitacovyHrac.Get_idPocitacovehoHrace();
+                    if (_idPocitacovehoHrace != n)
+                    {
+                        continue;
+                    }
+
+                    if (n == 3 && ((poz_X_PHr == leveOdsazeni + posun * 2 && poz_Y_PHr == horniOdsazeni + posun * 12) || (poz_X_PHr == leveOdsazeni + posun * 2 + posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 11)))
+                    {
+                        mozneTahyPocitacovehoHrace.Clear();
+                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                        for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
+                        {
+                            MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
+                            poz_X_MT = moznyTah.Get_poz_X_MT();
+                            poz_Y_MT = moznyTah.Get_poz_Y_MT();
+
+                            if (poz_X_MT > poz_X_PHr && poz_Y_MT < poz_Y_PHr && poz_Y_PHr - poz_Y_MT == posun)
+                            {
+                                novePoleX = poz_X_MT;
+                                novePoleY = poz_Y_MT;
+                                idOdebiranehoPole = i;
+                            }
+                        }
+                    }
+
+                    if (n == 4 && ((poz_X_PHr == leveOdsazeni - posun * 2 && poz_Y_PHr == horniOdsazeni + posun * 12) || (poz_X_PHr == leveOdsazeni - posun * 2 - posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 11)))
+                    {
+                        mozneTahyPocitacovehoHrace.Clear();
+                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                        for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
+                        {
+                            MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
+                            poz_X_MT = moznyTah.Get_poz_X_MT();
+                            poz_Y_MT = moznyTah.Get_poz_Y_MT();
+
+                            if (poz_X_MT < poz_X_PHr && poz_Y_MT < poz_Y_PHr && poz_Y_PHr - poz_Y_MT == posun)
+                            {
+                                novePoleX = poz_X_MT;
+                                novePoleY = poz_Y_MT;
+                                idOdebiranehoPole = i;
+                            }
+                        }
+                    }
+
+                    if (n == 5 && ((poz_X_PHr == leveOdsazeni + posun * 2 && poz_Y_PHr == horniOdsazeni + posun * 4) || (poz_X_PHr == leveOdsazeni + posun * 2 + posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 5)))
+                    {
+                        mozneTahyPocitacovehoHrace.Clear();
+                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                        for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
+                        {
+                            MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
+                            poz_X_MT = moznyTah.Get_poz_X_MT();
+                            poz_Y_MT = moznyTah.Get_poz_Y_MT();
+
+                            if (poz_X_MT > poz_X_PHr && poz_Y_MT > poz_Y_PHr && poz_Y_MT - poz_Y_PHr == posun)
+                            {
+                                novePoleX = poz_X_MT;
+                                novePoleY = poz_Y_MT;
+                                idOdebiranehoPole = i;
+                            }
+                        }
+                    }
+
+                    if (n == 6 && ((poz_X_PHr == leveOdsazeni - posun * 2 && poz_Y_PHr == horniOdsazeni + posun * 4) || (poz_X_PHr == leveOdsazeni - posun * 2 - posun / 2 && poz_Y_PHr == horniOdsazeni + posun * 5)))
+                    {
+                        mozneTahyPocitacovehoHrace.Clear();
+                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                        for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
+                        {
+                            MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
+                            poz_X_MT = moznyTah.Get_poz_X_MT();
+                            poz_Y_MT = moznyTah.Get_poz_Y_MT();
+
+                            if (poz_X_MT < poz_X_PHr && poz_Y_MT > poz_Y_PHr && poz_Y_MT - poz_Y_PHr == posun)
+                            {
+                                novePoleX = poz_X_MT;
+                                novePoleY = poz_Y_MT;
+                                idOdebiranehoPole = i;
+                            }
+                        }
+                    }
+                }
+            }
+
+            //pokud má nepřítel na posledním a předposledním řádku na y-ové ose správně rozmístěná pole k ukončení hry, zajistíme přesun nesprávně umístěného pole na 3. řádku odspodu
+            //pohyb provedeme na x-ové ose směrem v závislosti na tom, o kterého nepřítele se jedná (popř. pokud tento tah není možný, provedeme tah směrem dolů na y-ové ose)
+            if (pocetPosledniRadek == 4 && pocetPredposledniRadek == 3)
+            {
+                poleKeKontroleX = 0;
+                poleKeKontroleY = 0;
+                overovatVyhodnostTahu = false;
+                hracSePohlSkokem = false;
+                for (int i = 0; i < polePocitacovehoHrace.Count; i++)
+                {
+                    PocitacovyHrac pocitacovyHrac = polePocitacovehoHrace[i];
+                    poz_X_PHr = pocitacovyHrac.Get_poz_X_PHr();
+                    poz_Y_PHr = pocitacovyHrac.Get_poz_Y_PHr();
+                    int _idPocitacovehoHrace = pocitacovyHrac.Get_idPocitacovehoHrace();
+                    if (_idPocitacovehoHrace != n)
+                    {
+                        continue;
+                    }
+
+                    //hledáme vhodný tah na x-ové ose
+                    if (n == 3 && pozXPosledniRadek == leveOdsazeni + posun * 3 && pozXPredposledniRadek == leveOdsazeni + posun * 3 + posun / 2 && poz_X_PHr == leveOdsazeni + posun * 3 && poz_Y_PHr == horniOdsazeni + posun * 10)
+                    {
+                        bool nalezenTah = false;
+                        mozneTahyPocitacovehoHrace.Clear();
+                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                        for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
+                        {
+                            MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
+                            poz_X_MT = moznyTah.Get_poz_X_MT();
+                            poz_Y_MT = moznyTah.Get_poz_Y_MT();
+
+                            if (poz_X_MT > poz_X_PHr && poz_Y_MT == poz_Y_PHr)
+                            {
+                                novePoleX = poz_X_MT;
+                                novePoleY = poz_Y_MT;
+                                idOdebiranehoPole = i;
+                                nalezenTah = true;
+                            }
+                        }
+
+                        if (!nalezenTah)//tah na x-ové ose nenalezen, provedeme tedy tah směrem dolů na y-ové ose
+                        {
+                            vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                            for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
+                            {
+                                MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
+                                poz_X_MT = moznyTah.Get_poz_X_MT();
+                                poz_Y_MT = moznyTah.Get_poz_Y_MT();
+
+                                if (poz_Y_MT < poz_Y_PHr && poz_X_MT > poz_X_PHr)
+                                {
+                                    novePoleX = poz_X_MT;
+                                    novePoleY = poz_Y_MT;
+                                    idOdebiranehoPole = i;
+                                }
+                            }
+                        }
+                    }
+
+                    //hledáme vhodný tah na x-ové ose
+                    if (n == 4 && pozXPosledniRadek == leveOdsazeni - posun * 3 && pozXPredposledniRadek == leveOdsazeni - posun * 3 - posun / 2 && poz_X_PHr == leveOdsazeni - posun * 3 && poz_Y_PHr == horniOdsazeni + posun * 10)
+                    {
+                        bool nalezenTah = false;
+                        mozneTahyPocitacovehoHrace.Clear();
+                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                        for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
+                        {
+                            MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
+                            poz_X_MT = moznyTah.Get_poz_X_MT();
+                            poz_Y_MT = moznyTah.Get_poz_Y_MT();
+
+                            if (poz_X_MT < poz_X_PHr && poz_Y_MT == poz_Y_PHr)
+                            {
+                                novePoleX = poz_X_MT;
+                                novePoleY = poz_Y_MT;
+                                idOdebiranehoPole = i;
+                                nalezenTah = true;
+                            }
+                        }
+
+                        if (!nalezenTah)//tah na x-ové ose nenalezen, provedeme tedy tah směrem dolů na y-ové ose
+                        {
+                            vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                            for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
+                            {
+                                MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
+                                poz_X_MT = moznyTah.Get_poz_X_MT();
+                                poz_Y_MT = moznyTah.Get_poz_Y_MT();
+
+                                if (poz_Y_MT < poz_Y_PHr && poz_X_MT < poz_X_PHr)
+                                {
+                                    novePoleX = poz_X_MT;
+                                    novePoleY = poz_Y_MT;
+                                    idOdebiranehoPole = i;
+                                }
+                            }
+                        }
+                    }
+
+                    //hledáme vhodný tah na x-ové ose
+                    if (n == 5 && pozXPosledniRadek == leveOdsazeni + posun * 3 && pozXPredposledniRadek == leveOdsazeni + posun * 3 + posun / 2 && poz_X_PHr == leveOdsazeni + posun * 3 && poz_Y_PHr == horniOdsazeni + posun * 6)
+                    {
+                        bool nalezenTah = false;
+                        mozneTahyPocitacovehoHrace.Clear();
+                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                        for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
+                        {
+                            MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
+                            poz_X_MT = moznyTah.Get_poz_X_MT();
+                            poz_Y_MT = moznyTah.Get_poz_Y_MT();
+
+                            if (poz_X_MT > poz_X_PHr && poz_Y_MT == poz_Y_PHr)
+                            {
+                                novePoleX = poz_X_MT;
+                                novePoleY = poz_Y_MT;
+                                idOdebiranehoPole = i;
+                                nalezenTah = true;
+                            }
+                        }
+
+                        if (!nalezenTah)//tah na x-ové ose nenalezen, provedeme tedy tah směrem nahoru na y-ové ose
+                        {
+                            vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                            for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
+                            {
+                                MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
+                                poz_X_MT = moznyTah.Get_poz_X_MT();
+                                poz_Y_MT = moznyTah.Get_poz_Y_MT();
+
+                                if (poz_Y_MT > poz_Y_PHr && poz_X_MT > poz_X_PHr)
+                                {
+                                    novePoleX = poz_X_MT;
+                                    novePoleY = poz_Y_MT;
+                                    idOdebiranehoPole = i;
+                                }
+                            }
+                        }
+                    }
+
+                    //hledáme vhodný tah na x-ové ose
+                    if (n == 6 && pozXPosledniRadek == leveOdsazeni - posun * 3 && pozXPredposledniRadek == leveOdsazeni - posun * 3 - posun / 2 && poz_X_PHr == leveOdsazeni - posun * 3 && poz_Y_PHr == horniOdsazeni + posun * 6)
+                    {
+                        bool nalezenTah = false;
+                        mozneTahyPocitacovehoHrace.Clear();
+                        vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                        for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
+                        {
+                            MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
+                            poz_X_MT = moznyTah.Get_poz_X_MT();
+                            poz_Y_MT = moznyTah.Get_poz_Y_MT();
+
+                            if (poz_X_MT < poz_X_PHr && poz_Y_MT == poz_Y_PHr)
+                            {
+                                novePoleX = poz_X_MT;
+                                novePoleY = poz_Y_MT;
+                                idOdebiranehoPole = i;
+                                nalezenTah = true;
+                            }
+                        }
+
+                        if (!nalezenTah)//tah na x-ové ose nenalezen, provedeme tedy tah směrem nahoru na y-ové ose
+                        {
+                            vypocetMoznychTahu.PridaniMoznychTahu(poz_X_PHr, poz_Y_PHr, n, pocetHracu, hracSePohlSkokem, delkaSkokuX, delkaSkokuY, poleLidskehoHrace, polePocitacovehoHrace, mozneTahyLidskehoHrace, mozneTahyPocitacovehoHrace);
+                            for (int j = 0; j < mozneTahyPocitacovehoHrace.Count; j++)
+                            {
+                                MoznyTahPocitacovehoHrace moznyTah = mozneTahyPocitacovehoHrace[j];
+                                poz_X_MT = moznyTah.Get_poz_X_MT();
+                                poz_Y_MT = moznyTah.Get_poz_Y_MT();
+
+                                if (poz_Y_MT > poz_Y_PHr && poz_X_MT < poz_X_PHr)
+                                {
+                                    novePoleX = poz_X_MT;
+                                    novePoleY = poz_Y_MT;
+                                    idOdebiranehoPole = i;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            //ošetření případů, kdy je počítačový hráč blokován protilehlým hráčem, a zbývá mu dosadit jeden kámen do rohu nejbližšího ke středu herní desky
+            if (n == 3)
+            {
+                bool[] polohyKamenu = { false, false, false };
+                int pocetKamenu = 0;
+                for (int i = 0; i < polePocitacovehoHrace.Count; i++)
+                {
+                    if (polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 3 + posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 9)
+                    {
+                        polohyKamenu[2] = true;
+                    }
+                    if (!(polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 3 || polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 6))
+                    {
+                        continue;
+                    }
+                    if ((polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 3 && JePoleVSpodnimPravemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), true)) ||
+                        (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 6 && JePoleVSpodnimPravemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), false)))
+                    {
+                        pocetKamenu++;
+                    }
+                    if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 3 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 4 + posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 9)
+                    {
+                        polohyKamenu[0] = true;
+                    }
+                    if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 3 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 3 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 10)
+                    {
+                        polohyKamenu[1] = true;
+                    }
+                }
+                if (pocetKamenu == 9 && polohyKamenu[0] == false)//bylo tu true
+                {
+                    if (polohyKamenu[1] == true && polohyKamenu[2] == false)
+                    {
+                        novePoleX = leveOdsazeni + posun * 3 + posun / 2;
+                        novePoleY = horniOdsazeni + posun * 9;
+                    }
+                }
+            }
+            else if (n == 4)
+            {
+                bool[] polohyKamenu = { false, false, false };
+                int pocetKamenu = 0;
+                for (int i = 0; i < polePocitacovehoHrace.Count; i++)
+                {
+                    if (polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni - posun * 3 - posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 9)
+                    {
+                        polohyKamenu[2] = true;
+                    }
+                    if (!(polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4 || polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 5))
+                    {
+                        continue;
+                    }
+                    if ((polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4 && JePoleVSpodnimLevemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), true)) ||
+                        (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 5 && JePoleVSpodnimLevemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), false)))
+                    {
+                        pocetKamenu++;
+                    }
+                    if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni - posun * 4 - posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 9)
+                    {
+                        polohyKamenu[0] = true;
+                    }
+                    if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni - posun * 3 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 10)
+                    {
+                        polohyKamenu[1] = true;
+                    }
+                }
+                if (pocetKamenu == 9 && polohyKamenu[0] == true)
+                {
+                    if (polohyKamenu[1] == true && polohyKamenu[2] == false)
+                    {
+                        novePoleX = leveOdsazeni - posun * 3 - posun / 2;
+                        novePoleY = horniOdsazeni + posun * 9;
+                    }
+                }
+            }
+            else if (n == 5)
+            {
+                bool[] polohyKamenu = { false, false, false };
+                int pocetKamenu = 0;
+                for (int i = 0; i < polePocitacovehoHrace.Count; i++)
+                {
+                    if (polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 3 + posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 7)
+                    {
+                        polohyKamenu[2] = true;
+                    }
+                    if (!(polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 5 || polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4))
+                    {
+                        continue;
+                    }
+                    if ((polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 5 && JePoleVHornimPravemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), true)) ||
+                        (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4 && JePoleVHornimPravemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), false)))
+                    {
+                        pocetKamenu++;
+                    }
+                    if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 5 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 4 + posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 7)
+                    {
+                        polohyKamenu[0] = true;
+                    }
+                    if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 5 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 3 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 6)
+                    {
+                        polohyKamenu[1] = true;
+                    }
+                }
+                if (pocetKamenu == 9 && polohyKamenu[0] == true)
+                {
+                    if (polohyKamenu[1] == true && polohyKamenu[2] == false)
+                    {
+                        novePoleX = leveOdsazeni + posun * 3 + posun / 2;
+                        novePoleY = horniOdsazeni + posun * 7;
+                    }
+                }
+            }
+            else if (n == 6)
+            {
+                bool[] polohyKamenu = { false, false, false };
+                int pocetKamenu = 0;
+                for (int i = 0; i < polePocitacovehoHrace.Count; i++)
+                {
+                    if (polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni - posun * 3 - posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 7)
+                    {
+                        polohyKamenu[2] = true;
+                    }
+                    if (!(polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 6 || polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 3))
+                    {
+                        continue;
+                    }
+                    if ((polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 6 && JePoleVHornimLevemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), true)) ||
+                        (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 3 && JePoleVHornimLevemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), false)))
+                    {
+                        pocetKamenu++;
+                    }
+                    if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 6 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni - posun * 4 - posun / 2 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 7)
+                    {
+                        polohyKamenu[0] = true;
+                    }
+                    if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 6 && polePocitacovehoHrace[i].Get_poz_X_PHr() == leveOdsazeni + posun * 3 && polePocitacovehoHrace[i].Get_poz_Y_PHr() == horniOdsazeni + posun * 6)
+                    {
+                        polohyKamenu[1] = true;
+                    }
+                }
+                if (pocetKamenu == 9 && polohyKamenu[0] == true)
+                {
+                    if (polohyKamenu[1] == true && polohyKamenu[2] == false)
+                    {
+                        novePoleX = leveOdsazeni - posun * 3 - posun / 2;
+                        novePoleY = horniOdsazeni + posun * 7;
+                    }
+                }
+            }
+
+            return (novePoleX, novePoleY, idOdebiranehoPole, poleKeKontroleX, poleKeKontroleY);
+        }
+
+        private bool SplnenyPodminkyProPohyb(int n, bool simulaceMod)
+        {
+            if ((n == 0 && !simulaceMod) || n == 1 || (pocetHracu == 2 && n > 2) || (pocetHracu == 3 && (n == 2 || n > 4)) || (pocetHracu == 4 && (!simulaceMod && (n == 2 || n == 5) || simulaceMod && (n == 0 || n == 2))))
+            {
+                return false;
+            }
+            return true;
         }
 
         private void VytvoreniTahuLidskehoHrace()
@@ -1565,155 +1479,6 @@ namespace Čínská_dáma
                 polePocitacovehoHrace.Add(novyPocitacovyHrac);
                 ZvyrazneniPolePocitacovehoHrace zvyrazneni = new ZvyrazneniPolePocitacovehoHrace(novePoleX, novePoleY, sirkaPole, vyskaPole);
                 zvyraznenaPolePocitacovehoHrace.Add(zvyrazneni);
-            }
-            KontrolaKontumace();
-        }
-
-        private void KontrolaKontumace()
-        {
-            if(!simulaceMod)
-            {
-                int pocetKamenuLidskehoHraceVCilovemTrojuhelniku = 0;
-                int pocetKamenuPocitacovehoHraceVCilovemTrojuhelniku = 0;
-                for (int i = 0; i < poleLidskehoHrace.Count; i++)
-                {
-                    if (pocetHracu != 4)
-                    {
-                        if(JePoleVNejvyssimRohu(poleLidskehoHrace[i].Get_poz_Y_LHr(), true))
-                        {
-                            pocetKamenuLidskehoHraceVCilovemTrojuhelniku++;
-                        }
-                    }
-                    else
-                    {
-                        if (JePoleVHornimPravemRohu(poleLidskehoHrace[i].Get_poz_X_LHr(), poleLidskehoHrace[i].Get_poz_Y_LHr(), true))
-                        {
-                            pocetKamenuLidskehoHraceVCilovemTrojuhelniku++;
-                        }
-                    }
-                }
-                for(int i = 0; i < polePocitacovehoHrace.Count; i++)
-                {
-                    if (pocetHracu != 4)
-                    {
-                        if(polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 2 && JePoleVNejvyssimRohu(polePocitacovehoHrace[i].Get_poz_Y_PHr(), false))
-                        {
-                            pocetKamenuPocitacovehoHraceVCilovemTrojuhelniku++;
-                        }
-                    }
-                    else
-                    {
-                        if (polePocitacovehoHrace[i].Get_idPocitacovehoHrace() == 4 && JePoleVHornimPravemRohu(polePocitacovehoHrace[i].Get_poz_X_PHr(), polePocitacovehoHrace[i].Get_poz_Y_PHr(), false))
-                        {
-                            pocetKamenuPocitacovehoHraceVCilovemTrojuhelniku++;
-                        }
-                    }
-                }
-                if (pocetKamenuLidskehoHraceVCilovemTrojuhelniku + pocetKamenuPocitacovehoHraceVCilovemTrojuhelniku == 10 && pocetKamenuPocitacovehoHraceVCilovemTrojuhelniku > 0)
-                {
-                    kontumaceVyhra = 1;
-                }
-            }
-
-            for(int i = 0; i < 7; i++)
-            {
-                int pocetPuvodnichKamenuVCilovemTrojuhelniku = 0;
-                int pocetPrichozichKamenuVCilovemTrojuhelniku = 0;
-                for (int j = 0; j < polePocitacovehoHrace.Count; j++)
-                {
-                    switch(i)
-                    {
-                        case 0:
-                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 0 && JePoleVNejvyssimRohu( polePocitacovehoHrace[j].Get_poz_Y_PHr(), true))
-                            {
-                                pocetPrichozichKamenuVCilovemTrojuhelniku++;
-                            }
-                            if(polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 2 && JePoleVNejvyssimRohu(polePocitacovehoHrace[j].Get_poz_Y_PHr(), false))
-                            {
-                                pocetPuvodnichKamenuVCilovemTrojuhelniku++;
-                            }
-                            if (pocetPrichozichKamenuVCilovemTrojuhelniku + pocetPuvodnichKamenuVCilovemTrojuhelniku == 10 && pocetPuvodnichKamenuVCilovemTrojuhelniku > 0)
-                            {
-                                kontumaceVyhra = 7;
-                            }
-                            break;
-
-                        case 2:
-                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 2 && JePoleVNejnizsimRohu(polePocitacovehoHrace[j].Get_poz_Y_PHr(), true))
-                            {
-                                pocetPrichozichKamenuVCilovemTrojuhelniku++;
-                            }
-                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 0 && JePoleVNejnizsimRohu(polePocitacovehoHrace[j].Get_poz_Y_PHr(), false))
-                            {
-                                pocetPuvodnichKamenuVCilovemTrojuhelniku++;
-                            }
-                            if (pocetPrichozichKamenuVCilovemTrojuhelniku + pocetPuvodnichKamenuVCilovemTrojuhelniku == 10 && pocetPuvodnichKamenuVCilovemTrojuhelniku > 0)
-                            {
-                                kontumaceVyhra = 2;
-                            }
-                            break;
-
-                        case 3:                                
-                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 3 && JePoleVSpodnimPravemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), true))
-                            {
-                                pocetPrichozichKamenuVCilovemTrojuhelniku++;
-                            }
-                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 6 && JePoleVSpodnimPravemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), false))
-                            {
-                                pocetPuvodnichKamenuVCilovemTrojuhelniku++;
-                            }
-                            if (pocetPrichozichKamenuVCilovemTrojuhelniku + pocetPuvodnichKamenuVCilovemTrojuhelniku == 10 && pocetPuvodnichKamenuVCilovemTrojuhelniku > 0)
-                            {
-                                kontumaceVyhra = 3;
-                            }
-                            break;
-
-                        case 4:
-                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 4 && JePoleVSpodnimLevemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), true))
-                            {
-                                pocetPrichozichKamenuVCilovemTrojuhelniku++;
-                            }
-                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 5 && JePoleVSpodnimLevemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), false))
-                            {
-                                pocetPuvodnichKamenuVCilovemTrojuhelniku++;
-                            }
-                            if (pocetPrichozichKamenuVCilovemTrojuhelniku + pocetPuvodnichKamenuVCilovemTrojuhelniku == 10 && pocetPuvodnichKamenuVCilovemTrojuhelniku > 0)
-                            {
-                                kontumaceVyhra = 4;
-                            }
-                            break;
-
-                        case 5:
-                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 5 && JePoleVHornimPravemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), true))
-                            {
-                                pocetPrichozichKamenuVCilovemTrojuhelniku++;
-                            }
-                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 4 && JePoleVHornimPravemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), false))
-                            {
-                                pocetPuvodnichKamenuVCilovemTrojuhelniku++;
-                            }
-                            if (pocetPrichozichKamenuVCilovemTrojuhelniku + pocetPuvodnichKamenuVCilovemTrojuhelniku == 10 && pocetPuvodnichKamenuVCilovemTrojuhelniku > 0)
-                            {
-                                kontumaceVyhra = 5;
-                            }
-                            break;
-
-                        case 6:
-                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 6 && JePoleVHornimLevemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), true))
-                            {
-                                pocetPrichozichKamenuVCilovemTrojuhelniku++;
-                            }
-                            if (polePocitacovehoHrace[j].Get_idPocitacovehoHrace() == 3 && JePoleVHornimLevemRohu(polePocitacovehoHrace[j].Get_poz_X_PHr(), polePocitacovehoHrace[j].Get_poz_Y_PHr(), false))
-                            {
-                                pocetPuvodnichKamenuVCilovemTrojuhelniku++;
-                            }
-                            if (pocetPrichozichKamenuVCilovemTrojuhelniku + pocetPuvodnichKamenuVCilovemTrojuhelniku == 10 && pocetPuvodnichKamenuVCilovemTrojuhelniku > 0)
-                            {
-                                kontumaceVyhra = 6;
-                            }
-                            break;
-                    }
-                }
             }
         }
 
